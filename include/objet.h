@@ -54,7 +54,7 @@ typedef struct {
 
 
 
-void remplis_projectile(Objet* obj, Deplacement* deplacement);
+void remplis_projectile(Objet* projectile, Deplacement* deplacement);
 
 void remplis_lanceur(Objet* lanceur, Generation* gen);
 

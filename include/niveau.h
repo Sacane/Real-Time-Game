@@ -23,19 +23,20 @@ typedef struct coordonnees{
 
 
 typedef struct {
-  Coordonnees taille; /* Taille du niveau */
-  Objet** objets; /* Tableau bi-directionnel de largeur taille.x, 
-                   * de hauteur taille.y, et dont chaque case 
-                   * contient un Objet */
-  Coordonnees coo_perso; /* Position actuelle du personnage. */
-  unsigned long allure_perso; /* Allure du personnage */
-  bool depl_perso_autorise; /* Vaut `true` si  le temps ecoule
-                             * depuis le dernier deplacement du
-                             * personnage est superieur a son
-                             * allure. */
+
+    Coordonnees taille; /* Taille du niveau */
+    Objet** objets; /* Tableau bi-directionnel de largeur taille.x, 
+                    * de hauteur taille.y, et dont chaque case 
+                    * contient un Objet */
+    Coordonnees coo_perso; /* Position actuelle du personnage. */
+    unsigned long allure_perso; /* Allure du personnage */
+    bool depl_perso_autorise; /* Vaut `true` si  le temps ecoule
+                              * depuis le dernier deplacement du
+                              * personnage est superieur a son
+                              * allure. */
+    Direction dir_perso; /*Direction actuelle du personnage */
+    
 } Niveau, *Plateau;
-
-
 
 Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
                                              * pour obtenir un 
@@ -44,12 +45,23 @@ Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
 void free_Niveau (Plateau niveau); /* Libere la memoire prise par un
                                     * Niveau */
 
-
 /**
  * \arg niveau : plateau concernant le déplacement du joueur
  * Deplace le joueur selon une direction renseigné
 */
-void deplacer_joueur(Plateau niveau, Direction direction); 
+void deplacer_joueur(Plateau niveau); 
 
+/**
+ * Renvoi true si l'objet est prêt à rentré en contact avec un mur, false sinon.
+*/
+bool mur_en_contact(Plateau plateau, Objet obj);
+
+/**
+ * Renvoi true si l'objet est prêt à rentrer en contact avec le bord du terrain.
+*/
+bool bordure_en_contact(Plateau plateau, Objet obj);
+
+/*Vérifie et renvoi true si le personnage est s'apprête à rentrer en conflit avec un mur */
+bool perso_en_contact(Plateau plateau);
 
 #endif
