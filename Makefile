@@ -3,7 +3,7 @@ SRC     := src/main.c $(subst include/,,$(INCL:%.h=src/%.c))
 OBJ     := $(subst src/,,$(SRC:%.c=bin/%.o))
 LIBS    := -lm -lMLV -g
 EXE     := tempsreel
-	
+
 CC      := gcc
 CFLAGS  := -ansi -Wall -Wextra
 LDFLAGS := -o $(EXE) $(LIBS)
