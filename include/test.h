@@ -5,6 +5,11 @@
     Module de test pour nos fonctions
 *****************************************/
 
+#include "niveau.h"
+#include "objet.h"
+#include "evenement.h"
+
+
 
 
 
