@@ -1,12 +1,11 @@
 INCL    := $(wildcard include/*.h)
 SRC     := src/main.c $(subst include/,,$(INCL:%.h=src/%.c))
 OBJ     := $(subst src/,,$(SRC:%.c=bin/%.o))
-LIBS    := -lm -lMLV -g
 EXE     := tempsreel
-
 CC      := gcc
 CFLAGS  := -ansi -Wall -Wextra
-LDFLAGS := -o $(EXE) $(LIBS)
+LIBPATH := -L.
+LDFLAGS := -o $(EXE) $(LIBPATH) 
 RM      := rm -f
 
 all: $(OBJ)
@@ -25,4 +24,4 @@ $(OBJ): $(INCL)
 
 
 clean:
-	$(RM) $(OBJ) $(INCL:.h=.h.gch)
+	$(RM) $(EXE) $(OBJ) $(INCL:.h=.h.gch)
