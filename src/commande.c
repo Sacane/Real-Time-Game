@@ -36,7 +36,7 @@ Plateau niveau0() {
     niveau->objets[1][2].type = MUR;
     niveau->objets[1][3].type = MUR;
     niveau->objets[1][4].type = MUR;
-	niveau->objets[1][5].type = MUR;
+    niveau->objets[1][5].type = MUR;
     niveau->objets[1][6].type = MUR;
     niveau->objets[1][8].type = MUR;
     niveau->objets[2][8].type = MUR;
@@ -51,8 +51,8 @@ Plateau niveau0() {
     niveau->objets[1][9].type = VIDE;
     niveau->objets[1][7].type = VIDE;
 	
-	for(i = 0; i < taille_niveau.y; i++){
-		if(i != 8)
+    for(i = 0; i < taille_niveau.y; i++){
+	    if(i != 8)
         	niveau->objets[2][i].type = VIDE;
     }
 
@@ -67,8 +67,8 @@ Plateau niveau0() {
         niveau->objets[4][i].type = VIDE;
     }
 
-	niveau->coo_perso.x = 4;
-	niveau->coo_perso.y = 0;
+    niveau->coo_perso.x = 4;
+    niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
 
     /*CA NA AUCUN SENS*/

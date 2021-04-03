@@ -3,9 +3,9 @@
 
 Arbre malloc_Tas(unsigned capacite_initiale) {
     
-	Arbre arbre = (Arbre)malloc(sizeof(Tas));
+    Arbre arbre = (Arbre)malloc(sizeof(Tas));   
     verif_malloc(arbre);
-	arbre->taille = 0;
+    arbre->taille = 0;
 	arbre->capacite = capacite_initiale;
 	arbre->valeurs = (Evenement*)malloc(capacite_initiale*sizeof(Evenement));
     verif_malloc(arbre->valeurs);
