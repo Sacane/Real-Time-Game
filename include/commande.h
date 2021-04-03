@@ -13,8 +13,6 @@
 
 #include "niveau.h"
 
-
-
 Plateau niveau0(); /* Cree le niveau 0 (Figure 1) */
 
 

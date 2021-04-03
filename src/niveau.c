@@ -31,7 +31,7 @@ void free_Niveau (Plateau niveau){
  * Déplace le joueur selon une direction donnée
  */ 
 void deplacer_joueur(Plateau niveau){
-
+    
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
     
     switch(niveau->dir_perso){

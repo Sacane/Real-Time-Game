@@ -13,7 +13,7 @@ int main(void) {
 
 
 
-free_Niveau(niveau);
+  free_Niveau(niveau);
 
   return 0;
 }
