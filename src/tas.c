@@ -1,205 +1,82 @@
-#include "../include/tas.h"
+#include "../include/test.h"
 
+/* TODO : Finir le test d'ajout d'évènement */
 
-static unsigned int verif_pere(int iteration){
-	unsigned int tmp;
-	tmp = (iteration - 1)/2;
-
-	if(iteration%2 == 0){
-		tmp = (iteration - 2)/2;
-		return tmp;
-	}
-	if(iteration%2 != 0){
-		tmp = (iteration - 1)/2;
-		return tmp;
-	}
-    return tmp;
-}
-
-bool estTas(Arbre arbre){
-	
-	unsigned int i, pere;
-
-	for(i = 1; i < (arbre->taille); i++){
-
-		pere = verif_pere(i);
-		if((arbre->valeurs)[i].moment < (arbre->valeurs)[pere].moment)
-			return false;
-		if((arbre->valeurs)[pere].moment > (arbre->valeurs)[i].moment)
-			return false;
-	}
-	return true;
-}
-
-
-
-Arbre malloc_Tas(unsigned capacite_initiale) {
+static bool test_evenement_pret(){
+    unsigned long eval;
+	Arbre test_tas;
+    test_tas = malloc_Tas(INITIAL_SIZE);
+    test_tas->taille = 15;
+    test_tas->valeurs[0].moment = 1000;
+    test_tas->valeurs[1].moment = 1300;
+    test_tas->valeurs[2].moment = 2000;
     
-	Arbre arbre = (Arbre)malloc(sizeof(Tas));
-    verif_malloc(arbre);
-	arbre->taille = 0;
-	arbre->capacite = capacite_initiale;
-	arbre->valeurs = (Evenement*)malloc(capacite_initiale*sizeof(Evenement)); 
-    verif_malloc(arbre->valeurs);
-    
-	return arbre; 
-}
-
-void free_Tas(Arbre tas){
-
-    unsigned int i;
-    for(i = 0; i < tas->capacite; i++){
-        free(&tas->valeurs[i]);
-    }
-    free(tas);
-}
-
-void realloc_Tas(Arbre tas){
-
-    tas->capacite *= 2; /*On double la capacité max */
-    tas->valeurs = (Evenement*)realloc(tas->valeurs, sizeof(Evenement)*tas->capacite);
-    
-}
-
-bool un_evenement_est_pret(Arbre tas){
-    unsigned i;
-    for(i = 0; i < tas->taille; i++){
-        if(tas->valeurs[i].moment <= maintenant()){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-static int Fils(Arbre T, int indice){
-
-	unsigned int fils;
-	fils = (indice*2+1);
-	if (fils >= T->taille) 
-		return -1;
-	if (fils == (T->taille)-1) 
-		return fils;
-	if ((T->valeurs)[fils].moment > (T->valeurs)[fils+1].moment) 
-		fils++;
-	return fils;
-	
-}
-
-static void change(Arbre arbre, unsigned int indice, Evenement valeur){
-	
-    int f;
-    if (NULL == arbre) { return; }
-    
-    if (indice<=(arbre)->taille){
-        f=Fils(arbre, indice);
-        if (f!=-1){
-            if ((arbre->valeurs)[f].moment < valeur.moment){
-                (arbre->valeurs)[indice]=(arbre->valeurs)[f];
-                change(arbre, f, valeur);
+    while(true){
+        eval = maintenant();
+        if(eval == 800){
+            if(un_evenement_est_pret(test_tas) == true){
+                return false;
             }
-            
-            if (indice !=0){
-                if ((arbre->valeurs)[(indice-1)/2].moment > valeur.moment){
-                    (arbre->valeurs)[indice]=(arbre->valeurs)[(indice-1)/2];
-                    change(arbre,(indice-1)/2,valeur);
-                }
+        }
+        if(eval == 1000){
+            if(un_evenement_est_pret(test_tas) == false){
+                return false;
             }
-            (arbre->valeurs)[indice]=valeur;
         }
+        break;
     }
+    return true;
 }
 
+static bool test_ajoute_evenement_test() {
+    Arbre test_arbre = malloc_Tas(INITIAL_SIZE);
+    Evenement event1, event2, event3, event4, event5;
+    
+    event1.moment = 300;
+    event2.moment = 1000;
+    event3.moment = 500;
+    event4.moment = 800;
+    event5.moment = 200;
 
-/*void change(tas *T,int indice, int valeur){
-  int f;
-  if (NULL == T) {return;}
-  if (indice<=(*T)->taille) && (indice>= 0){
-    f=fils(*T, indice)
-    if f!=-1{
-      if (*T->arbre)[f]< valeur{
-       (*T->arbre)[indice]=(*T->arbre)[f];
-        change(T,f,valeur)
-        }
-      }
-    if indice!=0{
-    if (*T->arbre)[(indice-1)/2]>valeur{
-        (*T->arbre)[indice]=(*T->arbre)[(indice-1)/2];
-        change(T,(indice-1)/2,valeur)
-        }
+    ajoute_evenement(test_arbre, event1);
+
+    if(test_arbre->valeurs[0].moment != 300){
+        
+        return false;
     }
-  (*T->arbre)[indice]=valeur
-  }
-}*/
-
-
-void ajoute_evenement(Arbre arbre, Evenement valeur){
     
-	if ((NULL == arbre)||(arbre->taille == arbre->capacite)){
-        fprintf(stderr, "Erreur de taille, ou arbre inexistant\n");
-		return;
-	}
-    
-    arbre->valeurs[arbre->taille] = valeur;
-	(arbre->taille)++;
-	change(arbre, arbre->taille-1, valeur);
-	
-}
+    ajoute_evenement(test_arbre, event2);
+    ajoute_evenement(test_arbre, event3);
 
-
-Evenement ote_minimum(Arbre tas){
-	Evenement min;
-
-	min=(tas->valeurs)[0];
-	(tas->taille)--;
-	change(tas, 0, (tas->valeurs)[tas->taille]);
-    
-	return min;
-}
-
-
-/*static void triTas(Tas tas, int taille){
-	
-	int i;
-	Tas t;
-	t.taille = taille; 
-	for (i = 0; i< taille; i++){
-		ajoute_evenement(&t, (tas.valeurs)[i]);
-	}
-	for( i= taille-1 ; i>=0 ; i--){
-		(tas.valeurs)[i] = ote_minimum(&t);
-	}
-}*/
-
-
-Arbre construit_Tas(Plateau niveau){
-    
-	Arbre arbre;
-    arbre = malloc_Tas(512); 
-	Evenement evenement;
-	unsigned int i, j;
-    
-	for(i = 0; i < niveau->taille.x ; i++){
-		for(j = 0; j < niveau->taille.y; j++){
-			if(niveau->objets[i][j].type == LANCEUR) {
-				evenement.coo_obj.x = i;
-				evenement.coo_obj.y = j;
-				evenement.moment = 1000;
-				ajoute_evenement(arbre, evenement);
-			}
-		}
-	}
-	
-	return arbre;
-}
-
-
-void affiche_Tas(Arbre tas){
-
-    unsigned int i;
-    for(i = 0; i < tas->taille; i++){
-        affiche_coordonnee(tas->valeurs[i].coo_obj);
-        printf("Moment : %lu", tas->valeurs[i].moment);
+    if(estTas(test_arbre)){
+        printf("%lu\n", test_arbre->valeurs[1].moment);
+        return false;
     }
-	
+    ajoute_evenement(test_arbre, event3);
+    ajoute_evenement(test_arbre, event4);
+    ajoute_evenement(test_arbre, event5);
+
+    if(estTas(test_arbre) == false){
+        return false;
+    }
+
+
+    free_Tas(test_arbre);
+    return true;
+}
+
+void main_test(){
+    if(test_evenement_pret() == true){
+        printf("Le test de  la fonction un_evenement_est_pret est passé\n");
+    }
+    else{
+        printf("Le test de un_evenement_est_pret n'est pas passé \n");
+    }
+
+    if(test_ajoute_evenement_test() == true){
+        printf("le test de la fonction test_ajoute_evenement_test est passé\n");
+    }
+    else{
+        printf("le test de la fonction test_ajoute_evenement_test n'est pas passé\n");
+    }
 }
