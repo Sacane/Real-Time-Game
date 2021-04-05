@@ -14,14 +14,14 @@
 #include "../include/niveau.h"
 #include "temps.h"
 
-
 typedef struct {
     unsigned long moment; /* Moment auquel evenement doit avoir lieu en
                         * nombre de "tick" du processeur
                         * Voir Gestion du temps */
 
     Coordonnees coo_obj; /* Objet affecte */
-}Evenement;
+} Evenement;
+
 
 typedef struct {
   
@@ -33,9 +33,13 @@ typedef struct {
 						* utilisees. */
 } Tas, *Arbre;
 
+bool estTas(Arbre arbre);
+
 Arbre malloc_Tas(unsigned capacite_initiale);
 
+
 void free_Tas(Arbre tas);
+
 
 void realloc_Tas(Arbre tas);
 
@@ -49,9 +53,11 @@ Evenement ote_minimum(Arbre tas); /* Renvoie et retire de `tas`
                                   * le  plus petit. */
 void ajoute_evenement(Arbre tas, Evenement n); /* Ajoute un Evenement
                                                * a un Tas */
+                                               
 Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
                                      * Evenements initiaux d'un 
                                      * Niveau */
+									 
 void affiche_Tas(Arbre tas); /* Affiche le contenu d'un tas, a des
                              * fins de tests */
 

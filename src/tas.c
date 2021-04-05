@@ -1,6 +1,36 @@
 #include "../include/tas.h"
 
 
+static unsigned int verif_pere(int iteration){
+	unsigned int tmp;
+	tmp = (iteration - 1)/2;
+
+	if(iteration%2 == 0){
+		tmp = (iteration - 2)/2;
+		return tmp;
+	}
+	if(iteration%2 != 0){
+		tmp = (iteration - 1)/2;
+		return tmp;
+	}
+    return tmp;
+}
+
+bool estTas(Arbre arbre){
+	
+	unsigned int i, pere;
+
+	for(i = 1; i < (arbre->taille); i++){
+
+		pere = verif_pere(i);
+		if((arbre->valeurs)[i].moment < (arbre->valeurs)[pere].moment)
+			return false;
+		if((arbre->valeurs)[pere].moment > (arbre->valeurs)[i].moment)
+			return false;
+	}
+	return true;
+}
+
 
 
 Arbre malloc_Tas(unsigned capacite_initiale) {
@@ -42,7 +72,7 @@ bool un_evenement_est_pret(Arbre tas){
 }
 
 
-int Fils(Arbre T, int indice){
+static int Fils(Arbre T, int indice){
 
 	unsigned int fils;
 	fils = (indice*2+1);
@@ -56,7 +86,7 @@ int Fils(Arbre T, int indice){
 	
 }
 
-void change(Arbre arbre, unsigned int indice, Evenement valeur){
+static void change(Arbre arbre, unsigned int indice, Evenement valeur){
 	
     int f;
     if (NULL == arbre) { return; }
@@ -109,10 +139,11 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
         fprintf(stderr, "Erreur de taille, ou arbre inexistant\n");
 		return;
 	}
+    
+    arbre->valeurs[arbre->taille] = valeur;
 	(arbre->taille)++;
 	change(arbre, arbre->taille-1, valeur);
 	
-
 }
 
 
