@@ -9,9 +9,9 @@ Plateau malloc_Niveau (Coordonnees taille){
     tmp = (Plateau)malloc(sizeof(Niveau));
     tmp->taille = taille;
 
-    tmp->objets = malloc(sizeof(Objet*)*taille.x + sizeof(Objet) *taille.y * taille.x);
+    tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
     for(i = 0; i < taille.x; i++){
-      tmp->objets[i] = (Objet*)malloc(sizeof(Objet)*taille.x + taille.x * taille.y);
+      tmp->objets[i] = (Objet*)malloc(sizeof(Objet) * taille.y);
     }
     return tmp;
 }
@@ -31,7 +31,7 @@ void free_Niveau (Plateau niveau){
  * Déplace le joueur selon une direction donnée
  */ 
 void deplacer_joueur(Plateau niveau){
-    
+
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
     
     switch(niveau->dir_perso){
@@ -59,5 +59,9 @@ bool perso_en_contact(Plateau plateau){
             (plateau->coo_perso.x == plateau->taille.x + 1 && plateau->dir_perso == GAUCHE) || 
             (plateau->coo_perso.y == plateau->taille.y -1 && plateau->dir_perso == HAUT) ||
             (plateau->coo_perso.y == plateau->taille.y + 1 && plateau->dir_perso == BAS);
+}
+
+void affiche_coordonnee(Coordonnees coordonnee){
+    printf("Coordonnée : (%ud, %ud)\n", coordonnee.x, coordonnee.y);
 }
 

@@ -23,7 +23,7 @@ typedef struct coordonnees{
 
 
 typedef struct {
-
+    
     Coordonnees taille; /* Taille du niveau */
     Objet** objets; /* Tableau bi-directionnel de largeur taille.x, 
                     * de hauteur taille.y, et dont chaque case 
@@ -37,6 +37,10 @@ typedef struct {
     Direction dir_perso; /*Direction actuelle du personnage */
     
 } Niveau, *Plateau;
+
+
+
+void affiche_coordonnee(Coordonnees coordonnee);
 
 Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
                                              * pour obtenir un 
@@ -63,5 +67,9 @@ bool bordure_en_contact(Plateau plateau, Objet obj);
 
 /*Vérifie et renvoi true si le personnage est s'apprête à rentrer en conflit avec un mur */
 bool perso_en_contact(Plateau plateau);
+
+void deplacer_projectile(Plateau plateau);
+
+
 
 #endif
