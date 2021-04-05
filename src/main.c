@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../include/niveau.h"
 #include "../include/commande.h"
+#include "../include/test.h"
 
 int main(void) {
 
@@ -27,5 +28,9 @@ int main(void) {
     free_Niveau(niveau);
     
 
+    printf("\n");
+    /* ======== TEST ========*/
+    
+    main_test();
     return 0;
 }
