@@ -66,11 +66,9 @@ Arbre malloc_Tas(unsigned capacite_initiale) {
 
 void free_Tas(Arbre tas){
 
-    unsigned int i;
-    for(i = 0; i < tas->capacite; i++){
-        free(&tas->valeurs[i]);
-    }
+    if(tas->valeurs != NULL) free(tas->valeurs);
     free(tas);
+
 }
 
 void realloc_Tas(Arbre tas){

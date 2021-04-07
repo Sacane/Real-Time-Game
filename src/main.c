@@ -29,8 +29,12 @@ int main(void) {
     
 
     printf("\n");
+
+    free(dep);
+
     /* ======== TEST ========*/
     
+
     main_test();
     return 0;
 }

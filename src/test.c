@@ -15,51 +15,62 @@ static bool test_evenement_pret(){
         eval = maintenant();
         if(eval == 800){
             if(un_evenement_est_pret(test_tas) == true){
+                free_Tas(test_tas);
                 return false;
             }
         }
         if(eval == 1000){
             if(un_evenement_est_pret(test_tas) == false){
+                free_Tas(test_tas);
                 return false;
             }
         }
         break;
     }
+    free_Tas(test_tas);
     return true;
 }
 
 static bool test_ajoute_evenement_test() {
     Arbre test_arbre = malloc_Tas(INITIAL_SIZE);
-    Evenement event1, event2, event3, event4, event5;
+    Evenement event1, event2, event3, event4, event5, event6, event7, event8, event9;
     
     event1.moment = 300;
-    event2.moment = 1000;
-    event3.moment = 500;
-    event4.moment = 800;
-    event5.moment = 200;
-
+    event2.moment = 2050;
+    event3.moment = 1002;
+    event4.moment = 293;
+    event5.moment = 450;
+    event6.moment = 1080;
+    event7.moment = 850;
+    event8.moment = 1300;
+    event9.moment = 1000;
     ajoute_evenement(test_arbre, event1);
 
     if(test_arbre->valeurs[0].moment != 300){
-        
+        free_Tas(test_arbre);
         return false;
     }
     
     ajoute_evenement(test_arbre, event2);
-    ajoute_evenement(test_arbre, event3);
 
-    if(estTas(test_arbre)){
+    if(estTas(test_arbre) == false){
         printf("%lu\n", test_arbre->valeurs[1].moment);
         return false;
     }
+
     ajoute_evenement(test_arbre, event3);
     ajoute_evenement(test_arbre, event4);
     ajoute_evenement(test_arbre, event5);
+    ajoute_evenement(test_arbre, event6);
+    ajoute_evenement(test_arbre, event7);
+    ajoute_evenement(test_arbre, event8);
+    ajoute_evenement(test_arbre, event9);
+    affiche_Tas(test_arbre);
 
     if(estTas(test_arbre) == false){
+        free_Tas(test_arbre);
         return false;
     }
-
 
     free_Tas(test_arbre);
     return true;
