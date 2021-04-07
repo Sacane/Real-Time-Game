@@ -14,6 +14,8 @@
 #include "../include/niveau.h"
 #include "temps.h"
 
+#define heap_father(i) ((int) ((i)+1)/2-1)
+
 typedef struct {
     unsigned long moment; /* Moment auquel evenement doit avoir lieu en
                         * nombre de "tick" du processeur
@@ -39,7 +41,7 @@ Arbre malloc_Tas(unsigned capacite_initiale);
 
 
 void free_Tas(Arbre tas);
-
+bool est_Tas(Arbre tas);
 
 void realloc_Tas(Arbre tas);
 

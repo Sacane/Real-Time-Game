@@ -1,9 +1,15 @@
 #include "../include/tas.h"
 
+int test1 = 0;
+int test2 = 0;
 
 static unsigned int verif_pere(int iteration){
 	unsigned int tmp;
 	tmp = (iteration - 1)/2;
+
+    if(tmp == 0){
+        return 0;
+    }
 
 	if(iteration%2 == 0){
 		tmp = (iteration - 2)/2;
@@ -16,14 +22,27 @@ static unsigned int verif_pere(int iteration){
     return tmp;
 }
 
+bool est_Tas(Arbre tas){
+	
+    unsigned int k;
+
+    for(k = tas->taille - 1 ; k > 0; k--){
+		
+        if((tas->valeurs)[k].moment < (tas->valeurs)[(k-1)/2].moment){
+            return false;
+        }
+    }
+    return true;
+}
+
 bool estTas(Arbre arbre){
 	
 	unsigned int i, pere;
 
-	for(i = 1; i < (arbre->taille); i++){
+	for(i = (arbre->taille) - 1; i > 0; i--){
 
 		pere = verif_pere(i);
-		if((arbre->valeurs)[i].moment < (arbre->valeurs)[pere].moment)
+		if((arbre->valeurs)[0].moment < pere)
 			return false;
 		if((arbre->valeurs)[pere].moment > (arbre->valeurs)[i].moment)
 			return false;
@@ -72,77 +91,40 @@ bool un_evenement_est_pret(Arbre tas){
 }
 
 
-static int Fils(Arbre T, int indice){
+static void defiler(Arbre h, int i)
+{
+  int f = heap_father(i);
+  Evenement tmp;
 
-	unsigned int fils;
-	fils = (indice*2+1);
-	if (fils >= T->taille) 
-		return -1;
-	if (fils == (T->taille)-1) 
-		return fils;
-	if ((T->valeurs)[fils].moment > (T->valeurs)[fils+1].moment) 
-		fils++;
-	return fils;
-	
-}
-
-static void change(Arbre arbre, unsigned int indice, Evenement valeur){
-	
-    int f;
-    if (NULL == arbre) { return; }
+  if (i == 0) return;
+  while (h->valeurs[f].moment > h->valeurs[i].moment) { 
     
-    if (indice<=(arbre)->taille){
-        f=Fils(arbre, indice);
-        if (f!=-1){
-            if ((arbre->valeurs)[f].moment < valeur.moment){
-                (arbre->valeurs)[indice]=(arbre->valeurs)[f];
-                change(arbre, f, valeur);
-            }
-            
-            if (indice !=0){
-                if ((arbre->valeurs)[(indice-1)/2].moment > valeur.moment){
-                    (arbre->valeurs)[indice]=(arbre->valeurs)[(indice-1)/2];
-                    change(arbre,(indice-1)/2,valeur);
-                }
-            }
-            (arbre->valeurs)[indice]=valeur;
-        }
-    }
-}
+    tmp = h->valeurs[f];
+    h->valeurs[f] = h->valeurs[i];
+    h->valeurs[i] = tmp;
 
-
-/*void change(tas *T,int indice, int valeur){
-  int f;
-  if (NULL == T) {return;}
-  if (indice<=(*T)->taille) && (indice>= 0){
-    f=fils(*T, indice)
-    if f!=-1{
-      if (*T->arbre)[f]< valeur{
-       (*T->arbre)[indice]=(*T->arbre)[f];
-        change(T,f,valeur)
-        }
-      }
-    if indice!=0{
-    if (*T->arbre)[(indice-1)/2]>valeur{
-        (*T->arbre)[indice]=(*T->arbre)[(indice-1)/2];
-        change(T,(indice-1)/2,valeur)
-        }
-    }
-  (*T->arbre)[indice]=valeur
+    i = f;
+    if (f == 0)
+      return;
+    else
+      f = heap_father(f);
   }
-}*/
+}
 
 
 void ajoute_evenement(Arbre arbre, Evenement valeur){
     
+    assert((arbre != NULL) && (arbre->valeurs != NULL));
 	if ((NULL == arbre)||(arbre->taille == arbre->capacite)){
         fprintf(stderr, "Erreur de taille, ou arbre inexistant\n");
+        printf("Ah\n");
 		return;
 	}
     
     arbre->valeurs[arbre->taille] = valeur;
 	(arbre->taille)++;
-	change(arbre, arbre->taille-1, valeur);
+	/*change(arbre, arbre->taille-1, valeur);*/
+    defiler(arbre, (arbre->taille) -1);
 	
 }
 
@@ -152,7 +134,7 @@ Evenement ote_minimum(Arbre tas){
 
 	min=(tas->valeurs)[0];
 	(tas->taille)--;
-	change(tas, 0, (tas->valeurs)[tas->taille]);
+	/*change(tas, 0, (tas->valeurs)[tas->taille]);*/
     
 	return min;
 }
@@ -195,11 +177,12 @@ Arbre construit_Tas(Plateau niveau){
 
 
 void affiche_Tas(Arbre tas){
-
+    printf("enter\n");
     unsigned int i;
     for(i = 0; i < tas->taille; i++){
         affiche_coordonnee(tas->valeurs[i].coo_obj);
-        printf("Moment : %lu", tas->valeurs[i].moment);
+        printf("\n");
+        printf("Moment : %lu\n", tas->valeurs[i].moment);
     }
 	
 }
