@@ -1,8 +1,8 @@
 #include "../include/test.h"
 
-/* TODO : Finir le test d'ajout d'évènement */
 
-static bool test_evenement_pret(){
+static bool test_evenement_pret(int *total_test){
+    *total_test += 1;
     unsigned long eval;
 	Arbre test_tas;
     test_tas = malloc_Tas(INITIAL_SIZE);
@@ -15,13 +15,13 @@ static bool test_evenement_pret(){
         eval = maintenant();
         if(eval == 800){
             if(un_evenement_est_pret(test_tas) == true){
-                free_Tas(test_tas);
+				free_Tas(test_tas);
                 return false;
             }
         }
         if(eval == 1000){
             if(un_evenement_est_pret(test_tas) == false){
-                free_Tas(test_tas);
+				free_Tas(test_tas);
                 return false;
             }
         }
@@ -31,7 +31,8 @@ static bool test_evenement_pret(){
     return true;
 }
 
-static bool test_ajoute_evenement_test() {
+static bool test_ajoute_evenement(int *total_test) {
+    *total_test += 1;
     Arbre test_arbre = malloc_Tas(INITIAL_SIZE);
     Evenement event1, event2, event3, event4, event5, event6, event7, event8, event9;
     
@@ -44,6 +45,7 @@ static bool test_ajoute_evenement_test() {
     event7.moment = 850;
     event8.moment = 1300;
     event9.moment = 1000;
+    
     ajoute_evenement(test_arbre, event1);
 
     if(test_arbre->valeurs[0].moment != 300){
@@ -54,40 +56,158 @@ static bool test_ajoute_evenement_test() {
     ajoute_evenement(test_arbre, event2);
 
     if(estTas(test_arbre) == false){
-        printf("%lu\n", test_arbre->valeurs[1].moment);
+        free_Tas(test_arbre);
         return false;
     }
 
     ajoute_evenement(test_arbre, event3);
+    /* On vérifie que tas[1] et tas[2] plus petit que tas[1] */
+
     ajoute_evenement(test_arbre, event4);
     ajoute_evenement(test_arbre, event5);
     ajoute_evenement(test_arbre, event6);
     ajoute_evenement(test_arbre, event7);
     ajoute_evenement(test_arbre, event8);
     ajoute_evenement(test_arbre, event9);
-    affiche_Tas(test_arbre);
+
 
     if(estTas(test_arbre) == false){
         free_Tas(test_arbre);
         return false;
     }
 
-    free_Tas(test_arbre);
+	free_Tas(test_arbre);
+
     return true;
 }
 
-void main_test(){
-    if(test_evenement_pret() == true){
-        printf("Le test de  la fonction un_evenement_est_pret est passé\n");
+static bool test_minimum_aux(Evenement min, Arbre Tas){
+    unsigned int i;
+    
+    for(i = 0; i < Tas->taille; i++){
+        if(min.moment > Tas->valeurs[i].moment){
+            return false;
+        }
     }
-    else{
-        printf("Le test de un_evenement_est_pret n'est pas passé \n");
+    return true;
+}
+
+static bool test_ote_minimum(int *total_test){
+    *total_test += 1;
+	Arbre arbre = malloc_Tas(INITIAL_SIZE);
+	Evenement event1, event2, event3, event4, event5, eventMin;
+    
+    event1.moment = 300;
+    event2.moment = 2050;
+    event3.moment = 1002;
+    event4.moment = 293;
+    event5.moment = 450;
+    
+	ajoute_evenement(arbre, event1);
+	ajoute_evenement(arbre, event2);
+	ajoute_evenement(arbre, event3);
+	ajoute_evenement(arbre, event4);
+	ajoute_evenement(arbre, event5);
+	
+	eventMin = ote_minimum(arbre);
+    /* Le minimum est bien la valeur extraite */
+	if (test_minimum_aux(eventMin, arbre) == false){
+		free_Tas(arbre);
+		return false;
+	}
+
+    /* Test si le tas est toujours un tas */
+	if(estTas(arbre) == false){
+		free_Tas(arbre);
+		return false; 
+	}
+
+    free_Tas(arbre);
+	return true; 
+}
+
+
+static bool test_contruit_tas(int *total_test){
+    *total_test += 1;
+	Plateau niveau = niveau0();
+    Arbre arbre;
+    
+    Coordonnees lanceur1;
+    lanceur1.x = 0;
+    lanceur1.y = 0;
+    
+    Coordonnees lanceur2;
+    lanceur2.x = 3;
+    lanceur2.y = 5;
+
+	arbre = construit_Tas(niveau);
+	
+    if(!arbre){
+        free_Niveau(niveau);
+		free_Tas(arbre);
+        return false;
+    }
+    
+	if(estTas(arbre) == false){
+        free_Niveau(niveau);
+		free_Tas(arbre);
+		return false; 
+	}
+
+	if(est_coordonnee_equivalent(lanceur1, (arbre->valeurs[0]).coo_obj) == false){
+        free_Niveau(niveau);
+        free_Tas(arbre);
+        return false;
     }
 
-    if(test_ajoute_evenement_test() == true){
-        printf("le test de la fonction test_ajoute_evenement_test est passé\n");
+	if(est_coordonnee_equivalent(lanceur2, (arbre->valeurs[1]).coo_obj) == false){
+        free_Niveau(niveau);
+        free_Tas(arbre);
+        return false;
+    }
+    
+	free_Tas(arbre);
+	free_Niveau(niveau);
+	return true;
+
+}
+
+
+void main_test(){
+    int compteur = 0;
+    int total_test = 0;
+    if(test_evenement_pret(&total_test) == true){
+        compteur++;
+        printf("test 'un_evenement_est_pret' : réussi\n");
     }
     else{
-        printf("le test de la fonction test_ajoute_evenement_test n'est pas passé\n");
+        printf("test 'un_evenement_est_pret' : échoué\n");
     }
+
+    if(test_ajoute_evenement(&total_test) == true){
+        compteur++;
+        printf("test 'ajoute_evenement' : réussi\n");
+    }
+    else{
+        printf("test 'ajoute_evenement' : échoué\n");
+    }
+
+	if(test_ote_minimum(&total_test) == true){
+        compteur++;
+        printf("test 'ote_minimum' : réussi\n");
+    }
+    else{
+        printf("test 'ote_minimum' : échoué\n");
+    }
+    
+    if(test_contruit_tas(&total_test) == true){
+        compteur++;
+        printf("test 'construit_tas' : réussi\n");
+    }
+    else{
+        printf("test 'construit_tas' : échoué\n");
+    }
+
+    printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
+
 }

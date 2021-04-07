@@ -65,3 +65,6 @@ void affiche_coordonnee(Coordonnees coordonnee){
     printf("Coordonnée : (%ud, %ud)\n", coordonnee.x, coordonnee.y);
 }
 
+bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
+    return (first.y == second.y) && (first.x == second.x);
+}

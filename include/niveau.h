@@ -70,6 +70,6 @@ bool perso_en_contact(Plateau plateau);
 
 void deplacer_projectile(Plateau plateau);
 
-
+bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
 
 #endif

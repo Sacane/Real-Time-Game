@@ -68,7 +68,6 @@ void free_Tas(Arbre tas){
 
     if(tas->valeurs != NULL) free(tas->valeurs);
     free(tas);
-
 }
 
 void realloc_Tas(Arbre tas){
@@ -89,24 +88,23 @@ bool un_evenement_est_pret(Arbre tas){
 }
 
 
-static void defiler(Arbre h, int i)
-{
-  int f = heap_father(i);
-  Evenement tmp;
+static void defiler(Arbre h, int i) {
+    int f = heap_father(i);
+    Evenement tmp;
 
-  if (i == 0) return;
-  while (h->valeurs[f].moment > h->valeurs[i].moment) { 
-    
-    tmp = h->valeurs[f];
-    h->valeurs[f] = h->valeurs[i];
-    h->valeurs[i] = tmp;
+    if (i == 0) return;
+    while (h->valeurs[f].moment > h->valeurs[i].moment) { 
 
-    i = f;
-    if (f == 0)
-      return;
-    else
-      f = heap_father(f);
-  }
+        tmp = h->valeurs[f];
+        h->valeurs[f] = h->valeurs[i];
+        h->valeurs[i] = tmp;
+
+        i = f;
+        if (f == 0)
+            return;
+        else
+            f = heap_father(f);
+    }
 }
 
 
@@ -119,20 +117,62 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 		return;
 	}
     
+
     arbre->valeurs[arbre->taille] = valeur;
 	(arbre->taille)++;
-	/*change(arbre, arbre->taille-1, valeur);*/
+    
+    if(arbre->taille >= arbre->capacite){
+        realloc_Tas(arbre);
+    }
+
+
     defiler(arbre, (arbre->taille) -1);
 	
 }
 
+static unsigned int Fils(Arbre T, unsigned int indice){
+	unsigned int fils;
+	fils = (indice*2+1);
+	if (fils == (T->taille)-1) 
+		return fils;
+	if ((T->valeurs)[fils].moment > (T->valeurs)[fils+1].moment) 
+		fils++;
+	return fils;
+}
+
+
+static void change(Arbre T, unsigned int indice, Evenement valeur){
+	unsigned int f;
+    
+	if (NULL == T) return;
+
+	if ((indice<=(T)->taille)){
+        f = Fils(T, indice);
+
+        if ((T->valeurs)[f].moment < valeur.moment){
+        (T->valeurs)[indice]=(T->valeurs)[f];
+        change(T, f, valeur);;
+        }
+        
+        if(indice != 0){
+            if ((T->valeurs)[(indice-1)/2].moment > valeur.moment){
+                (T->valeurs)[indice]=(T->valeurs)[(indice-1)/2];
+                change(T,(indice-1)/2,valeur);
+            }
+        }
+	    (T->valeurs)[indice]=valeur;
+	}
+}
+
 
 Evenement ote_minimum(Arbre tas){
+
 	Evenement min;
 
-	min=(tas->valeurs)[0];
-	(tas->taille)--;
-	/*change(tas, 0, (tas->valeurs)[tas->taille]);*/
+    min=(tas->valeurs)[0];
+    (tas->taille)--;
+    change(tas, 0, tas->valeurs[tas->taille]);
+
     
 	return min;
 }
@@ -184,3 +224,4 @@ void affiche_Tas(Arbre tas){
     }
 	
 }
+
