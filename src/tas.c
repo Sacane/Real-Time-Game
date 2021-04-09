@@ -1,25 +1,12 @@
 #include "../include/tas.h"
 
-int test1 = 0;
-int test2 = 0;
-
 static unsigned int verif_pere(int iteration){
-	unsigned int tmp;
-	tmp = (iteration - 1)/2;
 
-    if(tmp == 0){
+    if(iteration == 0){
         return 0;
     }
+    return (iteration % 2 == 0) ? (iteration - 2) / 2 : (iteration - 1) / 2;
 
-	if(iteration%2 == 0){
-		tmp = (iteration - 2)/2;
-		return tmp;
-	}
-	if(iteration%2 != 0){
-		tmp = (iteration - 1)/2;
-		return tmp;
-	}
-    return tmp;
 }
 
 bool est_Tas(Arbre tas){
