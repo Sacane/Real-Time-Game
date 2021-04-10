@@ -51,8 +51,10 @@ typedef enum {
 
 
 typedef struct {
+
 	Direction direction; /* Direction du deplacement */
 	unsigned long allure; /* Allure du deplacement */
+
 } Deplacement;
 
 
@@ -60,7 +62,6 @@ typedef struct {
  * modifie les propriété de l'objet obj en lui attribuant le déplacement en tant que projectile
 */
 void remplis_projectile(Objet* obj, Deplacement* deplacement);
-
 
 /*
  * Modifie les propriétés de l'objet lanceur en lui attribuant la génération gen en tant que lanceur
