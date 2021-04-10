@@ -173,6 +173,55 @@ static bool test_contruit_tas(int *total_test){
 }
 
 
+/*
+    - Tester si l'ancien coordonnée du projectile à bien comme type "VIDE"
+    - Tester si la nouvelle coordonnée dans le niveau contient bien le projectile
+    - Tester si lorsqu'il y a un mur, le projectile est bien effacé du plateau
+*/
+static bool test_deplace_projectile(int *total_test){
+    *total_test += 1;
+	Plateau niveau = niveau0();
+	Objet objet; 
+    Deplacement* deplacement;
+    deplacement = (Deplacement*)malloc(sizeof(deplacement));
+	Coordonnees coordonnees;
+
+	deplacement->direction = HAUT;
+	coordonnees.x = 3;
+    coordonnees.y = 2;
+	objet.type = PROJECTILE; 
+	objet.donnee_suppl = deplacement;
+    niveau->objets[coordonnees.x][coordonnees.y] = objet;
+	
+	deplace_projectile(objet, niveau, coordonnees);
+    
+	if(niveau->objets[3][2].type != VIDE){
+        printf("Projectile non-déplacé !");
+		return false;
+	}
+
+	if(niveau->objets[2][2].type != PROJECTILE){
+        printf("Projectile pas au bon endroit !\n");
+		return false;
+	}
+
+    Coordonnees new_coord;
+    new_coord.x = 2;
+    new_coord.y = 2;
+
+    deplace_projectile(objet, niveau, new_coord);
+
+    if(niveau->objets[1][2].type != MUR){
+        printf("Le mur a été modifié par un projectile !\n");
+        return false;
+    }
+
+	free_Niveau(niveau);
+	free(deplacement);
+	return true; 
+}
+
+
 void main_test(){
     int compteur = 0;
     int total_test = 0;
@@ -208,6 +257,16 @@ void main_test(){
         printf("test 'construit_tas' : échoué\n");
     }
 
+	if(test_deplace_projectile(&total_test) == true){
+        compteur++;
+        printf("test 'deplace_projectile' : réussi\n");
+    }
+    else{
+        printf("test 'deplace_projectile' : échoué\n");
+    }
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 
 }
+
+
+    
