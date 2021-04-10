@@ -11,7 +11,7 @@
 #ifndef __TAS__H__
 #define __TAS__H__
 
-#include "../include/niveau.h"
+#include "niveau.h"
 #include "temps.h"
 
 #define heap_father(i) ((int) ((i)+1)/2-1)
@@ -66,7 +66,10 @@ void affiche_Tas(Arbre tas); /* Affiche le contenu d'un tas, a des
 /* Traite un Evenement. */
 void traite_evenement(Evenement e, Arbre tas, Plateau niveau); 
 
-
+/* Execute un Evenement , ce qui peut consister a deplacer un
+* objet dans le Niveau , verifier si la partie est terminee ,
+* ajouter de nouveaux evenements au Tas , etc. */
+void execute_evenement ( Evenement e, Tas* tas , Niveau* niveau);
 
 
 #endif

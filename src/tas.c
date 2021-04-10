@@ -1,29 +1,31 @@
 #include "../include/tas.h"
 
-static unsigned int verif_pere(int iteration){
+int test1 = 0;
+int test2 = 0;
 
-    if(iteration == 0){
+static unsigned int verif_pere(int iteration){
+	unsigned int tmp;
+	tmp = (iteration - 1)/2;
+
+    if(tmp == 0){
         return 0;
     }
-    return (iteration % 2 == 0) ? (iteration - 2) / 2 : (iteration - 1) / 2;
 
+	if(iteration%2 == 0){
+		tmp = (iteration - 2)/2;
+		return tmp;
+	}
+	if(iteration%2 != 0){
+		tmp = (iteration - 1)/2;
+		return tmp;
+	}
+    return tmp;
 }
 
-bool est_Tas(Arbre tas){
-	
-    unsigned int k;
-
-    for(k = tas->taille - 1 ; k > 0; k--){
-		
-        if((tas->valeurs)[k].moment < (tas->valeurs)[(k-1)/2].moment){
-            return false;
-        }
-    }
-    return true;
-}
 
 bool estTas(Arbre arbre){
-	
+
+	assert(arbre->valeurs != NULL);
 	unsigned int i, pere;
 
 	for(i = (arbre->taille) - 1; i > 0; i--){
@@ -40,7 +42,9 @@ bool estTas(Arbre arbre){
 
 
 Arbre malloc_Tas(unsigned capacite_initiale) {
-    
+
+    assert(capacite_initiale > 0);
+
 	Arbre arbre = (Arbre)malloc(sizeof(Tas));
     verif_malloc(arbre);
 	arbre->taille = 0;
@@ -59,12 +63,18 @@ void free_Tas(Arbre tas){
 
 void realloc_Tas(Arbre tas){
 
+    assert(tas->valeurs != NULL);
+
     tas->capacite *= 2; /*On double la capacité max */
     tas->valeurs = (Evenement*)realloc(tas->valeurs, sizeof(Evenement)*tas->capacite);
     
 }
 
+
 bool un_evenement_est_pret(Arbre tas){
+
+    assert(tas->valeurs != NULL);
+
     unsigned i;
     for(i = 0; i < tas->taille; i++){
         if(tas->valeurs[i].moment <= maintenant()){
@@ -75,16 +85,20 @@ bool un_evenement_est_pret(Arbre tas){
 }
 
 
-static void defiler(Arbre h, int i) {
+static void defiler(Arbre tas, int i) {
+
+    assert(tas->valeurs != NULL);
+    assert(i >= 0);
+    
     int f = heap_father(i);
     Evenement tmp;
 
     if (i == 0) return;
-    while (h->valeurs[f].moment > h->valeurs[i].moment) { 
+    while (tas->valeurs[f].moment > tas->valeurs[i].moment) { 
 
-        tmp = h->valeurs[f];
-        h->valeurs[f] = h->valeurs[i];
-        h->valeurs[i] = tmp;
+        tmp = tas->valeurs[f];
+        tas->valeurs[f] = tas->valeurs[i];
+        tas->valeurs[i] = tmp;
 
         i = f;
         if (f == 0)
@@ -97,13 +111,13 @@ static void defiler(Arbre h, int i) {
 
 void ajoute_evenement(Arbre arbre, Evenement valeur){
     
-    assert((arbre != NULL) && (arbre->valeurs != NULL));
+	assert(arbre->valeurs != NULL);
+
 	if ((NULL == arbre)||(arbre->taille == arbre->capacite)){
         fprintf(stderr, "Erreur de taille, ou arbre inexistant\n");
         printf("Ah\n");
 		return;
 	}
-    
 
     arbre->valeurs[arbre->taille] = valeur;
 	(arbre->taille)++;
@@ -112,12 +126,15 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
         realloc_Tas(arbre);
     }
 
-
     defiler(arbre, (arbre->taille) -1);
 	
 }
 
+
 static unsigned int Fils(Arbre T, unsigned int indice){
+
+	assert(T->valeurs != NULL);
+
 	unsigned int fils;
 	fils = (indice*2+1);
 	if (fils == (T->taille)-1) 
@@ -129,6 +146,10 @@ static unsigned int Fils(Arbre T, unsigned int indice){
 
 
 static void change(Arbre T, unsigned int indice, Evenement valeur){
+
+	assert(T->valeurs != NULL);
+	assert(valeur.moment > 0);
+
 	unsigned int f;
     
 	if (NULL == T) return;
@@ -154,6 +175,8 @@ static void change(Arbre T, unsigned int indice, Evenement valeur){
 
 Evenement ote_minimum(Arbre tas){
 
+	assert(tas->valeurs != NULL);
+    
 	Evenement min;
 
     min=(tas->valeurs)[0];
@@ -165,24 +188,10 @@ Evenement ote_minimum(Arbre tas){
 }
 
 
-/*static void triTas(Tas tas, int taille){
-	
-	int i;
-	Tas t;
-	t.taille = taille; 
-	for (i = 0; i< taille; i++){
-		ajoute_evenement(&t, (tas.valeurs)[i]);
-	}
-	for( i= taille-1 ; i>=0 ; i--){
-		(tas.valeurs)[i] = ote_minimum(&t);
-	}
-}*/
-
-
 Arbre construit_Tas(Plateau niveau){
     
 	Arbre arbre;
-    arbre = malloc_Tas(512); 
+    arbre = malloc_Tas(INITIAL_SIZE); 
 	Evenement evenement;
 	unsigned int i, j;
     
@@ -202,6 +211,9 @@ Arbre construit_Tas(Plateau niveau){
 
 
 void affiche_Tas(Arbre tas){
+
+	assert(tas->valeurs != NULL);
+
     printf("enter\n");
     unsigned int i;
     for(i = 0; i < tas->taille; i++){
@@ -209,6 +221,47 @@ void affiche_Tas(Arbre tas){
         printf("\n");
         printf("Moment : %lu\n", tas->valeurs[i].moment);
     }
-	
 }
 
+
+
+/*void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur){
+    assert(niveau != NULL);
+    assert(tas != NULL);
+    assert(niveau->objets[pos_lanceur.x][pos_lanceur.y].type == LANCEUR);
+    assert(pos_lanceur.x <= niveau->taille.x);
+    assert(pos_lanceur.y <= niveau->taille.y);
+
+    Objet lanceur = niveau->objets[pos_lanceur.x][pos_lanceur.y];
+    Generation *gen = lanceur.donnee_suppl;
+
+
+}*/
+
+void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
+
+    assert(tas != NULL);
+	assert(tas->valeurs != NULL);
+    assert(niveau != NULL);
+	assert(e.coo_obj.x <= niveau->taille.x);
+    assert(e.coo_obj.y <= niveau->taille.y);
+    
+    Coordonnees coord_evenement;
+    coord_evenement.x = e.coo_obj.x;
+    coord_evenement.y = e.coo_obj.y;
+
+    /* Lancer l'évènement e */
+    switch(niveau->objets[coord_evenement.x][coord_evenement.y].type){
+        
+        case PROJECTILE:
+            
+            break;
+        case LANCEUR:
+            break;
+        case PERSONNAGE:
+            break;
+        default:
+            break;
+    }
+
+}
