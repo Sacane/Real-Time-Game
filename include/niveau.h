@@ -68,8 +68,8 @@ bool bordure_en_contact(Plateau plateau, Objet obj);
 /*Vérifie et renvoi true si le personnage est s'apprête à rentrer en conflit avec un mur */
 bool perso_en_contact(Plateau plateau);
 
-void deplacer_projectile(Plateau plateau);
-
 bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
+
+void deplace_projectile(Objet projectile, Plateau niveau, Coordonnees coordonnees);
 
 #endif
