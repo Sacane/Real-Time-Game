@@ -44,7 +44,7 @@ bool estTas(Arbre arbre){
 Arbre malloc_Tas(unsigned capacite_initiale) {
 
     assert(capacite_initiale > 0);
-
+    
 	Arbre arbre = (Arbre)malloc(sizeof(Tas));
     verif_malloc(arbre);
 	arbre->taille = 0;
@@ -134,55 +134,59 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 static unsigned int Fils(Arbre T, unsigned int indice){
 
 	assert(T->valeurs != NULL);
-
+    
 	unsigned int fils;
 	fils = (indice*2+1);
-	if (fils == (T->taille)-1) 
+	if (fils >= (T->taille)-1) 
 		return fils;
 	if ((T->valeurs)[fils].moment > (T->valeurs)[fils+1].moment) 
 		fils++;
 	return fils;
 }
 
+static void heap_shift_down(Arbre h, unsigned int i)
+{
+  unsigned int next_i;
+  unsigned int max_i = h->taille - 1; /* Indice à ne pas dépasser */
+  Evenement tmp;
 
-static void change(Arbre T, unsigned int indice, Evenement valeur){
-
-	assert(T->valeurs != NULL);
-	assert(valeur.moment > 0);
-
-	unsigned int f;
-    
-	if (NULL == T) return;
-
-	if ((indice<=(T)->taille)){
-        f = Fils(T, indice);
-
-        if ((T->valeurs)[f].moment < valeur.moment){
-        (T->valeurs)[indice]=(T->valeurs)[f];
-        change(T, f, valeur);;
-        }
-        
-        if(indice != 0){
-            if ((T->valeurs)[(indice-1)/2].moment > valeur.moment){
-                (T->valeurs)[indice]=(T->valeurs)[(indice-1)/2];
-                change(T,(indice-1)/2,valeur);
-            }
-        }
-	    (T->valeurs)[indice]=valeur;
-	}
+  assert((h != NULL) && (h->valeurs != NULL) && (i >= 0));
+  if (h->taille - 1 == 0)
+    return;
+  while ((i*2)+1 <= max_i || (i*2)+2 <= max_i) {
+    /* S'il y en a, détermine le plus grand des fils */
+    next_i = (i*2)+1;
+    if (((i*2)+2 <= max_i) &&
+        (h->valeurs[next_i].moment > h->valeurs[(i*2)+2].moment))
+      next_i = (i*2)+2;
+    /* next_i pointe ici sur le plus grand du ou des fils
+     * S'il y a lieu, fait l'échange et continue, sinon sort tout de
+     * suite.
+     */
+    if ((h->valeurs[i].moment > h->valeurs[next_i].moment)) {
+      tmp = h->valeurs[i];
+      h->valeurs[i] = h->valeurs[next_i];
+      h->valeurs[next_i] = tmp;
+      i = next_i;
+    } else
+      return;
+  }
 }
+
 
 
 Evenement ote_minimum(Arbre tas){
 
 	assert(tas->valeurs != NULL);
-    
 	Evenement min;
 
     min=(tas->valeurs)[0];
-    (tas->taille)--;
-    change(tas, 0, tas->valeurs[tas->taille]);
 
+    tas->valeurs[0] = tas->valeurs[tas->taille-1];
+
+    (tas->taille)--;
+
+    heap_shift_down(tas, 0);
     
 	return min;
 }
@@ -213,34 +217,53 @@ Arbre construit_Tas(Plateau niveau){
 void affiche_Tas(Arbre tas){
 
 	assert(tas->valeurs != NULL);
-
-    printf("enter\n");
+    printf("On affiche le tas :\n");
     unsigned int i;
+    printf("[");
     for(i = 0; i < tas->taille; i++){
         affiche_coordonnee(tas->valeurs[i].coo_obj);
-        printf("\n");
-        printf("Moment : %lu\n", tas->valeurs[i].moment);
+        
+        if(i != tas->taille-1){
+            printf(": %lu, ", tas->valeurs[i].moment);
+        }
+        else{
+            printf(": %lu", tas->valeurs[i].moment);
+        }
     }
+    printf("]\n");
 }
 
-static void creer_projectile_selon_direction(Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
-
+static void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
+    Deplacement* deplacement;
+    deplacement = (Deplacement*)malloc(sizeof(Deplacement));
+    deplacement->allure = 300;
+    
     switch(direction){
         case HAUT:
             pos_projectile->x = pos_lanceur.x - 1;
+            pos_projectile->y = pos_lanceur.y;
+            deplacement->direction = HAUT;
             break;
         case BAS:
             pos_projectile->x = pos_lanceur.x + 1;
+            pos_projectile->y = pos_lanceur.y;
+            deplacement->direction = BAS;
             break;
         case DROITE:
+            pos_projectile->x = pos_lanceur.x;
             pos_projectile->y = pos_lanceur.y + 1;
+            deplacement->direction = DROITE;
             break;
         case GAUCHE:
+            pos_projectile->x = pos_lanceur.x;
             pos_projectile->y = pos_lanceur.y - 1;
+            deplacement->direction = GAUCHE;
             break;
         default:
             printf("Erreur de direction\n");
     }
+    plateau->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
+    plateau->objets[pos_projectile->x][pos_projectile->y].donnee_suppl = deplacement;
 }
 
 void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur){
@@ -253,18 +276,47 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur){
     Direction direction;
     Coordonnees pos_projectile;
     Evenement evenement_projectile;
+    Evenement evenement_lanceur;
+    unsigned long moment_lanceur;
+    unsigned long moment = maintenant() + 300;
 
-    for(direction = 0; direction < 3; ++direction){
+    for(direction = HAUT; direction <= DROITE; direction++){
         if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
-            creer_projectile_selon_direction(direction, &pos_projectile, pos_lanceur);
-            evenement_projectile.moment = 300;
+            creer_projectile_selon_direction(niveau, direction, &pos_projectile, pos_lanceur);
+            evenement_projectile.moment = moment;
             evenement_projectile.coo_obj = pos_projectile;
             ajoute_evenement(tas, evenement_projectile);
         }
     }
-
+    moment_lanceur = maintenant() + 1000;
+    evenement_lanceur.moment = moment_lanceur;
+    evenement_lanceur.coo_obj = pos_lanceur;
+    ajoute_evenement(tas, evenement_lanceur);
 }
 
+/*
+ (1) - Déplace le projectile : en fonction de la direction
+ (2) - si le projectile n'a pas disparu (mur / hors plateau), rajoute dans le tas l'évènement du projectile à la position mis à jour
+*/
+void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile){
+
+	assert(tas != NULL);
+	assert(niveau != NULL);
+	assert(pos_projectile.x <= niveau->taille.x);
+	assert(pos_projectile.y <= niveau->taille.y);
+    assert(niveau->objets[pos_projectile.x][pos_projectile.y].type == PROJECTILE);
+
+    Evenement evenement_projectile;
+    
+    deplace_projectile(niveau, &pos_projectile);
+    unsigned long moment = maintenant() + 300;
+
+	if(pos_projectile.x <= niveau->taille.x && pos_projectile.y <= niveau->taille.y){
+		evenement_projectile.moment = moment;
+		evenement_projectile.coo_obj = pos_projectile;
+		ajoute_evenement(tas, evenement_projectile);
+	}
+}
 
 void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
 
@@ -273,7 +325,6 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
     assert(niveau != NULL);
 	assert(e.coo_obj.x <= niveau->taille.x);
     assert(e.coo_obj.y <= niveau->taille.y);
-    
     Coordonnees coord_evenement;
     coord_evenement.x = e.coo_obj.x;
     coord_evenement.y = e.coo_obj.y;
@@ -281,14 +332,12 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
     /* Lancer l'évènement e */
     switch(niveau->objets[coord_evenement.x][coord_evenement.y].type){
         case PROJECTILE:
+            declenche_projectile(tas, niveau, coord_evenement);
             break;
         case LANCEUR:
             declenche_lanceur(niveau, tas, coord_evenement);
             break;
-        case PERSONNAGE:
-            break;
         default:
             break;
     }
-
 }
