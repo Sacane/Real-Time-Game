@@ -11,6 +11,7 @@ void init_niveaux(Plateau niveau, Coordonnees taille){
     for(i = 0; i < taille.x; i++){
         for(j = 0; j < taille.y; j++){
             niveau->objets[i][j].type = VIDE;
+            niveau->objets[i][j].donnee_suppl = NULL;
         }
     }
 }

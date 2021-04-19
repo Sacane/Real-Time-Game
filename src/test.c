@@ -258,8 +258,6 @@ static bool test_deplace_projectile_haut(int *total_test){
 		return false;
 	}
 
-    free(dep);
-	free(deplacement);
     free_Niveau(niveau);
 	return true; 
 }
@@ -301,8 +299,7 @@ static bool test_deplace_projectile_bas(int *total_test){
     coord.x = 4;
     coord.y = 3;
     deplace_projectile( niveau, &coord);
-    
-    free(dep);
+
     free_Niveau(niveau);
 	return true; 
 }
@@ -354,7 +351,6 @@ static bool test_deplace_projectile_droite(int *total_test){
     deplace_projectile(niveau, &coords); 
     
 	free_Niveau(niveau);
-	free(deplacement);
 	return true; 
 }
 
@@ -404,7 +400,6 @@ static bool test_deplace_projectile_gauche(int *total_test){
     }
 
 	free_Niveau(niveau);
-	free(deplacement);
 	return true; 
 }
 
@@ -471,6 +466,7 @@ static bool test_declenche_projectile(int *total_test){
 	tas = malloc_Tas(512);
 	Plateau niveau = niveau0();
 
+
     Coordonnees pos_lanceur;
     pos_lanceur.x = 3;
     pos_lanceur.y = 5;
@@ -501,7 +497,7 @@ static bool test_declenche_projectile(int *total_test){
 
     ev = ote_minimum(tas);
 
-    /*declenche_projectile(tas, niveau, ev.coo_obj);*/
+    declenche_projectile(tas, niveau, ev.coo_obj);
 
     affiche_Niveau(niveau);
     affiche_Tas(tas);
@@ -521,7 +517,7 @@ static bool test_execute_evenement(int *total_test){
 
     Plateau niveau = niveau0();
     Arbre tas;
-    tas = malloc_Tas(512);
+
     tas = construit_Tas(niveau);
 
 
@@ -543,9 +539,11 @@ static bool test_execute_evenement(int *total_test){
     
     affiche_Tas(tas);
     affiche_Niveau(niveau);
-    
-    free_Niveau(niveau);
+
+
     free_Tas(tas);
+    free_Niveau(niveau);
+    
 
 
     return true;
@@ -625,7 +623,7 @@ void main_test(){
     else{
         printf("test 'declenche_projectile' : échoué\n");
     }
-    /*
+    
     if(test_declenche_lanceur(&total_test)){
         compteur++;
         printf("test de la fonction 'declenche_lanceur' : réussi\n");
@@ -640,7 +638,7 @@ void main_test(){
     }
     else{
         printf("test de la fonction 'execute_evenement' : échoué\n");
-    }*/
+    }
     
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
