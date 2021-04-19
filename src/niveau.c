@@ -151,46 +151,42 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
     if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
         niveau->objets[coordonnees->x][coordonnees->y].type = VIDE;
-        
         niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = NULL;
         return;
     }
     
-    switch(deplacement->direction){
+    switch((deplacement)->direction){
 
         case HAUT:
-            if(niveau->objets[coordonnees->x - 1][coordonnees->y].type != MUR){
-                coordonnees->x--; 
-                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
-                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            }
+            
+            coordonnees->x--; 
+            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+
+            
             break;
         case BAS:
-            if(niveau->objets[coordonnees->x + 1][coordonnees->y].type != MUR){
-                coordonnees->x++; 
-                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
-                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            }
+            
+            coordonnees->x++; 
+            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+
+            
             break;
         case DROITE:
-            if(niveau->objets[coordonnees->x][coordonnees->y+1].type != MUR){
-                coordonnees->y++; 
-                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
-                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            }	
+            
+            coordonnees->y++; 
+            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+
+            
             break;
         case GAUCHE:
-            if(niveau->objets[coordonnees->x][coordonnees->y - 1].type != MUR){
-                coordonnees->y--; 
-                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
-                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            }			
+            
+            coordonnees->y--; 
+            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+
+            			
             break;
     }
-
+    niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+    niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
 }
 

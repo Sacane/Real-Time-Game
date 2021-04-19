@@ -130,27 +130,12 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 	
 }
 
-
-static unsigned int Fils(Arbre T, unsigned int indice){
-
-	assert(T->valeurs != NULL);
-    
-	unsigned int fils;
-	fils = (indice*2+1);
-	if (fils >= (T->taille)-1) 
-		return fils;
-	if ((T->valeurs)[fils].moment > (T->valeurs)[fils+1].moment) 
-		fils++;
-	return fils;
-}
-
 static void heap_shift_down(Arbre h, unsigned int i)
 {
   unsigned int next_i;
   unsigned int max_i = h->taille - 1; /* Indice à ne pas dépasser */
   Evenement tmp;
 
-  assert((h != NULL) && (h->valeurs != NULL) && (i >= 0));
   if (h->taille - 1 == 0)
     return;
   while ((i*2)+1 <= max_i || (i*2)+2 <= max_i) {

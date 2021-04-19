@@ -471,9 +471,6 @@ static bool test_declenche_projectile(int *total_test){
 	tas = malloc_Tas(512);
 	Plateau niveau = niveau0();
 
-	Coordonnees pos_projectile; 
-
-
     Coordonnees pos_lanceur;
     pos_lanceur.x = 3;
     pos_lanceur.y = 5;
