@@ -72,4 +72,6 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
 
 void deplace_projectile(Objet projectile, Plateau niveau, Coordonnees coordonnees);
 
+bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau);
+
 #endif

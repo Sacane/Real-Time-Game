@@ -223,20 +223,48 @@ void affiche_Tas(Arbre tas){
     }
 }
 
+static void creer_projectile_selon_direction(Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
 
+    switch(direction){
+        case HAUT:
+            pos_projectile->x = pos_lanceur.x - 1;
+            break;
+        case BAS:
+            pos_projectile->x = pos_lanceur.x + 1;
+            break;
+        case DROITE:
+            pos_projectile->y = pos_lanceur.y + 1;
+            break;
+        case GAUCHE:
+            pos_projectile->y = pos_lanceur.y - 1;
+            break;
+        default:
+            printf("Erreur de direction\n");
+    }
+}
 
-/*void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur){
+void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur){
     assert(niveau != NULL);
     assert(tas != NULL);
     assert(niveau->objets[pos_lanceur.x][pos_lanceur.y].type == LANCEUR);
     assert(pos_lanceur.x <= niveau->taille.x);
     assert(pos_lanceur.y <= niveau->taille.y);
 
-    Objet lanceur = niveau->objets[pos_lanceur.x][pos_lanceur.y];
-    Generation *gen = lanceur.donnee_suppl;
+    Direction direction;
+    Coordonnees pos_projectile;
+    Evenement evenement_projectile;
 
+    for(direction = 0; direction < 3; ++direction){
+        if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
+            creer_projectile_selon_direction(direction, &pos_projectile, pos_lanceur);
+            evenement_projectile.moment = 300;
+            evenement_projectile.coo_obj = pos_projectile;
+            ajoute_evenement(tas, evenement_projectile);
+        }
+    }
 
-}*/
+}
+
 
 void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
 
@@ -252,11 +280,10 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
 
     /* Lancer l'évènement e */
     switch(niveau->objets[coord_evenement.x][coord_evenement.y].type){
-        
         case PROJECTILE:
-            
             break;
         case LANCEUR:
+            declenche_lanceur(niveau, tas, coord_evenement);
             break;
         case PERSONNAGE:
             break;

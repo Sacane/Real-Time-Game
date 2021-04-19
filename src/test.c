@@ -172,13 +172,13 @@ static bool test_contruit_tas(int *total_test){
 
 }
 
-
 /*
     - Tester si l'ancien coordonnée du projectile à bien comme type "VIDE"
     - Tester si la nouvelle coordonnée dans le niveau contient bien le projectile
     - Tester si lorsqu'il y a un mur, le projectile est bien effacé du plateau
 */
-static bool test_deplace_projectile(int *total_test){
+static bool test_deplace_projectile_haut(int *total_test){
+
     *total_test += 1;
 	Plateau niveau = niveau0();
 	Objet objet; 
@@ -192,19 +192,18 @@ static bool test_deplace_projectile(int *total_test){
 	objet.type = PROJECTILE; 
 	objet.donnee_suppl = deplacement;
     niveau->objets[coordonnees.x][coordonnees.y] = objet;
-	
 	deplace_projectile(objet, niveau, coordonnees);
-    
+
 	if(niveau->objets[3][2].type != VIDE){
-        printf("Projectile non-déplacé !");
+        printf("Projectile non-déplacé (haut) !");
 		return false;
 	}
 
 	if(niveau->objets[2][2].type != PROJECTILE){
-        printf("Projectile pas au bon endroit !\n");
+        printf("Projectile pas au bon endroit (haut) !\n");
 		return false;
 	}
-
+    
     Coordonnees new_coord;
     new_coord.x = 2;
     new_coord.y = 2;
@@ -212,7 +211,168 @@ static bool test_deplace_projectile(int *total_test){
     deplace_projectile(objet, niveau, new_coord);
 
     if(niveau->objets[1][2].type != MUR){
-        printf("Le mur a été modifié par un projectile !\n");
+        printf("Le mur a été modifié par un projectile (haut) !\n");
+        return false;
+    }
+
+
+    Deplacement* dep;
+    dep = (Deplacement*)malloc(sizeof(deplacement));
+    dep->direction = HAUT;
+	Coordonnees new1coord2;
+	new1coord2.x = 0;
+	new1coord2.y = 2;
+
+    niveau->objets[new1coord2.x][new1coord2.y].type = PROJECTILE;
+    niveau->objets[new1coord2.x][new1coord2.y].donnee_suppl = dep;
+
+    deplace_projectile(objet, niveau, new1coord2);
+	if (niveau->objets[0][2].type != VIDE){
+        printf("Projectile toujours présent\n");
+		return false;
+	}
+
+    free(dep);
+	free(deplacement);
+    free_Niveau(niveau);
+	return true; 
+}
+
+static bool test_deplace_projectile_bas(int *total_test){
+
+	*total_test += 1;
+    Plateau niveau = niveau0();
+    Objet objet;
+    Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
+	Coordonnees coords;
+    dep->direction = BAS;
+    coords.x = 2;
+    coords.y = 3;
+    objet.type = PROJECTILE;
+    objet.donnee_suppl = dep;
+    niveau->objets[coords.x][coords.y] = objet;
+
+	deplace_projectile(objet, niveau, coords);
+
+    if(niveau->objets[2][3].type != VIDE){
+        printf("Projectile non-déplacé (bas) !");
+		return false;
+	}
+
+	if(niveau->objets[3][3].type != PROJECTILE){
+        printf("Projectile pas au bon endroit (bas) !\n");
+		return false;
+	}
+    coords.x++;
+    deplace_projectile(objet, niveau, coords);
+
+
+    if(niveau->objets[4][3].type != PROJECTILE){
+        printf("Projectile toujours présent (bas)\n");
+		return false;
+	}
+    Coordonnees coord;
+    coord.x = 4;
+    coord.y = 3;
+    deplace_projectile(objet, niveau, coord);
+    
+    free(dep);
+    free_Niveau(niveau);
+	return true; 
+}
+
+
+static bool test_deplace_projectile_droite(int *total_test){
+
+    *total_test += 1;
+	Plateau niveau = niveau0();
+	Objet objet;
+    Deplacement* deplacement;
+    deplacement = (Deplacement*)malloc(sizeof(Deplacement));
+    Coordonnees coord;
+	
+	deplacement->direction = DROITE;
+    coord.x = 0;
+    coord.y = 7;
+	objet.type = PROJECTILE; 
+	objet.donnee_suppl = deplacement;
+    niveau->objets[coord.x][coord.y] = objet;
+
+
+	deplace_projectile(objet, niveau, coord); 
+
+	if(niveau->objets[0][7].type != VIDE){
+        printf("Projectile non-déplacé !");
+		return false;
+	}
+
+	if(niveau->objets[0][8].type != PROJECTILE){
+        printf("Projectile pas au bon endroit (droite)!\n");
+		return false;
+	}
+
+    coord.y++;
+
+    deplace_projectile(objet, niveau, coord); 
+
+
+	if (niveau->objets[0][9].type != PROJECTILE){
+        printf("Projectile toujours présent (droite) \n");
+		return false;
+	}
+
+    Coordonnees coords; 
+    coords.x = 0;
+    coords.y = 9; 
+    deplace_projectile(objet, niveau, coords); 
+    
+	free_Niveau(niveau);
+	free(deplacement);
+	return true; 
+}
+
+static bool test_deplace_projectile_gauche(int *total_test){
+
+	*total_test += 1;
+	Plateau niveau = niveau0();
+	Objet objet; 
+    Deplacement* deplacement;
+    deplacement = (Deplacement*)malloc(sizeof(deplacement));
+	Coordonnees coordonnees;
+
+	deplacement->direction = GAUCHE;
+	coordonnees.x = 2;
+    coordonnees.y = 2;
+	objet.type = PROJECTILE; 
+	objet.donnee_suppl = deplacement;
+    niveau->objets[coordonnees.x][coordonnees.y] = objet;
+
+	deplace_projectile(objet, niveau, coordonnees);
+	
+	if(niveau->objets[2][2].type != VIDE){
+        printf("Projectile non-déplacé (gauche)!");
+		return false;
+	}
+
+	if(niveau->objets[2][1].type != PROJECTILE){
+        printf("Projectile pas au bon endroit (gauche)!\n");
+		return false;
+	}
+    
+    coordonnees.y--;
+    deplace_projectile(objet, niveau, coordonnees);
+
+	if (niveau->objets[2][0].type != PROJECTILE){
+        printf("Projectile toujours présent\n");
+		return false;
+	}
+
+    Coordonnees coord;
+    coord.x = 2;
+    coord.y = 0;
+    deplace_projectile(objet, niveau, coord);
+    if(niveau->objets[2][0].type != VIDE){
+        printf("Le projectile est toujours là !\n");
         return false;
     }
 
@@ -257,16 +417,37 @@ void main_test(){
         printf("test 'construit_tas' : échoué\n");
     }
 
-	if(test_deplace_projectile(&total_test) == true){
+	if(test_deplace_projectile_haut(&total_test) == true){
         compteur++;
-        printf("test 'deplace_projectile' : réussi\n");
+        printf("test vers le haut 'deplace_projectile_haut' : réussi\n");
     }
     else{
-        printf("test 'deplace_projectile' : échoué\n");
+        printf("test vers le haut 'deplace_projectile_haut' : échoué\n");
     }
+	
+	if(test_deplace_projectile_bas(&total_test) == true){
+        compteur++;
+        printf("test vers le bas 'deplace_projectile_bas' : réussi\n");
+    }
+    else{
+        printf("test vers le bas 'deplace_projectile_bas' : échoué\n");
+    }
+	
+	if(test_deplace_projectile_droite(&total_test) == true){
+        compteur++;
+        printf("test vers la droite 'deplace_projectile_droite' : réussi\n");
+    }
+    else{
+        printf("test vers la droite 'deplace_projectile_droite' : échoué\n");
+    }
+	
+	if(test_deplace_projectile_gauche(&total_test) == true){
+        compteur++;
+        printf("test vers la gauche 'deplace_projectile_gauche' : réussi\n");
+    }
+    else{
+        printf("test vers la gauche 'deplace_projectile_gauche' : échoué\n");
+    }
+
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
-
 }
-
-
-    
