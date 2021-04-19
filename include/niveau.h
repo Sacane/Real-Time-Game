@@ -70,8 +70,10 @@ bool perso_en_contact(Plateau plateau);
 
 bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
 
-void deplace_projectile(Objet projectile, Plateau niveau, Coordonnees coordonnees);
+void deplace_projectile(Plateau niveau, Coordonnees *coordonnees);
 
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau);
+
+bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y);
 
 #endif

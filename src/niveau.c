@@ -1,5 +1,5 @@
 #include "../include/niveau.h"
-
+#include <string.h>
 
 Plateau malloc_Niveau (Coordonnees taille){
 
@@ -19,11 +19,16 @@ Plateau malloc_Niveau (Coordonnees taille){
 
 void free_Niveau (Plateau niveau){
 	
-    unsigned int i;
+    unsigned int i, j;
 
     for(i = 0; i < niveau->taille.x; i++){
+        for(j = 0; j < niveau->taille.y; j++){
+            if(niveau->objets[i][j].type == PROJECTILE || niveau->objets[i][j].type == LANCEUR)
+                free(niveau->objets[i][j].donnee_suppl);
+        }
         free(niveau->objets[i]);
     }
+    
     free(niveau->objets);
     free(niveau);
 }
@@ -65,7 +70,7 @@ bool perso_en_contact(Plateau plateau){
 }
 
 void affiche_coordonnee(Coordonnees coordonnee){
-    printf("Coordonnée : (%ud, %ud)\n", coordonnee.x, coordonnee.y);
+    printf("(%u, %u)", coordonnee.x, coordonnee.y);
 }
 
 bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
@@ -73,6 +78,10 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
 }
 
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau){
+    if((x <= 0 && direction == HAUT) || (x >= plateau->taille.x-1 && direction == BAS)||
+    (y <= 0 && direction == GAUCHE) || (y >= plateau->taille.y - 1 && direction == DROITE)){
+        return true;
+    }
     switch(direction){
         case HAUT:
             if(plateau->objets[x-1][y].type == MUR){
@@ -99,7 +108,7 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
     return false;
 }
 
-static bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y){
+bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y){
     switch(direction){
         case HAUT:
             if(x <= 0){
@@ -125,62 +134,63 @@ static bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int 
     return true;
 }
 
-void deplace_projectile(Objet projectile, Plateau niveau, Coordonnees coordonnees){
+void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
     assert(niveau != NULL);
-    assert(projectile.type == PROJECTILE);
+    assert(niveau->objets[coordonnees->x][coordonnees->y].type == PROJECTILE);
     
-    Deplacement* deplacement = projectile.donnee_suppl;
-
-    niveau->objets[coordonnees.x][coordonnees.y].type = VIDE;
-    niveau->objets[coordonnees.x][coordonnees.y].donnee_suppl = NULL;
+    Deplacement* deplacement;
+    
+    deplacement = niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl;
+    
+    
+    niveau->objets[coordonnees->x][coordonnees->y].type = VIDE;
+        
+    niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = NULL;
     
 
-    if(!est_dans_plateau(deplacement->direction, niveau, coordonnees.x, coordonnees.y)){
+    if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
+        niveau->objets[coordonnees->x][coordonnees->y].type = VIDE;
+        
+        niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = NULL;
         return;
     }
+    
     switch(deplacement->direction){
 
         case HAUT:
-            if(niveau->objets[coordonnees.x - 1][coordonnees.y].type != MUR){
-                coordonnees.x--; 
-                remplis_projectile(&niveau->objets[coordonnees.x][coordonnees.y], deplacement);
-                niveau->objets[coordonnees.x][coordonnees.y].type = PROJECTILE;
-                niveau->objets[coordonnees.x][coordonnees.y].donnee_suppl = deplacement;
+            if(niveau->objets[coordonnees->x - 1][coordonnees->y].type != MUR){
+                coordonnees->x--; 
+                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             }
             break;
         case BAS:
-            if(niveau->objets[coordonnees.x + 1][coordonnees.y].type != MUR){
-                coordonnees.x++; 
-                remplis_projectile(&niveau->objets[coordonnees.x][coordonnees.y], deplacement);
-                niveau->objets[coordonnees.x][coordonnees.y].type = PROJECTILE;
-                niveau->objets[coordonnees.x][coordonnees.y].donnee_suppl = deplacement;
+            if(niveau->objets[coordonnees->x + 1][coordonnees->y].type != MUR){
+                coordonnees->x++; 
+                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             }
             break;
         case DROITE:
-            if(niveau->objets[coordonnees.x][coordonnees.y+1].type != MUR){
-                coordonnees.y++; 
-                remplis_projectile(&niveau->objets[coordonnees.x][coordonnees.y], deplacement);
-                niveau->objets[coordonnees.x][coordonnees.y].type = PROJECTILE;
-                niveau->objets[coordonnees.x][coordonnees.y].donnee_suppl = deplacement;
+            if(niveau->objets[coordonnees->x][coordonnees->y+1].type != MUR){
+                coordonnees->y++; 
+                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             }	
             break;
         case GAUCHE:
-            if(niveau->objets[coordonnees.x][coordonnees.y - 1].type != MUR){
-                coordonnees.y--; 
-                remplis_projectile(&niveau->objets[coordonnees.x][coordonnees.y], deplacement);
-                niveau->objets[coordonnees.x][coordonnees.y].type = PROJECTILE;
-                niveau->objets[coordonnees.x][coordonnees.y].donnee_suppl = deplacement;
+            if(niveau->objets[coordonnees->x][coordonnees->y - 1].type != MUR){
+                coordonnees->y--; 
+                remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+                niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+                niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             }			
             break;
     }
 
-
-    
-    /*
-    - Tester si l'ancien coordonnée du projectile à bien comme type "VIDE"
-    - Tester si la nouvelle coordonnée dans le niveau contient bien le projectile
-    - Tester si lorsqu'il y a un mur, le projectile est bien effacé du plateau
-    */
 }
 
