@@ -108,42 +108,16 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
     return false;
 }
 
-bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y){
-    switch(direction){
-        case HAUT:
-            if(x <= 0){
-                return false;
-            }
-            break;
-        case BAS:
-            if(x >= plateau->taille.x-1){
-                return false;
-            }
-            break;
-        case GAUCHE:
-            if(y <= 0){
-                return false;
-            }
-            break;
-        case DROITE:
-            if(y >= plateau->taille.y-1){
-                return false;
-            }
-            break;
-    }
-    return true;
-}
-
 void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
     assert(niveau != NULL);
     assert(niveau->objets[coordonnees->x][coordonnees->y].type == PROJECTILE);
     
     Deplacement* deplacement;
+    
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
-    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl,sizeof(Deplacement));
-    /*deplacement = niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl;*/
 
+    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl,sizeof(Deplacement));
 
     if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
         free(deplacement);
@@ -155,20 +129,17 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     switch((deplacement)->direction){
 
         case HAUT:
-            
-            coordonnees->x--; 
-            niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+        
+            niveau->objets[--coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-           
             niveau->objets[coordonnees->x + 1][coordonnees->y].type = VIDE;
 
-            
             break;
         case BAS:
             
-            coordonnees->x++; 
-            niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+            
+            niveau->objets[++coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
             
@@ -178,26 +149,19 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
             break;
         case DROITE:
             
-            coordonnees->y++; 
-            niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+            niveau->objets[coordonnees->x][++coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-            
             niveau->objets[coordonnees->x][coordonnees->y - 1].type = VIDE;
 
-
-            
             break;
         case GAUCHE:
             
-            coordonnees->y--; 
-            niveau->objets[coordonnees->x][coordonnees->y].type = PROJECTILE;
+            niveau->objets[coordonnees->x][--coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-            
             niveau->objets[coordonnees->x][coordonnees->y + 1].type = VIDE;
-
-            			
+		
             break;
     }
     
