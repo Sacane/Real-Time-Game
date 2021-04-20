@@ -205,7 +205,7 @@ static bool test_deplace_projectile_haut(int *total_test){
 	Plateau niveau = niveau0();
 	Objet objet; 
     Deplacement* deplacement;
-    deplacement = (Deplacement*)malloc(sizeof(deplacement));
+    deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
 	Coordonnees coordonnees;
 
@@ -240,7 +240,7 @@ static bool test_deplace_projectile_haut(int *total_test){
 
 
     Deplacement* dep;
-    dep = (Deplacement*)malloc(sizeof(deplacement));
+    dep = (Deplacement*)malloc(sizeof(Deplacement));
     dep->direction = HAUT;
 	Coordonnees new1coord2;
 	new1coord2.x = 0;
@@ -355,7 +355,7 @@ static bool test_deplace_projectile_gauche(int *total_test){
 	Plateau niveau = niveau0();
 	Objet objet; 
     Deplacement* deplacement;
-    deplacement = (Deplacement*)malloc(sizeof(deplacement));
+    deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
 	Coordonnees coordonnees;
 
@@ -398,6 +398,7 @@ static bool test_deplace_projectile_gauche(int *total_test){
 	return true; 
 }
 
+/* Si la coordonnée remaining se trouve parmis les éléments du tas, la fonction return true, false sinon */
 static bool test_equals_heap(Arbre heap, Coordonnees remaining){
     unsigned int i;
     for(i = 0; i < heap->taille; i++){
@@ -412,43 +413,48 @@ static bool test_declenche_lanceur(int *total_test){
     *total_test += 1;
     Plateau niveau = niveau0();
     Arbre tas;
-    tas = malloc_Tas(512);
-    Coordonnees pos_lanceur;
-    pos_lanceur.x = 3;
-    pos_lanceur.y = 5;
+    Coordonnees eval;
+    tas = construit_Tas(niveau);
+    Evenement e = ote_minimum(tas);
+    int i;
 
-    Coordonnees pos_lanceur2;
-    pos_lanceur2.x = 0;
-    pos_lanceur2.y = 0;
+    declenche_lanceur(niveau, tas, e.coo_obj, e);
 
-    Coordonnees component;
+    do{
 
-    declenche_lanceur(niveau, tas, pos_lanceur);
-    
-    component.x = pos_lanceur.x - 1;
-    component.y = pos_lanceur.y;
+        e = ote_minimum(tas);
 
-    if(niveau->objets[component.x][component.y].type != PROJECTILE){
-        printf("Erreur, projectile non créer\n");
-        return false;
+    }while(niveau->objets[e.coo_obj.x][e.coo_obj.y].type != LANCEUR);
+
+    declenche_lanceur(niveau, tas, e.coo_obj, e);
+
+    for(i = HAUT; i <= DROITE; i++){
+        switch(i){
+            case HAUT:
+                eval.x = e.coo_obj.x - 1;
+                eval.y = e.coo_obj.y;
+                break;
+            case BAS:
+                eval.x = e.coo_obj.x + 1;
+                eval.y = e.coo_obj.y;
+                break;
+            case DROITE:
+                eval.x = e.coo_obj.x;
+                eval.y = e.coo_obj.y + 1;
+                break;
+            case GAUCHE:
+                eval.x = e.coo_obj.x;
+                eval.y = e.coo_obj.y - 1;
+                break;
+        }
+        if(!test_equals_heap(tas, eval)){
+            printf("Le projectile n'est pas dans le tas\n");
+            return false;
+        }
     }
-    if(!test_equals_heap(tas, component)){
-        printf("Erreur, le projectile à la position : 3 5 n'est pas insérer dans le tas\n");
-        return false;
-    }
-    declenche_lanceur(niveau, tas, pos_lanceur2);
-    
-    component.x = pos_lanceur2.x + 1;
-    component.y = pos_lanceur2.y;
 
+    affiche_Niveau(niveau);
 
-    component.x = pos_lanceur2.x;
-    component.y = pos_lanceur2.y + 1;
-
-    if(!test_equals_heap(tas, component)){
-        printf("Erreur, le projectile à la position : 0 1 n'est pas insérer dans le tas\n");
-        return false;
-    }
     free_Tas(tas);
     free_Niveau(niveau);
     return true;
@@ -458,19 +464,10 @@ static bool test_declenche_projectile(int *total_test){
 	
 	*total_test += 1;
 	Arbre tas;
-	tas = malloc_Tas(512);
 	Plateau niveau = niveau0();
 
-
-    Coordonnees pos_lanceur;
-    pos_lanceur.x = 3;
-    pos_lanceur.y = 5;
     Evenement ev;
 
-    tas = construit_Tas(niveau);
-    affiche_Tas(tas);
-    declenche_lanceur(niveau, tas, pos_lanceur);
-    affiche_Tas(tas);
     ev = ote_minimum(tas);
 
     declenche_projectile(tas, niveau, ev.coo_obj, ev);

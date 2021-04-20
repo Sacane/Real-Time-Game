@@ -66,7 +66,7 @@ void affiche_Tas(Arbre tas); /* Affiche le contenu d'un tas, a des
 /* Traite un Evenement. */
 void traite_evenement(Evenement e, Arbre tas, Plateau niveau); 
 
-void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur);
+void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evenement ancien_lanceur);
 
 void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Evenement projectile); 
 

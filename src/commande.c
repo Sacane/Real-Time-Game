@@ -17,8 +17,7 @@ void init_niveaux(Plateau niveau, Coordonnees taille){
 }
 
 Plateau niveau0() {
-    
-    unsigned int i;
+
     Plateau niveau;
     Coordonnees taille_niveau;
     taille_niveau.x = 5;
@@ -54,29 +53,6 @@ Plateau niveau0() {
     niveau->objets[3][8].type = MUR;
     niveau->objets[4][8].type = MUR;
 
-    
-    for(i = 1; i < taille_niveau.y; i++){
-        niveau->objets[0][i].type = VIDE;
-    }
-    niveau->objets[1][0].type = VIDE;
-    niveau->objets[1][9].type = VIDE;
-    niveau->objets[1][7].type = VIDE;
-	
-    for(i = 0; i < taille_niveau.y; i++){
-	    if(i != 8)
-        	niveau->objets[2][i].type = VIDE;
-    }
-
-	for(i = 0; i < taille_niveau.y; i++){
-        if(i == 5 || i == 8){
-            continue;
-        }
-        niveau->objets[3][i].type = VIDE;
-    }
-
-    for(i = 1; i < taille_niveau.y - 2; i++){
-        niveau->objets[4][i].type = VIDE;
-    }
 
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
