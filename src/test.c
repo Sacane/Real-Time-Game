@@ -12,20 +12,23 @@ static bool test_evenement_pret(int *total_test){
     test_tas->valeurs[2].moment = 2000;
     
     while(true){
-        eval = maintenant();
-        if(eval == 800){
+        
+        if(maintenant() >= 800){
+            printf("test de l'éval : %lu\n", maintenant());
             if(un_evenement_est_pret(test_tas) == true){
 				free_Tas(test_tas);
                 return false;
             }
         }
-        if(eval == 1000){
+        if(maintenant() == 1000){
             if(un_evenement_est_pret(test_tas) == false){
 				free_Tas(test_tas);
                 return false;
             }
         }
-        break;
+        if(maintenant() >= 1300){
+            break;
+        }
     }
     free_Tas(test_tas);
     return true;

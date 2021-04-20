@@ -5,10 +5,7 @@ static unsigned int verif_pere(int i){
 
     assert(i >= 0);
 
-	unsigned int tmp;
-	tmp = (i - 1)/2;
-
-    if(tmp == 0){
+    if(heap_father_left(i) <= 0){
         return 0;
     }
     return (i % 2 == 0) ? (i - 2) / 2 : (i - 1) / 2;
