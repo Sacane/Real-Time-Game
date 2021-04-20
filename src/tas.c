@@ -1,25 +1,17 @@
 #include "../include/tas.h"
 
-int test1 = 0;
-int test2 = 0;
 
-static unsigned int verif_pere(int iteration){
+static unsigned int verif_pere(int i){
+
+    assert(i >= 0);
+
 	unsigned int tmp;
-	tmp = (iteration - 1)/2;
+	tmp = (i - 1)/2;
 
     if(tmp == 0){
         return 0;
     }
-
-	if(iteration%2 == 0){
-		tmp = (iteration - 2)/2;
-		return tmp;
-	}
-	if(iteration%2 != 0){
-		tmp = (iteration - 1)/2;
-		return tmp;
-	}
-    return tmp;
+    return (i%2 == 0) ? (i - 2) / 2 : (i - 1) / 2;
 }
 
 
@@ -65,7 +57,7 @@ void realloc_Tas(Arbre tas){
 
     assert(tas->valeurs != NULL);
 
-    tas->capacite *= 2; /*On double la capacité max */
+    tas->capacite *= 2; 
     tas->valeurs = (Evenement*)realloc(tas->valeurs, sizeof(Evenement)*tas->capacite);
     
 }
@@ -75,13 +67,8 @@ bool un_evenement_est_pret(Arbre tas){
 
     assert(tas->valeurs != NULL);
 
-    unsigned i;
-    for(i = 0; i < tas->taille; i++){
-        if(tas->valeurs[i].moment <= maintenant()){
-            return true;
-        }
-    }
-    return false;
+    return (tas->valeurs[0].moment >= maintenant());
+
 }
 
 
@@ -90,7 +77,7 @@ static void defiler(Arbre tas, int i) {
     assert(tas->valeurs != NULL);
     assert(i >= 0);
     
-    int f = heap_father(i);
+    int f = verif_pere(i);
     Evenement tmp;
 
     if (i == 0) return;
@@ -104,7 +91,7 @@ static void defiler(Arbre tas, int i) {
         if (f == 0)
             return;
         else
-            f = heap_father(f);
+            f = verif_pere(f);
     }
 }
 
@@ -112,12 +99,7 @@ static void defiler(Arbre tas, int i) {
 void ajoute_evenement(Arbre arbre, Evenement valeur){
     
 	assert(arbre->valeurs != NULL);
-
-	if ((NULL == arbre)||(arbre->taille == arbre->capacite)){
-        fprintf(stderr, "Erreur de taille, ou arbre inexistant\n");
-        printf("Ah\n");
-		return;
-	}
+    assert(arbre != NULL);
 
     arbre->valeurs[arbre->taille] = valeur;
 	(arbre->taille)++;
@@ -130,32 +112,27 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 	
 }
 
-static void heap_shift_down(Arbre h, unsigned int i)
+static void enfiler(Arbre h, unsigned int i)
 {
-  unsigned int next_i;
-  unsigned int max_i = h->taille - 1; /* Indice à ne pas dépasser */
-  Evenement tmp;
+    unsigned int next_i;
+    unsigned int max_i = h->taille - 1; 
+    Evenement tmp;
 
-  if (h->taille - 1 == 0)
-    return;
-  while ((i*2)+1 <= max_i || (i*2)+2 <= max_i) {
-    /* S'il y en a, détermine le plus grand des fils */
-    next_i = (i*2)+1;
-    if (((i*2)+2 <= max_i) &&
-        (h->valeurs[next_i].moment > h->valeurs[(i*2)+2].moment))
-      next_i = (i*2)+2;
-    /* next_i pointe ici sur le plus grand du ou des fils
-     * S'il y a lieu, fait l'échange et continue, sinon sort tout de
-     * suite.
-     */
-    if ((h->valeurs[i].moment > h->valeurs[next_i].moment)) {
-      tmp = h->valeurs[i];
-      h->valeurs[i] = h->valeurs[next_i];
-      h->valeurs[next_i] = tmp;
-      i = next_i;
-    } else
-      return;
-  }
+    if (h->taille - 1 == 0)
+        return;
+    while ((i * 2) + 1 <= max_i || (i * 2) + 2 <= max_i) {
+        next_i = (i * 2) + 1;
+        if (((i * 2) + 2 <= max_i) && (h->valeurs[next_i].moment > h->valeurs[(i*2)+2].moment))
+            next_i = (i * 2) + 2;
+
+        if ((h->valeurs[i].moment > h->valeurs[next_i].moment)) {
+            tmp = h->valeurs[i];
+            h->valeurs[i] = h->valeurs[next_i];
+            h->valeurs[next_i] = tmp;
+            i = next_i;
+        } else
+            return;
+    }
 }
 
 
@@ -163,15 +140,13 @@ static void heap_shift_down(Arbre h, unsigned int i)
 Evenement ote_minimum(Arbre tas){
 
 	assert(tas->valeurs != NULL);
+
 	Evenement min;
 
     min=(tas->valeurs)[0];
-
     tas->valeurs[0] = tas->valeurs[tas->taille-1];
-
     (tas->taille)--;
-
-    heap_shift_down(tas, 0);
+    enfiler(tas, 0);
     
 	return min;
 }

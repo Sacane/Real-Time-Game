@@ -124,9 +124,7 @@ static bool test_ote_minimum(int *total_test){
 	ajoute_evenement(arbre, event3);
 	ajoute_evenement(arbre, event4);
 	ajoute_evenement(arbre, event5);
-    affiche_Tas(arbre);
 	eventMin = ote_minimum(arbre);
-    printf("test après ote minmum\n");
 
     /* Le minimum est bien la valeur extraite */
 	if (test_minimum_aux(eventMin, arbre) == false){
@@ -141,8 +139,7 @@ static bool test_ote_minimum(int *total_test){
 
     /* Test si le tas est toujours un tas */
 	if(estTas(arbre) == false){
-        printf("Le tas n'est plus un tas\n");
-        affiche_Tas(arbre);
+        printf("Le tableau n'est plus un tas\n");
 		free_Tas(arbre);
 		return false; 
 	}
@@ -337,8 +334,6 @@ static bool test_deplace_projectile_droite(int *total_test){
 	}
 
     deplace_projectile(niveau, &coord); 
-
-    printf("test projectile présent : \n");
     
 	if (niveau->objets[0][9].type != PROJECTILE){
         printf("Projectile toujours présent (droite) \n");
@@ -472,35 +467,23 @@ static bool test_declenche_projectile(int *total_test){
     pos_lanceur.y = 5;
     Evenement ev;
 
-    affiche_Niveau(niveau);
-
     declenche_lanceur(niveau, tas, pos_lanceur);
 
     ev = ote_minimum(tas);
 
     declenche_projectile(tas, niveau, ev.coo_obj);
 
-    affiche_Niveau(niveau);
+    ev = ote_minimum(tas);
+
+    declenche_projectile(tas, niveau, ev.coo_obj);
 
     ev = ote_minimum(tas);
 
     declenche_projectile(tas, niveau, ev.coo_obj);
 
-    affiche_Niveau(niveau);
-
     ev = ote_minimum(tas);
 
     declenche_projectile(tas, niveau, ev.coo_obj);
-
-    affiche_Niveau(niveau);
-    affiche_Tas(tas);
-
-    ev = ote_minimum(tas);
-
-    declenche_projectile(tas, niveau, ev.coo_obj);
-
-    affiche_Niveau(niveau);
-    affiche_Tas(tas);
 
     if(!estTas(tas)){
         return false;
@@ -530,15 +513,9 @@ static bool test_execute_evenement(int *total_test){
 
     execute_evenement(ev, tas, niveau);
 
-    affiche_Tas(tas);
-    affiche_Niveau(niveau);
-
     ev = ote_minimum(tas);
 
     execute_evenement(ev, tas, niveau);
-    
-    affiche_Tas(tas);
-    affiche_Niveau(niveau);
 
 
     free_Tas(tas);
