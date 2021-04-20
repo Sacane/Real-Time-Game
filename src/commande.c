@@ -26,9 +26,19 @@ Plateau niveau0() {
     niveau = malloc_Niveau(taille_niveau);
     init_niveaux(niveau, taille_niveau);
 
+    Generation* gen;
+    Generation* gen2;
+    gen2 = (Generation*)malloc(sizeof(Generation));
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen2->allure_proj = 300;
+    gen2->intervalle = 1000;
+    gen->allure_proj = 300;
+    gen->intervalle = 1000;
 
     niveau->objets[0][0].type = LANCEUR;
+    niveau->objets[0][0].donnee_suppl = gen;
     niveau->objets[3][5].type = LANCEUR;
+    niveau->objets[3][5].donnee_suppl = gen2;
     niveau->objets[4][9].type = DESTINATION;
 	
     /* init mur */
@@ -72,7 +82,7 @@ Plateau niveau0() {
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
 
-    /*CA NA AUCUN SENS*/
+
     return niveau;
 }
 

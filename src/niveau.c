@@ -117,7 +117,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
 
-    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl,sizeof(Deplacement));
+    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl, sizeof(Deplacement));
 
     if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
         free(deplacement);

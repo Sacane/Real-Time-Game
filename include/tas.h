@@ -68,7 +68,7 @@ void traite_evenement(Evenement e, Arbre tas, Plateau niveau);
 
 void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur);
 
-void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile); 
+void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Evenement projectile); 
 
 /* Execute un Evenement , ce qui peut consister a deplacer un
 * objet dans le Niveau , verifier si la partie est terminee ,
