@@ -64,7 +64,7 @@ bool un_evenement_est_pret(Arbre tas){
 
     assert(tas->valeurs != NULL);
 
-    return (tas->valeurs[0].moment >= maintenant());
+    return (tas->valeurs[0].moment <= maintenant());
 
 }
 
@@ -194,6 +194,7 @@ void affiche_Tas(Arbre tas){
 }
 
 static void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
+	
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
@@ -233,6 +234,7 @@ static void creer_projectile_selon_direction(Plateau plateau, Direction directio
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
 static void update_launcher(Evenement lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
+
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
@@ -247,11 +249,13 @@ static void update_launcher(Evenement lanceur, Arbre tas, Coordonnees pos_lanceu
 }
 
 void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evenement ancien_lanceur){
+	
     assert(niveau != NULL);
     assert(tas != NULL);
     assert(niveau->objets[pos_lanceur.x][pos_lanceur.y].type == LANCEUR);
     assert(pos_lanceur.x <= niveau->taille.x);
     assert(pos_lanceur.y <= niveau->taille.y);
+    
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
     memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
@@ -262,13 +266,14 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evene
     for(direction = HAUT; direction <= DROITE; direction++){
         if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
             creer_projectile_selon_direction(niveau, direction, &pos_projectile, pos_lanceur);
-            evenement_projectile.moment = generation->allure_proj;
+            evenement_projectile.moment = ancien_lanceur.moment + generation->allure_proj;
             evenement_projectile.coo_obj = pos_projectile;
             ajoute_evenement(tas, evenement_projectile);
         }
     }
 
     update_launcher(ancien_lanceur, tas, pos_lanceur, niveau);
+
     free(generation);
 }
 
@@ -319,3 +324,4 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
             break;
     }
 }
+

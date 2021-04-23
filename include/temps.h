@@ -23,4 +23,10 @@ static const long unsigned une_milliseconde = une_seconde/1000;
 
 long unsigned maintenant();
 
+
+/* La fonction `millisleep(i)` fait en sorte que le programme 
+ * attende i millisecondes avant de continuer a s'executer. */
+void millisleep(unsigned long i);
+
+
 #endif
