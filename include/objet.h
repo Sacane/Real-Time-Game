@@ -11,9 +11,7 @@
 #ifndef __OBJET__H__
 #define __OBJET__H__
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+#include "../wrapper/include.h"
 
 #define INITIAL_SIZE 512
 
