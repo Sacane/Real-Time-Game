@@ -1,38 +1,6 @@
 #include "../include/test.h"
 
 
-static bool test_evenement_pret(int *total_test){
-    *total_test += 1;
-    unsigned long eval;
-	Arbre test_tas;
-    test_tas = malloc_Tas(INITIAL_SIZE);
-    test_tas->taille = 15;
-    test_tas->valeurs[0].moment = 1000;
-    test_tas->valeurs[1].moment = 1300;
-    test_tas->valeurs[2].moment = 2000;
-    
-    while(true){
-        
-        if(maintenant() >= 800){
-            printf("test de l'éval : %lu\n", maintenant());
-            if(un_evenement_est_pret(test_tas) == true){
-				free_Tas(test_tas);
-                return false;
-            }
-        }
-        if(maintenant() == 1000){
-            if(un_evenement_est_pret(test_tas) == false){
-				free_Tas(test_tas);
-                return false;
-            }
-        }
-        if(maintenant() >= 1300){
-            break;
-        }
-    }
-    free_Tas(test_tas);
-    return true;
-}
 
 static bool test_ajoute_evenement(int *total_test) {
     *total_test += 1;
@@ -463,7 +431,7 @@ static bool test_declenche_lanceur(int *total_test){
     return true;
 }
 
-static bool test_declenche_projectile(int *total_test){
+/*static bool test_declenche_projectile(int *total_test){
 	
 	*total_test += 1;
 	Arbre tas;
@@ -495,7 +463,7 @@ static bool test_declenche_projectile(int *total_test){
     free_Niveau(niveau);
     free_Tas(tas);
 	return true;
-}
+}*/
 
 static bool test_execute_evenement(int *total_test){
     (*total_test)++;
@@ -531,13 +499,6 @@ static bool test_execute_evenement(int *total_test){
 void main_test(){
     int compteur = 0;
     int total_test = 0;
-    if(test_evenement_pret(&total_test) == true){
-        compteur++;
-        printf("test 'un_evenement_est_pret' : réussi\n");
-    }
-    else{
-        printf("test 'un_evenement_est_pret' : échoué\n");
-    }
 
     if(test_ajoute_evenement(&total_test) == true){
         compteur++;
