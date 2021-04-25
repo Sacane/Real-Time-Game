@@ -12,7 +12,6 @@
 #define __NIVEAU__H__
 
 
-#include <stdbool.h> /* Definis le type `bool` */
 #include "objet.h"
 
 

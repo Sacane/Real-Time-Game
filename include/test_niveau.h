@@ -2,7 +2,7 @@
 #define __TEST_NIVEAU__H__
 
 
-
+#include "niveau.h"
 
 
 
