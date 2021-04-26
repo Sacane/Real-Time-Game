@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "../include/test.h"
-
-void main_naif2(){
+#include "../include/test_gui.h"
+void main_naif(){
 	
     Niveau* niveau = niveau0();
     Tas* tas = construit_Tas (niveau );
@@ -33,17 +33,21 @@ void main_naif2(){
 
 
 int main(void) {
-
+    
     int choice;
     printf("1 : tests\n");
     printf("2 : main\n");
+    printf("3 : graphic_test\n");
     scanf("%d", &choice);
 	
 	if(choice == 2){
-    	main_naif2();
+    	main_naif();
 	}    
     else if(choice == 1){
         main_test();
+    }
+    else if(choice == 3){
+        test_gui();
     }
     
 

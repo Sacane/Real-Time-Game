@@ -3,9 +3,10 @@ SRC     := src/main.c $(subst include/,,$(INCL:%.h=src/%.c))
 OBJ     := $(subst src/,,$(SRC:%.c=bin/%.o))
 EXE     := tempsreel
 CC      := gcc
+LIBS    := -lMLV
 CFLAGS  := -ansi -Wall -Wextra
 LIBPATH := -L.
-LDFLAGS := -o $(EXE) $(LIBPATH) 
+LDFLAGS := -o $(EXE) $(LIBPATH) $(LIBS)
 RM      := rm -f
 
 all: $(OBJ)
