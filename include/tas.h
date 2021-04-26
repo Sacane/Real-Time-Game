@@ -11,8 +11,9 @@
 #ifndef __TAS__H__
 #define __TAS__H__
 
-#include "niveau.h"
+#include "wrapper.h"
 #include "temps.h"
+
 
 #define heap_father_left(i) ((int) ((i)-1) / 2)
 #define heap_father(i) ((int) ((i)+1)/2-1)
@@ -56,25 +57,11 @@ Evenement ote_minimum(Arbre tas); /* Renvoie et retire de `tas`
                                   * le  plus petit. */
 void ajoute_evenement(Arbre tas, Evenement n); /* Ajoute un Evenement
                                                * a un Tas */
-                                               
-Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
-                                     * Evenements initiaux d'un 
-                                     * Niveau */
+                                            
 									 
 void affiche_Tas(Arbre tas); /* Affiche le contenu d'un tas, a des
                              * fins de tests */
 
-/* Traite un Evenement. */
-void traite_evenement(Evenement e, Arbre tas, Plateau niveau); 
-
-void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evenement ancien_lanceur);
-
-void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Evenement projectile); 
-
-/* Execute un Evenement , ce qui peut consister a deplacer un
-* objet dans le Niveau , verifier si la partie est terminee ,
-* ajouter de nouveaux evenements au Tas , etc. */
-void execute_evenement ( Evenement e, Tas* tas , Niveau* niveau);
 
 
 #endif

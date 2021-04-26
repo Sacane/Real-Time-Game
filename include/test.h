@@ -2,9 +2,9 @@
 #define __TEST__H__
 
 #include "commande.h"
-#include <assert.h>
 #include "time.h"
 #include "management.h"
+
 void main_test();
 
 #endif

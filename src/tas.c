@@ -155,7 +155,6 @@ void affiche_Tas(Arbre tas){
     unsigned int i;
     printf("[");
     for(i = 0; i < tas->taille; i++){
-        affiche_coordonnee(tas->valeurs[i].coo_obj);
         
         if(i != tas->taille-1){
             printf(": %lu, ", tas->valeurs[i].moment);

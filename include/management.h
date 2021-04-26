@@ -1,3 +1,13 @@
+/**
+ * \fichier : management.h
+ * \auteurs : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date de création : 01-04-21
+ * \dernière modification : 21-05-21
+ * 
+ * DESCRIPTION
+ *
+ */
+
 #ifndef __MANAGEMENT__H__
 #define __MANAGEMENT__H__
 

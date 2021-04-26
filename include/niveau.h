@@ -11,17 +11,11 @@
 #ifndef __NIVEAU__H__
 #define __NIVEAU__H__
 
-
+#include "wrapper.h"
 #include "objet.h"
 
 
-typedef struct coordonnees{
-  unsigned x;
-  unsigned y;
-} Coordonnees;
-
-
-typedef struct {
+typedef struct Niveau{
     
     Coordonnees taille; /* Taille du niveau */
     Objet** objets; /* Tableau bi-directionnel de largeur taille.x, 

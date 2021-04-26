@@ -11,16 +11,16 @@
 #ifndef __OBJET__H__
 #define __OBJET__H__
 
-#include "../wrapper/include.h"
+#include "wrapper.h"
 
 #define INITIAL_SIZE 512
 
 /* ======== Definition du type `Objet` ====================================== */
+
 typedef enum {
 	VIDE = 0,          LANCEUR,           MUR,
 	PROJECTILE,        PERSONNAGE,        DESTINATION,
 } TypeObjet;
-
 
 typedef struct {
 	TypeObjet type;     /* Type de l'objet */
@@ -67,6 +67,6 @@ void remplis_projectile(Objet* obj, Deplacement* deplacement);
 void remplis_lanceur(Objet* lanceur, Generation* gen);
 
 
-void verif_malloc(void *objet);
+
 
 #endif
