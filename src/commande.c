@@ -8,6 +8,7 @@
 void init_niveaux(Plateau niveau, Coordonnees taille){
 
     unsigned int i, j;
+    niveau->dir_perso = BAS;
     for(i = 0; i < taille.x; i++){
         for(j = 0; j < taille.y; j++){
             niveau->objets[i][j].type = VIDE;

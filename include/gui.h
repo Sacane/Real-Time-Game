@@ -15,12 +15,13 @@ typedef enum {
     PROJECTILE_EAST,
     PROJECTILE_WEST,
     WALL,
-    LAUNCHER
+    LAUNCHER,
+    DEST
 }typeImage;
 
 
 
-void init_array_img(MLV_Image *array_img[]);
+void init_array_img(MLV_Image *array_img[], Plateau niveau, int size_case);
 
 void free_array_img(MLV_Image *array[]);
 
@@ -28,9 +29,9 @@ void load_image();
 
 void free_image();
 
-void init_plateau(Plateau niveau, int height);
+void init_plateau(Plateau niveau, int height, MLV_Image *font);
 
-void update_plateau(Plateau niveau);
+void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Image *font);
 
 void draw_Object(Objet objet);
 

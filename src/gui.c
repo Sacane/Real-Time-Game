@@ -1,21 +1,36 @@
 #include "../include/gui.h"
 
 
-
-
-
-void init_array_img(MLV_Image* array_img[]){
+void init_array_img(MLV_Image* array_img[], Plateau niveau, int size_case){
 	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
+	MLV_resize_image(array_img[PROJECTILE_EAST], niveau->taille.y * size_case, niveau->taille.x * size_case);
 	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");
+	MLV_resize_image(array_img[PROJECTILE_NORTH], niveau->taille.y, niveau->taille.x);
 	array_img[PROJECTILE_SOUTH] = MLV_load_image("assets/projectiles/proj_south.png");
+	MLV_resize_image(array_img[PROJECTILE_SOUTH], niveau->taille.y, niveau->taille.x);
 	array_img[PROJECTILE_WEST] = MLV_load_image("assets/projectiles/proj_west.png");
+	MLV_resize_image(array_img[PROJECTILE_WEST], niveau->taille.y, niveau->taille.x);
+	array_img[CHARACTER_EAST] = MLV_load_image("assets/character/character_east.jpeg");
+	MLV_resize_image(array_img[CHARACTER_EAST], niveau->taille.y, niveau->taille.x);
+	array_img[CHARACTER_NORTH] = MLV_load_image("assets/character/character_north.jpeg");
+	MLV_resize_image(array_img[CHARACTER_NORTH], niveau->taille.y, niveau->taille.x);
+	array_img[CHARACTER_SOUTH] = MLV_load_image("assets/character/character_south.jpeg");
+	MLV_resize_image(array_img[CHARACTER_SOUTH], niveau->taille.y, niveau->taille.x);
+	array_img[CHARACTER_WEST] = MLV_load_image("assets/character/character_west.jpeg");
+	MLV_resize_image(array_img[CHARACTER_WEST], niveau->taille.y, niveau->taille.x);
+	array_img[WALL] = MLV_load_image("assets/Wall.png");
+	MLV_resize_image(array_img[WALL], niveau->taille.y, niveau->taille.x);
+	array_img[LAUNCHER] = MLV_load_image("assets/launcher.jpg");
+	MLV_resize_image(array_img[LAUNCHER], niveau->taille.y, niveau->taille.x);
+	array_img[DEST] = MLV_load_image("assets/dest.png");
+	MLV_resize_image(array_img[DEST], niveau->taille.y, niveau->taille.x);
 }
 
 
 
 void free_array_img(MLV_Image *array[]){
 	int i;
-	for(i = CHARACTER_SOUTH; i <= WALL; i++){
+	for(i = CHARACTER_SOUTH; i <= DEST; i++){
 		MLV_free_image(array[i]);
 	}
 }
@@ -41,10 +56,85 @@ static void init_horizontal(int taillecase, int colonne, int ligne){
 	MLV_actualise_window();
 }
 
-void init_plateau(Plateau niveau, int height){  
+void init_plateau(Plateau niveau, int height, MLV_Image* font){
+	MLV_draw_image(font, 0, 0);  
     init_vertical(height, niveau->taille.y, niveau->taille.x);
     init_horizontal(height, niveau->taille.y, niveau->taille.x);
     MLV_draw_line(0, 0, 0, height, MLV_COLOR_WHITE);
     MLV_draw_rectangle(0, 0, height * niveau->taille.y, height * niveau->taille.x, MLV_COLOR_WHITE);
     MLV_actualise_window();
+}
+
+void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Image *font){
+
+	unsigned int i, j;
+	int x_height, y_height;
+	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+	MLV_draw_image(font, 0, 0);
+	printf("please\n");
+	for(i = 0; i < niveau->taille.x; ++i){
+		for(j = 0; j < niveau->taille.y; ++j){
+			printf("(%u, %u)\n", i, j);
+			x_height = i * height;
+			y_height = j * height;
+			switch(niveau->objets[i][j].type){
+				case VIDE: 
+					printf("VIDE\n");
+					break;
+				case PROJECTILE:
+					printf("PROJECTILE\n");
+					/*depl = niveau->objets[i][j].donnee_suppl;
+					switch(depl->direction){
+						case HAUT:
+							MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
+							break;
+						case BAS:
+							MLV_draw_image(array_img[PROJECTILE_SOUTH], x_height, y_height);
+							break;
+						case DROITE:
+							MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
+							break;
+						case GAUCHE:
+							MLV_draw_image(array_img[PROJECTILE_WEST], x_height, y_height);
+							break;
+					}*/
+					MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
+					break;
+				case LANCEUR:
+					printf("LANCEUR\n");
+					MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
+					break;
+				case PERSONNAGE:
+					printf("PERSO\n");
+					/*switch(niveau->dir_perso){
+						case HAUT:
+							MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
+							break;
+						case BAS:
+							MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
+							break;
+						case DROITE:
+							MLV_draw_image(array_img[CHARACTER_EAST], x_height, y_height);
+							break;
+						case GAUCHE:
+							MLV_draw_image(array_img[CHARACTER_WEST], x_height, y_height);
+							break;
+					}*/
+					MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
+					break;
+				case MUR:
+					printf("MUR\n");
+					MLV_draw_image(array_img[WALL], x_height, y_height);
+					break;
+				case DESTINATION:
+					printf("DEST\n");
+					MLV_draw_image(array_img[DEST], x_height, y_height);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+
 }
