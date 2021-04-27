@@ -1,31 +1,30 @@
 #include "../include/gui.h"
 
 
-void init_array_img(MLV_Image* array_img[], Plateau niveau, int size_case){
+void init_array_img(MLV_Image* array_img[], int size_case){
 	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
-	MLV_resize_image(array_img[PROJECTILE_EAST], niveau->taille.y * size_case, niveau->taille.x * size_case);
+	MLV_resize_image(array_img[PROJECTILE_EAST], size_case, size_case);
 	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");
-	MLV_resize_image(array_img[PROJECTILE_NORTH], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[PROJECTILE_NORTH], size_case, size_case);
 	array_img[PROJECTILE_SOUTH] = MLV_load_image("assets/projectiles/proj_south.png");
-	MLV_resize_image(array_img[PROJECTILE_SOUTH], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[PROJECTILE_SOUTH], size_case, size_case);
 	array_img[PROJECTILE_WEST] = MLV_load_image("assets/projectiles/proj_west.png");
-	MLV_resize_image(array_img[PROJECTILE_WEST], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[PROJECTILE_WEST], size_case, size_case);
 	array_img[CHARACTER_EAST] = MLV_load_image("assets/character/character_east.jpeg");
-	MLV_resize_image(array_img[CHARACTER_EAST], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[CHARACTER_EAST], size_case, size_case);
 	array_img[CHARACTER_NORTH] = MLV_load_image("assets/character/character_north.jpeg");
-	MLV_resize_image(array_img[CHARACTER_NORTH], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[CHARACTER_NORTH], size_case, size_case);
 	array_img[CHARACTER_SOUTH] = MLV_load_image("assets/character/character_south.jpeg");
-	MLV_resize_image(array_img[CHARACTER_SOUTH], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[CHARACTER_SOUTH], size_case, size_case);
 	array_img[CHARACTER_WEST] = MLV_load_image("assets/character/character_west.jpeg");
-	MLV_resize_image(array_img[CHARACTER_WEST], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[CHARACTER_WEST], size_case, size_case);
 	array_img[WALL] = MLV_load_image("assets/Wall.png");
-	MLV_resize_image(array_img[WALL], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[WALL], size_case, size_case);
 	array_img[LAUNCHER] = MLV_load_image("assets/launcher.jpg");
-	MLV_resize_image(array_img[LAUNCHER], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[LAUNCHER], size_case, size_case);
 	array_img[DEST] = MLV_load_image("assets/dest.png");
-	MLV_resize_image(array_img[DEST], niveau->taille.y, niveau->taille.x);
+	MLV_resize_image(array_img[DEST], size_case, size_case);
 }
-
 
 
 void free_array_img(MLV_Image *array[]){
@@ -71,19 +70,15 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Imag
 	int x_height, y_height;
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	MLV_draw_image(font, 0, 0);
-	printf("please\n");
 	for(i = 0; i < niveau->taille.x; ++i){
 		for(j = 0; j < niveau->taille.y; ++j){
-			printf("(%u, %u)\n", i, j);
-			x_height = i * height;
-			y_height = j * height;
+			x_height = j * height;
+			y_height = i * height;
 			switch(niveau->objets[i][j].type){
 				case VIDE: 
-					printf("VIDE\n");
 					break;
 				case PROJECTILE:
-					printf("PROJECTILE\n");
-					/*depl = niveau->objets[i][j].donnee_suppl;
+					depl = niveau->objets[i][j].donnee_suppl;
 					switch(depl->direction){
 						case HAUT:
 							MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
@@ -97,16 +92,13 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Imag
 						case GAUCHE:
 							MLV_draw_image(array_img[PROJECTILE_WEST], x_height, y_height);
 							break;
-					}*/
-					MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
+					}
 					break;
 				case LANCEUR:
-					printf("LANCEUR\n");
 					MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
 					break;
 				case PERSONNAGE:
-					printf("PERSO\n");
-					/*switch(niveau->dir_perso){
+					switch(niveau->dir_perso){
 						case HAUT:
 							MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
 							break;
@@ -119,15 +111,12 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Imag
 						case GAUCHE:
 							MLV_draw_image(array_img[CHARACTER_WEST], x_height, y_height);
 							break;
-					}*/
-					MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
+					}
 					break;
 				case MUR:
-					printf("MUR\n");
 					MLV_draw_image(array_img[WALL], x_height, y_height);
 					break;
 				case DESTINATION:
-					printf("DEST\n");
 					MLV_draw_image(array_img[DEST], x_height, y_height);
 					break;
 				default:

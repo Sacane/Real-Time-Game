@@ -5,6 +5,6 @@
 #include "commande.h"
 
 void test_gui();
-
+void main_gui_test();
 
 #endif 

@@ -21,7 +21,7 @@ typedef enum {
 
 
 
-void init_array_img(MLV_Image *array_img[], Plateau niveau, int size_case);
+void init_array_img(MLV_Image *array_img[], int size_case);
 
 void free_array_img(MLV_Image *array[]);
 

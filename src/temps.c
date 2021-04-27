@@ -1,14 +1,15 @@
 #include "../include/temps.h"
 
 
-long unsigned maintenant() { return clock(); }
+long unsigned decalage = 0;
 
-/* La fonction `millisleep(i)` fait en sorte que le programme 
- * attende i millisecondes avant de continuer a s'executer. */
+long unsigned maintenant() { return decalage+clock(); }
+
 void millisleep(unsigned long i) {
-    struct timeval tim;
-    tim.tv_sec = 0;
-    tim.tv_usec =  i * 1000;
-    select(0, NULL, NULL, NULL, &tim);
+  struct timeval tim;
+  tim.tv_sec = 0;
+  tim.tv_usec =  i * 1000;
+  decalage += i*une_milliseconde;
+  select(0, NULL, NULL, NULL, &tim);
 }
 

@@ -47,7 +47,7 @@ int main(void) {
         main_test();
     }
     else if(choice == 3){
-        test_gui();
+        main_gui_test();
     }
     
 
