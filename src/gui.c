@@ -1,5 +1,26 @@
 #include "../include/gui.h"
 
+
+
+
+
+void init_array_img(MLV_Image* array_img[]){
+	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
+	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");
+	array_img[PROJECTILE_SOUTH] = MLV_load_image("assets/projectiles/proj_south.png");
+	array_img[PROJECTILE_WEST] = MLV_load_image("assets/projectiles/proj_west.png");
+}
+
+
+
+void free_array_img(MLV_Image *array[]){
+	int i;
+	for(i = CHARACTER_SOUTH; i <= WALL; i++){
+		MLV_free_image(array[i]);
+	}
+}
+
+
 static void init_vertical(int taillecase, int colonne, int lignes){
 	int i, j;
 	for(i = 0; i < colonne+1; i++){
