@@ -12,9 +12,11 @@
 #define __COMMANDE__H__
 
 #include "niveau.h"
+#include "temps.h"
 
-Plateau niveau0(); /* Cree le niveau 0 (Figure 1) */
+Plateau niveau0();
 
+Plateau niveau1();
 
 void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */

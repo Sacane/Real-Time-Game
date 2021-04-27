@@ -8,6 +8,7 @@ Plateau malloc_Niveau (Coordonnees taille){
 
     tmp = (Plateau)malloc(sizeof(Niveau));
     tmp->taille = taille;
+    tmp->est_vivant = true;
 
     tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
     for(i = 0; i < taille.x; i++){
@@ -164,7 +165,9 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 		
             break;
     }
-    
+    if(est_coordonnee_equivalent((*coordonnees), niveau->coo_perso)){
+        niveau->est_vivant = false;
+    }
     
 }
 

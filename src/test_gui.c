@@ -48,6 +48,9 @@ void main_gui_test(){
     
     while (MLV_get_event(&touche, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL) == MLV_NONE || touche != MLV_KEYBOARD_ESCAPE) {
+        if(niveau->est_vivant == false){
+            break;
+        }
         if (un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
             execute_evenement(e, tas, niveau);
@@ -55,14 +58,16 @@ void main_gui_test(){
                 e = ote_minimum(tas);
                 execute_evenement(e, tas, niveau);
             }
-            execute_evenement(e, tas, niveau);
+            
             update_plateau(niveau, array_img, size_case, font);
             MLV_actualise_window();
             
         }   
         else
             millisleep (100);
+        MLV_actualise_window();
     }
+    printf("program ended in : %lums\n", maintenant());
     free_Tas(tas);
     free_Niveau(niveau);
 }

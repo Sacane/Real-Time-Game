@@ -28,6 +28,7 @@ typedef struct Niveau{
                               * personnage est superieur a son
                               * allure. */
     Direction dir_perso; /*Direction actuelle du personnage */
+    bool est_vivant;
     
 } Niveau, *Plateau;
 

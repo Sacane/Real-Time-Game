@@ -8,7 +8,6 @@
 void init_niveaux(Plateau niveau, Coordonnees taille){
 
     unsigned int i, j;
-    niveau->dir_perso = BAS;
     for(i = 0; i < taille.x; i++){
         for(j = 0; j < taille.y; j++){
             niveau->objets[i][j].type = VIDE;
@@ -16,6 +15,7 @@ void init_niveaux(Plateau niveau, Coordonnees taille){
         }
     }
 }
+
 
 Plateau niveau0() {
 
@@ -25,7 +25,7 @@ Plateau niveau0() {
     taille_niveau.y = 10;
     niveau = malloc_Niveau(taille_niveau);
     init_niveaux(niveau, taille_niveau);
-
+    
     Generation* gen;
     Generation* gen2;
     gen2 = (Generation*)malloc(sizeof(Generation));
@@ -61,6 +61,200 @@ Plateau niveau0() {
 
 
     return niveau;
+}
+
+
+Plateau niveau1(){
+
+    Plateau niveau;
+    Coordonnees taille_niveau;
+    taille_niveau.x = 5;
+    taille_niveau.y = 10;
+    niveau = malloc_Niveau(taille_niveau);
+    init_niveaux(niveau, taille_niveau);
+
+    Generation* gen;
+    Generation* gen2;
+    Generation* gen3;
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen2 = (Generation*)malloc(sizeof(Generation));
+    gen3 = (Generation*)malloc(sizeof(Generation));
+    
+    gen->allure_proj = 300;
+    gen->intervalle = 1000;
+	gen2->allure_proj = 300;
+    gen2->intervalle = 1000;
+	gen3->allure_proj = 300;
+    gen3->intervalle = 1000;
+
+	niveau->objets[4][0].type = LANCEUR;
+    niveau->objets[4][0].donnee_suppl = gen;
+    niveau->objets[1][6].type = LANCEUR;
+    niveau->objets[1][6].donnee_suppl = gen2;
+	niveau->objets[3][9].type = LANCEUR;
+    niveau->objets[3][9].donnee_suppl = gen3;
+    niveau->objets[0][3].type = DESTINATION;
+
+    /* init mur */
+    niveau->objets[0][2].type = MUR;
+    niveau->objets[1][2].type = MUR;
+    niveau->objets[1][3].type = MUR;
+    niveau->objets[1][4].type = MUR;
+    niveau->objets[1][5].type = MUR;
+    niveau->objets[2][3].type = MUR;
+    niveau->objets[4][5].type = MUR;
+    niveau->objets[4][6].type = MUR;
+
+	niveau->coo_perso.x = 0;
+    niveau->coo_perso.y = 0;
+    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+
+	return niveau;
+}
+
+
+Plateau niveau2(){
+
+	Plateau niveau;
+    Coordonnees taille_niveau;
+    taille_niveau.x = 8;
+    taille_niveau.y = 12;
+    niveau = malloc_Niveau(taille_niveau);
+    init_niveaux(niveau, taille_niveau);
+
+    Generation* gen;
+    Generation* gen2;
+    Generation* gen3;
+    Generation* gen4;
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen2 = (Generation*)malloc(sizeof(Generation));
+    gen3 = (Generation*)malloc(sizeof(Generation));
+    gen4 = (Generation*)malloc(sizeof(Generation));
+
+	gen->allure_proj = 300;
+    gen->intervalle = 1000;
+	gen2->allure_proj = 300;
+    gen2->intervalle = 1000;
+	gen3->allure_proj = 300;
+    gen3->intervalle = 1000;
+	gen4->allure_proj = 300;
+    gen4->intervalle = 1000;
+
+	niveau->objets[1][2].type = LANCEUR;
+    niveau->objets[1][2].donnee_suppl = gen;
+    niveau->objets[2][10].type = LANCEUR;
+    niveau->objets[2][10].donnee_suppl = gen2;
+	niveau->objets[6][4].type = LANCEUR;
+    niveau->objets[6][4].donnee_suppl = gen3;
+	niveau->objets[6][9].type = LANCEUR;
+    niveau->objets[6][9].donnee_suppl = gen4;
+    niveau->objets[0][0].type = DESTINATION;
+
+	/* init mur */
+    niveau->objets[1][5].type = MUR;
+
+    niveau->objets[2][0].type = MUR;
+    niveau->objets[2][1].type = MUR;
+    niveau->objets[2][2].type = MUR;
+    niveau->objets[2][3].type = MUR;
+    niveau->objets[2][4].type = MUR;
+    niveau->objets[2][5].type = MUR;
+    niveau->objets[2][11].type = MUR;
+
+    niveau->objets[4][0].type = MUR;
+
+    niveau->objets[4][3].type = MUR;
+    niveau->objets[4][4].type = MUR;
+    niveau->objets[4][5].type = MUR;
+    niveau->objets[4][6].type = MUR;
+    niveau->objets[4][7].type = MUR;
+    niveau->objets[4][8].type = MUR;
+    niveau->objets[4][9].type = MUR;
+    niveau->objets[4][10].type = MUR;
+    niveau->objets[4][11].type = MUR;
+
+    niveau->objets[6][0].type = MUR;
+    niveau->objets[6][1].type = MUR;
+    niveau->objets[6][2].type = MUR;
+    niveau->objets[6][3].type = MUR;
+
+    niveau->objets[6][5].type = MUR;
+    niveau->objets[6][6].type = MUR;
+
+    niveau->objets[6][10].type = MUR;
+    niveau->objets[6][11].type = MUR;
+
+	niveau->coo_perso.x = 7;
+    niveau->coo_perso.y = 0;
+    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+
+	return niveau;
+
+}
+
+
+Plateau niveau3(){
+
+	Plateau niveau;
+    Coordonnees taille_niveau;
+    taille_niveau.x = 8;
+    taille_niveau.y = 12;
+    niveau = malloc_Niveau(taille_niveau);
+    init_niveaux(niveau, taille_niveau);
+
+    Generation* gen;
+    Generation* gen3;
+    Generation* gen4;
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen3 = (Generation*)malloc(sizeof(Generation));
+    gen4 = (Generation*)malloc(sizeof(Generation));
+
+	gen->allure_proj = 300;
+    gen->intervalle = 1000;
+	gen3->allure_proj = 300;
+    gen3->intervalle = 1000;
+	gen4->allure_proj = 300;
+    gen4->intervalle = 1000;
+
+	niveau->objets[0][9].type = LANCEUR;
+    niveau->objets[0][9].donnee_suppl = gen;
+	niveau->objets[4][11].type = LANCEUR;
+    niveau->objets[4][11].donnee_suppl = gen3;
+	niveau->objets[5][2].type = LANCEUR;
+    niveau->objets[5][2].donnee_suppl = gen4;
+    niveau->objets[0][6].type = DESTINATION;
+
+	/* init mur */
+    niveau->objets[1][0].type = MUR;
+    niveau->objets[1][1].type = MUR;
+
+    niveau->objets[3][0].type = MUR;
+
+    niveau->objets[0][7].type = MUR;
+    niveau->objets[1][7].type = MUR;
+    niveau->objets[2][7].type = MUR;
+    niveau->objets[2][6].type = MUR;
+    niveau->objets[2][5].type = MUR;
+    niveau->objets[2][4].type = MUR;
+    niveau->objets[2][3].type = MUR;
+    niveau->objets[3][3].type = MUR;
+    niveau->objets[4][3].type = MUR;
+    niveau->objets[5][3].type = MUR;
+    niveau->objets[6][3].type = MUR;
+
+    niveau->objets[5][4].type = MUR;
+    niveau->objets[5][5].type = MUR;
+    niveau->objets[5][6].type = MUR;
+    niveau->objets[6][6].type = MUR;
+    niveau->objets[6][7].type = MUR;
+    niveau->objets[6][8].type = MUR;
+    niveau->objets[6][9].type = MUR;
+
+	niveau->coo_perso.x = 3;
+    niveau->coo_perso.y = 4;
+    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+
+	return niveau;
 }
 
 

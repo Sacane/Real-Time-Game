@@ -4,13 +4,11 @@
 void main_naif(){
 	
     Niveau* niveau = niveau0();
-    Tas* tas = construit_Tas (niveau );
+    Tas* tas = construit_Tas (niveau);
     Evenement e;
     printf("affichage du tas au début : \n");
-    affiche_Tas(tas);
     affiche_Niveau(niveau);
-    while (true) { /* La partie ne se termine jamais car on n ' a pas
-        encore d ' actions de l ' utilisateur */
+    while (true) { 
 
         if ( un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
@@ -19,14 +17,17 @@ void main_naif(){
                 e = ote_minimum(tas);
                 execute_evenement(e, tas, niveau);
             }
-            execute_evenement(e, tas, niveau);
             affiche_Niveau(niveau);
         }   
         else
-            millisleep (100); /* Toujours attendre quelques millisecondes
+            millisleep (10); /* Toujours attendre quelques millisecondes
             quand on ne fait pas grand chose (ici un
             seul test) dans la boucle. */
+        if(niveau->est_vivant == false){
+            break;
+        }
     }
+
     free_Tas(tas);
     free_Niveau(niveau);
 }

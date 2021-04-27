@@ -122,15 +122,17 @@ void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile,
     assert(niveau->objets[pos_projectile.x][pos_projectile.y].type == PROJECTILE);
 
     Evenement evenement_projectile;
-    
+    Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
+    dep = niveau->objets[pos_projectile.x][pos_projectile.y].donnee_suppl;
     deplace_projectile(niveau, &pos_projectile);
-    unsigned long moment = projectile.moment + 300;
+    unsigned long moment = projectile.moment + dep->allure;
 
 	if(pos_projectile.x <= niveau->taille.x && pos_projectile.y <= niveau->taille.y){
 		evenement_projectile.moment = moment;
 		evenement_projectile.coo_obj = pos_projectile;
 		ajoute_evenement(tas, evenement_projectile);
 	}
+    free(dep);
 }
 
 void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
