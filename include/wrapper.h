@@ -5,14 +5,24 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
+
+#define COMMAND 0
+#define GRAPHIC 1
+#define DEBUG 2
 
 typedef struct{
+
   unsigned x;
   unsigned y;
+  
 } Coordonnees;
 
 
 void verif_malloc(void *objet);
+
+char *strcpy_tos(char* text);
+
 
 
 #endif

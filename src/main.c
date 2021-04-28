@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include "../include/test.h"
 #include "../include/test_gui.h"
-void main_naif(){
+#include "../include/opt.h"
+
+void command_launch(){
 	
-    Niveau* niveau = niveau0();
+
+    
+    Plateau niveau = niveau0();
     Tas* tas = construit_Tas (niveau);
     Evenement e;
     printf("affichage du tas au début : \n");
@@ -20,9 +24,7 @@ void main_naif(){
             affiche_Niveau(niveau);
         }   
         else
-            millisleep (10); /* Toujours attendre quelques millisecondes
-            quand on ne fait pas grand chose (ici un
-            seul test) dans la boucle. */
+            millisleep (10); 
         if(niveau->est_vivant == false){
             break;
         }
@@ -33,24 +35,30 @@ void main_naif(){
 }
 
 
-int main(void) {
+int main(int argc, char* argv[]) {
     
-    int choice;
-    printf("1 : tests\n");
-    printf("2 : main\n");
-    printf("3 : graphic_test\n");
-    scanf("%d", &choice);
-	
-	if(choice == 2){
-    	main_naif();
-	}    
-    else if(choice == 1){
-        main_test();
+    int mode;
+    char* name_file;
+    mode = COMMAND;
+    name_file = (char*)malloc(sizeof(char) * BUFSIZ);
+    if(argc >= 2){
+        parse_opt(argc, argv, &mode, name_file);
     }
-    else if(choice == 3){
-        main_gui_test();
-    }
-    
 
+    switch(mode){
+        case DEBUG:
+            main_test();
+            break;
+        case COMMAND:
+            command_launch();
+            break;
+        case GRAPHIC:
+            main_gui_test();
+            break;
+        default:
+            break;
+    }
+
+    free(name_file);
     return EXIT_SUCCESS;
 }

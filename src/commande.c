@@ -30,10 +30,10 @@ Plateau niveau0() {
     Generation* gen2;
     gen2 = (Generation*)malloc(sizeof(Generation));
     gen = (Generation*)malloc(sizeof(Generation));
-    gen2->allure_proj = 300;
-    gen2->intervalle = 1000;
-    gen->allure_proj = 300;
-    gen->intervalle = 1000;
+    gen2->allure_proj = une_milliseconde*300;
+    gen2->intervalle = une_seconde;
+    gen->allure_proj = une_milliseconde*300;
+    gen->intervalle = une_seconde;
 
     niveau->objets[0][0].type = LANCEUR;
     niveau->objets[0][0].donnee_suppl = gen;
@@ -80,12 +80,12 @@ Plateau niveau1(){
     gen2 = (Generation*)malloc(sizeof(Generation));
     gen3 = (Generation*)malloc(sizeof(Generation));
     
-    gen->allure_proj = 300;
-    gen->intervalle = 1000;
-	gen2->allure_proj = 300;
-    gen2->intervalle = 1000;
-	gen3->allure_proj = 300;
-    gen3->intervalle = 1000;
+    gen->allure_proj = une_milliseconde*300;
+    gen->intervalle = une_seconde;
+	gen2->allure_proj = une_milliseconde*300;
+    gen2->intervalle = une_seconde;
+	gen3->allure_proj = une_milliseconde*300;
+    gen3->intervalle = une_seconde;
 
 	niveau->objets[4][0].type = LANCEUR;
     niveau->objets[4][0].donnee_suppl = gen;
@@ -131,14 +131,14 @@ Plateau niveau2(){
     gen3 = (Generation*)malloc(sizeof(Generation));
     gen4 = (Generation*)malloc(sizeof(Generation));
 
-	gen->allure_proj = 300;
-    gen->intervalle = 1000;
-	gen2->allure_proj = 300;
-    gen2->intervalle = 1000;
-	gen3->allure_proj = 300;
-    gen3->intervalle = 1000;
-	gen4->allure_proj = 300;
-    gen4->intervalle = 1000;
+	gen->allure_proj = une_milliseconde * 300;
+    gen->intervalle = une_seconde;
+	gen2->allure_proj = une_milliseconde * 300;
+    gen2->intervalle = une_seconde;
+	gen3->allure_proj = une_milliseconde * 300;
+    gen3->intervalle = une_seconde;
+	gen4->allure_proj = une_milliseconde * 300;
+    gen4->intervalle = une_seconde;
 
 	niveau->objets[1][2].type = LANCEUR;
     niveau->objets[1][2].donnee_suppl = gen;
@@ -209,12 +209,12 @@ Plateau niveau3(){
     gen3 = (Generation*)malloc(sizeof(Generation));
     gen4 = (Generation*)malloc(sizeof(Generation));
 
-	gen->allure_proj = 300;
-    gen->intervalle = 1000;
-	gen3->allure_proj = 300;
-    gen3->intervalle = 1000;
-	gen4->allure_proj = 300;
-    gen4->intervalle = 1000;
+	gen->allure_proj = une_milliseconde * 300;
+    gen->intervalle = une_seconde;
+	gen3->allure_proj = une_milliseconde * 300;
+    gen3->intervalle = une_seconde;
+	gen4->allure_proj = une_milliseconde * 300;
+    gen4->intervalle = une_seconde;
 
 	niveau->objets[0][9].type = LANCEUR;
     niveau->objets[0][9].donnee_suppl = gen;
@@ -256,7 +256,6 @@ Plateau niveau3(){
 
 	return niveau;
 }
-
 
 void affiche_Niveau (Plateau niveau) {
 
@@ -314,3 +313,4 @@ void affiche_Niveau (Plateau niveau) {
 		printf("\n");
 	}
 }
+

@@ -1,3 +1,14 @@
+/**
+ * \fichier : gui.h
+ * \auteurs : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date de création : 01-04-21
+ * \dernière modification : 21-05-21
+ * 
+ * DESCRIPTION
+ *
+ */
+
+
 #ifndef __GUI__H__
 #define __GUI__H__
 
