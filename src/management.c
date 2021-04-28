@@ -131,8 +131,7 @@ void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile,
 		evenement_projectile.moment = moment;
 		evenement_projectile.coo_obj = pos_projectile;
 		ajoute_evenement(tas, evenement_projectile);
-	}
-    free(dep);
+    }
 }
 
 void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {

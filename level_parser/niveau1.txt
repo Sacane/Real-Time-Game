@@ -1,1 +1,14 @@
-size = 10 x 15
+size = 5 x 10
+PERSONNAGE 0 x 1 allure : 300
+LANCEUR 4 x 0 allure : 300 intervalle : 1000
+LANCEUR 1 x 6 allure : 300 intervalle : 1000
+LANCEUR 3 x 9 allure : 300 intervalle : 1000
+LANCEUR 0 x 3 allure : 300 intervalle : 1000
+MUR 0 x 2
+MUR 1 x 2
+MUR 1 x 3
+MUR 1 x 4
+MUR 1 x 5
+MUR 2 x 3
+MUR 4 x 5
+MUR 4 x 6

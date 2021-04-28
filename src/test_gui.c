@@ -67,7 +67,10 @@ void main_gui_test(){
             millisleep (100);
         MLV_actualise_window();
     }
+    MLV_free_image(font);
+    MLV_free_window();
     printf("program ended in : %lums\n", maintenant());
     free_Tas(tas);
     free_Niveau(niveau);
+    printf("end_free\n");
 }

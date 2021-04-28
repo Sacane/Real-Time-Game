@@ -5,8 +5,7 @@ void parse_opt(int argc, char* argv[], int *mode, char *name_file){
     int c;
     int option_index = 0;
     while(1){
-    
-        
+
         static struct option long_options[] =
             {
             {"file",     required_argument,       0, 'f'},
@@ -17,13 +16,15 @@ void parse_opt(int argc, char* argv[], int *mode, char *name_file){
         c = getopt_long (argc, argv, "f:t:m:", long_options, &option_index);
         if(c == -1)
             break;
-            
+
         switch(c){
             case -1:
                 break;
             case 'f':
-                memcpy(name_file, optarg, BUFSIZ);
-                printf("program launch with the file : %s\n", optarg);
+                printf("Enter filemode\n");
+                strcpy(name_file, optarg);
+                printf("program launch with the file : %s %s\n", optarg, name_file);
+                *mode = TEST_FILE;
                 break;
             case 't':
                 printf("launch test level %ld\n", strtol(optarg, NULL, 10));

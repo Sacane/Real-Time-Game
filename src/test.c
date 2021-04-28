@@ -572,13 +572,13 @@ void main_test(){
         printf("test de la fonction 'declenche_lanceur' : échoué\n");
     }
 
-	if(test_execute_evenement(&total_test)){
+	/*if(test_execute_evenement(&total_test)){
         compteur++;
         printf("test de la fonction 'execute_evenement' : réussi\n");
     }
     else{
         printf("test de la fonction 'execute_evenement' : échoué\n");
-    }
+    }*/
     
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);

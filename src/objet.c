@@ -18,3 +18,19 @@ void remplis_lanceur(Objet* lanceur, Generation* gen){
 }
 
 
+TypeObjet str_to_obj(char* type){
+    if(strcmp(type, "PROJECTILE") == 0){
+        return PROJECTILE;
+    }
+    if(strcmp(type, "LANCEUR") == 0){
+        return LANCEUR;
+    }
+    if(strcmp(type, "PERSONNAGE") == 0){
+        return PERSONNAGE;
+    }
+    if(strcmp(type, "MUR") == 0){
+        return MUR;
+    }
+    return 0;
+}
+

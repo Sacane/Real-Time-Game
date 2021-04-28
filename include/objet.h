@@ -66,7 +66,7 @@ void remplis_projectile(Objet* obj, Deplacement* deplacement);
 */
 void remplis_lanceur(Objet* lanceur, Generation* gen);
 
-
+TypeObjet str_to_obj(char* type);
 
 
 #endif
