@@ -3,6 +3,7 @@
 #include "../include/test_gui.h"
 #include "../include/opt.h"
 #include "../include/parser.h"
+#include "../include/config_stdin.h"
 
 void command_launch(){
     
@@ -36,11 +37,38 @@ void command_launch(){
 
 void launch_command(Plateau niveau){
     
+    init_stdin();
     Tas* tas = construit_Tas(niveau);
     Evenement e;
+	char touche;
     printf("affichage du tas au début : \n");
     affiche_Niveau(niveau);
+    printf("\n");
     while (true) {
+        verifie_mouvement_personnage(niveau);
+        while((touche = getchar()) != EOF){
+            if(niveau->depl_perso_autorise == true){
+                switch (touche)
+                {
+                case 'z':
+                    niveau->dir_perso = HAUT;
+                    break;
+                case 's':
+                    niveau->dir_perso = BAS;
+                    break;
+                case 'd':
+                    niveau->dir_perso = DROITE;
+                    break;
+                case 'q':
+                    niveau->dir_perso = GAUCHE;
+                    break;
+                default:
+                    break;
+                }
+                deplace_joueur(niveau);
+            }
+        }
+
         if ( un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
             execute_evenement(e, tas, niveau);
@@ -49,6 +77,7 @@ void launch_command(Plateau niveau){
                 execute_evenement(e, tas, niveau);
             }
             affiche_Niveau(niveau);
+    		printf("\n");
         }   
         else
             millisleep (10); 
@@ -56,9 +85,8 @@ void launch_command(Plateau niveau){
             break;
         }
     }
-    printf("before free\n");
     free_Tas(tas);
-    printf("after free\n");
+    restaure_stdin();
 
 }
 
@@ -73,7 +101,7 @@ int main(int argc, char* argv[]) {
     
     
     opt_management(argc, argv, &mode, name_file, &niveau);
-    
+
 
     switch(mode){
         case DEBUG:

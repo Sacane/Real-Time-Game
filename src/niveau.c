@@ -162,16 +162,16 @@ void deplace_joueur(Plateau niveau){
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
     switch(niveau->dir_perso){
         case HAUT:
-            niveau->coo_perso.y += 1;
+            niveau->coo_perso.x -= 1;
             break;
         case BAS:
-            niveau->coo_perso.y -= 1;
-            break;
-        case DROITE:
             niveau->coo_perso.x += 1;
             break;
+        case DROITE:
+            niveau->coo_perso.y += 1;
+            break;
         case GAUCHE:
-            niveau->coo_perso.x -= 1;
+            niveau->coo_perso.y -= 1;
             break;
     }
 	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
