@@ -15,6 +15,7 @@
 #include "objet.h"
 
 
+
 typedef struct Niveau{
     
     Coordonnees taille; /* Taille du niveau */
@@ -28,6 +29,7 @@ typedef struct Niveau{
                               * personnage est superieur a son
                               * allure. */
     Direction dir_perso; /*Direction actuelle du personnage */
+    unsigned long moment_depl_perso;
     bool est_vivant;
     
 } Niveau, *Plateau;
@@ -47,7 +49,11 @@ void free_Niveau (Plateau niveau); /* Libere la memoire prise par un
  * \arg niveau : plateau concernant le déplacement du joueur
  * Deplace le joueur selon une direction renseigné
 */
-void deplacer_joueur(Plateau niveau); 
+void deplace_joueur(Plateau niveau); 
+
+
+void verifie_mouvement_personnage(Plateau niveau);
+
 
 /**
  * Renvoi true si l'objet est prêt à rentré en contact avec un mur, false sinon.
@@ -58,6 +64,7 @@ bool mur_en_contact(Plateau plateau, Objet obj);
  * Renvoi true si l'objet est prêt à rentrer en contact avec le bord du terrain.
 */
 bool bordure_en_contact(Plateau plateau, Objet obj);
+
 
 /*Vérifie et renvoi true si le personnage est s'apprête à rentrer en conflit avec un mur */
 bool perso_en_contact(Plateau plateau);

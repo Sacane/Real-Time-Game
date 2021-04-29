@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <string.h>
+#include "temps.h"
 
 #define COMMAND 0
 #define GRAPHIC 1

@@ -30,7 +30,7 @@ void test_gui(){
 }
 
 void main_gui_test(){
-
+    
     MLV_Image *font;
     MLV_Image *array_img[11];
     Plateau niveau = niveau0();
@@ -45,7 +45,7 @@ void main_gui_test(){
     MLV_resize_image(font, size_case * niveau->taille.y, size_case * niveau->taille.x);
     init_plateau(niveau, size_case, font);
     update_plateau(niveau, array_img, size_case, font);
-    
+    niveau->dir_perso = DROITE;
     while (MLV_get_event(&touche, NULL, NULL,
         NULL, NULL, NULL, NULL, NULL, NULL) == MLV_NONE || touche != MLV_KEYBOARD_ESCAPE) {
         if(niveau->est_vivant == false){
@@ -72,5 +72,51 @@ void main_gui_test(){
     printf("program ended in : %lums\n", maintenant());
     free_Tas(tas);
     free_Niveau(niveau);
+    printf("end_free\n");
+}
+
+
+void launch_gui(Plateau niveau){
+    MLV_Image *font;
+    MLV_Image *array_img[11];
+    int size_case = niveau->taille.x * niveau->taille.y;
+    MLV_Keyboard_button touche;
+    Arbre tas = construit_Tas (niveau);
+    Evenement e;
+    MLV_create_window("RealTimeGame", "Game", size_case * niveau->taille.y, size_case * niveau->taille.x);
+    init_array_img(array_img, size_case);
+    font = MLV_load_image("assets/font.jpeg");
+    assert(font != NULL);
+    MLV_resize_image(font, size_case * niveau->taille.y, size_case * niveau->taille.x);
+    init_plateau(niveau, size_case, font);
+    update_plateau(niveau, array_img, size_case, font);
+    niveau->dir_perso = DROITE;
+    while (MLV_get_event(&touche, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL) == MLV_NONE || touche != MLV_KEYBOARD_ESCAPE) {
+        if(niveau->est_vivant == false){
+            break;
+        }
+        printf("test\n");
+        affiche_Tas(tas);
+        if (un_evenement_est_pret(tas)) {
+            e = ote_minimum(tas);
+            execute_evenement(e, tas, niveau);
+            while(e.moment == tas->valeurs[0].moment){
+                e = ote_minimum(tas);
+                execute_evenement(e, tas, niveau);
+            }
+            
+            update_plateau(niveau, array_img, size_case, font);
+            MLV_actualise_window();
+            
+        }   
+        else
+            millisleep (100);
+        MLV_actualise_window();
+    }
+    MLV_free_image(font);
+    MLV_free_window();
+    printf("program ended in : %lums\n", maintenant());
+    free_Tas(tas);
     printf("end_free\n");
 }

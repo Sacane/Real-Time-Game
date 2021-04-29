@@ -34,29 +34,7 @@ void free_Niveau (Plateau niveau){
     free(niveau);
 }
 
-/**
- * Déplace le joueur selon une direction donnée
- */ 
-void deplacer_joueur(Plateau niveau){
-    
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
-    
-    switch(niveau->dir_perso){
-        case HAUT:
-            niveau->coo_perso.y += 1;
-            break;
-        case BAS:
-            niveau->coo_perso.y -= 1;
-            break;
-        case DROITE:
-            niveau->coo_perso.x += 1;
-            break;
-        case GAUCHE:
-            niveau->coo_perso.x -= 1;
-            break;
-    }
 
-}
 
 
 /**
@@ -171,3 +149,41 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
 }
 
+/**
+ * Déplace le joueur selon une direction donnée
+ */ 
+void deplace_joueur(Plateau niveau){
+
+    assert(niveau != NULL);
+    
+    if(se_dirige_vers_mur(niveau->coo_perso.x, niveau->coo_perso.y, niveau->dir_perso, niveau)){
+        return;
+    }
+    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
+    switch(niveau->dir_perso){
+        case HAUT:
+            niveau->coo_perso.y += 1;
+            break;
+        case BAS:
+            niveau->coo_perso.y -= 1;
+            break;
+        case DROITE:
+            niveau->coo_perso.x += 1;
+            break;
+        case GAUCHE:
+            niveau->coo_perso.x -= 1;
+            break;
+    }
+	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+    niveau->depl_perso_autorise = false;
+    niveau->moment_depl_perso = maintenant() + niveau->allure_perso;
+}
+
+void verifie_mouvement_personnage(Plateau niveau){
+
+	assert(NULL != niveau);
+
+	if(maintenant() >= niveau->moment_depl_perso){
+		niveau->depl_perso_autorise = true;
+	}
+}

@@ -28,12 +28,13 @@ Plateau read_file(char* name_file){
     res->allure_perso = une_milliseconde * allure;
     printf("OK || coordinates : (%u, %u) allure : %lu\n", (res->coo_perso).x, (res->coo_perso).y, res->allure_perso);
     printf("Filling of objects...\n");
+    res->objets[res->coo_perso.x][res->coo_perso.y].type = PERSONNAGE;
     while(fscanf(in, "%s", typeObject) != EOF){
         Generation *gen = (Generation*)malloc(sizeof(Generation));
         switch(str_to_obj(typeObject)){
             case LANCEUR:
                 printf("Filling of launchers...\n");
-                fscanf(in, " %u x %u allure : %lu interval : %lu", &x, &y, &allure, &intervalle);
+                fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
                 res->objets[x][y].type = LANCEUR;
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
@@ -53,7 +54,6 @@ Plateau read_file(char* name_file){
     }
     printf("OK\n");
     free(typeObject);
-    
     fclose(in);
     return res;
 }

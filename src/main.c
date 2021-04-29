@@ -55,10 +55,11 @@ int main(int argc, char* argv[]) {
             command_launch();
             break;
         case GRAPHIC:
-            test_gui(); 
+            main_gui_test(); 
             break;
         case TEST_FILE:
             test = read_file(name_file);
+            launch_gui(test);
             free_Niveau(test);
             break;
         default:

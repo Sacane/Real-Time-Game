@@ -6,5 +6,6 @@
 
 void test_gui();
 void main_gui_test();
+void launch_gui(Plateau niveau);
 
 #endif 
