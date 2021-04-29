@@ -465,7 +465,7 @@ static bool test_declenche_lanceur(int *total_test){
 	return true;
 }*/
 
-static bool test_execute_evenement(int *total_test){
+/*static bool test_execute_evenement(int *total_test){
     (*total_test)++;
 
     Plateau niveau = niveau0();
@@ -494,7 +494,7 @@ static bool test_execute_evenement(int *total_test){
 
 
     return true;
-}
+}*/
 
 void main_test(){
     int compteur = 0;
@@ -556,13 +556,6 @@ void main_test(){
         printf("test vers la gauche 'deplace_projectile_gauche' : échoué\n");
     }
 
-	/*if(test_declenche_projectile(&total_test) == true){
-        compteur++;
-        printf("test 'declenche_projectile' : réussi\n");
-    }
-    else{
-        printf("test 'declenche_projectile' : échoué\n");
-    }*/
     
     if(test_declenche_lanceur(&total_test)){
         compteur++;
@@ -572,13 +565,6 @@ void main_test(){
         printf("test de la fonction 'declenche_lanceur' : échoué\n");
     }
 
-	/*if(test_execute_evenement(&total_test)){
-        compteur++;
-        printf("test de la fonction 'execute_evenement' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'execute_evenement' : échoué\n");
-    }*/
     
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);

@@ -30,7 +30,7 @@ void test_gui(){
 }
 
 void main_gui_test(){
-    
+
     MLV_Image *font;
     MLV_Image *array_img[11];
     Plateau niveau = niveau0();
@@ -79,11 +79,13 @@ void main_gui_test(){
 void launch_gui(Plateau niveau){
     MLV_Image *font;
     MLV_Image *array_img[11];
-    int size_case = niveau->taille.x * niveau->taille.y;
+    int size_case = 60;
+    printf("%d\n", size_case);
     MLV_Keyboard_button touche;
     Arbre tas = construit_Tas (niveau);
     Evenement e;
     MLV_create_window("RealTimeGame", "Game", size_case * niveau->taille.y, size_case * niveau->taille.x);
+    printf("x : %d | y : %d\n", size_case * niveau->taille.y, size_case * niveau->taille.x);
     init_array_img(array_img, size_case);
     font = MLV_load_image("assets/font.jpeg");
     assert(font != NULL);
