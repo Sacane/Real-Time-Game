@@ -4,8 +4,11 @@
 
 #include <getopt.h>
 #include "wrapper.h"
+#include "niveau.h"
+#include "parser.h"
+#include "commande.h"
 
-void parse_opt(int argc, char* argv[], int *mode, char *name_file);
+void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau *niveau);
 
 
 

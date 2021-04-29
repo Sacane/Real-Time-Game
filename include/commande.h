@@ -18,6 +18,10 @@ Plateau niveau0();
 
 Plateau niveau1();
 
+Plateau niveau2();
+ 
+Plateau niveau3();
+
 void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */
 

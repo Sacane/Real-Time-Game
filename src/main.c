@@ -34,38 +34,61 @@ void command_launch(){
     
 }
 
+void launch_command(Plateau niveau){
+    
+    Tas* tas = construit_Tas(niveau);
+    Evenement e;
+    printf("affichage du tas au début : \n");
+    affiche_Niveau(niveau);
+    while (true) {
+        if ( un_evenement_est_pret(tas)) {
+            e = ote_minimum(tas);
+            execute_evenement(e, tas, niveau);
+            while(e.moment == tas->valeurs[0].moment){
+                e = ote_minimum(tas);
+                execute_evenement(e, tas, niveau);
+            }
+            affiche_Niveau(niveau);
+        }   
+        else
+            millisleep (10); 
+        if(niveau->est_vivant == false){
+            break;
+        }
+    }
+    printf("before free\n");
+    free_Tas(tas);
+    printf("after free\n");
+
+}
+
 
 int main(int argc, char* argv[]) {
     
-    Plateau test;
+    Plateau niveau = NULL;
     int mode;
     char* name_file = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
     
-    if(argc >= 2){
-        parse_opt(argc, argv, &mode, name_file);
-    }
     
+    opt_management(argc, argv, &mode, name_file, &niveau);
+    
+
     switch(mode){
         case DEBUG:
             main_test();
             break;
         case COMMAND:
-            command_launch();
+            launch_command(niveau);
             break;
         case GRAPHIC:
-            main_gui_test(); 
-            break;
-        case TEST_FILE:
-            test = read_file(name_file);
-            launch_gui(test);
-            free_Niveau(test);
+            launch_gui(niveau); 
             break;
         default:
             break;
     }
-    
+    free_Niveau(niveau);
     free(name_file);
     return EXIT_SUCCESS;
 }

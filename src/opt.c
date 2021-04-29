@@ -1,9 +1,13 @@
 #include "../include/opt.h"
 
 
-void parse_opt(int argc, char* argv[], int *mode, char *name_file){
-    int c;
+void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau *niveau){
+    int c, level_number;
     int option_index = 0;
+    if(argc < 2){
+        *niveau = niveau0();
+        printf("Ah\n");
+    }
     while(1){
 
         static struct option long_options[] =
@@ -24,10 +28,25 @@ void parse_opt(int argc, char* argv[], int *mode, char *name_file){
                 printf("Enter filemode\n");
                 strcpy(name_file, optarg);
                 printf("program launch with the file : %s %s\n", optarg, name_file);
-                *mode = TEST_FILE;
+                *niveau = read_file(name_file);
                 break;
             case 't':
                 printf("launch test level %ld\n", strtol(optarg, NULL, 10));
+                level_number = strtol(optarg, NULL, 10);
+                switch(level_number){
+                    case 0:
+                        *niveau = niveau0();
+                        break;
+                    case 1:
+                        *niveau = niveau1();
+                        break;
+                    case 2: 
+                        *niveau = niveau2();
+                        break;
+                    case 3:
+                        *niveau = niveau3();
+                        break;
+                }
                 break;
             case 'm':
                 if(strcmp(optarg, "DEBUG") == 0){
