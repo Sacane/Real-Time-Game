@@ -73,7 +73,9 @@ int main(int argc, char* argv[]) {
     
     opt_management(argc, argv, &mode, name_file, &niveau);
 
-
+    if(niveau == NULL){
+        niveau = niveau0();
+    }
     switch(mode){
         case DEBUG:
             main_test();

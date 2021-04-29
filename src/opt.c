@@ -61,6 +61,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau 
                 
 
             case '?':
+                printf("On sort\n");
                 break;
             default:
                 abort();

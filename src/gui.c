@@ -26,6 +26,12 @@ void init_array_img(MLV_Image* array_img[], int size_case){
 	MLV_resize_image(array_img[DEST], size_case, size_case);
 }
 
+void resize_all_img(MLV_Image* array_img[],  int width, int height){
+	int i;
+	for(i = CHARACTER_SOUTH; i <= DEST; i++){
+		MLV_resize_image(array_img[i], width, height);
+	}
+}
 
 void free_array_img(MLV_Image *array[]){
 	int i;
@@ -64,7 +70,7 @@ void init_plateau(Plateau niveau, int height, MLV_Image* font){
     MLV_actualise_window();
 }
 
-void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Image *font){
+void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
 
 	unsigned int i, j;
 	int x_height, y_height;
@@ -72,7 +78,7 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Imag
 	MLV_draw_image(font, 0, 0);
 	for(i = 0; i < niveau->taille.x; ++i){
 		for(j = 0; j < niveau->taille.y; ++j){
-			x_height = j * height;
+			x_height = j * width;
 			y_height = i * height;
 			switch(niveau->objets[i][j].type){
 				case VIDE: 

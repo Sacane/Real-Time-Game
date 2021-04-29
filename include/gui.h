@@ -42,10 +42,11 @@ void free_image();
 
 void init_plateau(Plateau niveau, int height, MLV_Image *font);
 
-void update_plateau(Plateau niveau, MLV_Image *array_img[], int height, MLV_Image *font);
+void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height);
 
 void draw_Object(Objet objet);
 
+void resize_all_img(MLV_Image* array_img[],  int width, int height);
 
 
 #endif
