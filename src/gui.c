@@ -130,6 +130,26 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, uns
 			}
 		}
 	}
+}
 
+void action_listener(MLV_Keyboard_button button, Plateau board){
+	switch(button){
+		case MLV_KEYBOARD_z:
+			board->dir_perso = HAUT;
+			break;
+		case MLV_KEYBOARD_q:
+			board->dir_perso = GAUCHE;
+			break;
+		case MLV_KEYBOARD_s:
+			board->dir_perso = BAS;
+			break;
+		case MLV_KEYBOARD_d:
+			board->dir_perso = DROITE;
+			break;
+		default:
+			return;
+	}
+	if(board->depl_perso_autorise == true)
+		deplace_joueur(board);
 
 }

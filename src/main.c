@@ -36,7 +36,8 @@ void launch_command(Plateau niveau){
                 default:
                     break;
                 }
-                deplace_joueur(niveau);
+                if(niveau->depl_perso_autorise == true)
+                    deplace_joueur(niveau);
             }
         }
 

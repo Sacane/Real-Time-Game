@@ -28,13 +28,18 @@ void launch_gui(Plateau niveau){
 
     update_plateau(niveau, array_img, font, width, height);
     niveau->dir_perso = DROITE;
-    while (MLV_get_event(&touche, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL) == MLV_NONE || touche != MLV_KEYBOARD_ESCAPE) {
+    while (true) {
         if(niveau->est_vivant == false){
             break;
         }
-        printf("test\n");
-        affiche_Tas(tas);
+        while(MLV_get_event(&touche, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL, NULL) != MLV_NONE){
+            verifie_mouvement_personnage(niveau);
+            action_listener(touche, niveau);
+        }
+        if(touche == MLV_KEYBOARD_ESCAPE){
+            break;
+        }
         if (un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
             execute_evenement(e, tas, niveau);

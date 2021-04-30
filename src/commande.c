@@ -58,6 +58,7 @@ Plateau niveau0() {
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+    niveau->allure_perso = une_milliseconde * 300;
 
 
     return niveau;
