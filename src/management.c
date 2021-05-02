@@ -61,6 +61,9 @@ static void creer_projectile_selon_direction(Plateau plateau, Direction directio
     }
     plateau->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
     plateau->objets[pos_projectile->x][pos_projectile->y].donnee_suppl = deplacement;
+    if(est_coordonnee_equivalent(*pos_projectile, plateau->coo_perso)){
+        plateau->est_vivant = false;
+    }
     free(generation);
 }
 

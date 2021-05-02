@@ -18,19 +18,17 @@
 
 typedef struct Niveau{
     
-    Coordonnees taille; /* Taille du niveau */
-    Objet** objets; /* Tableau bi-directionnel de largeur taille.x, 
-                    * de hauteur taille.y, et dont chaque case 
-                    * contient un Objet */
-    Coordonnees coo_perso; /* Position actuelle du personnage. */
-    unsigned long allure_perso; /* Allure du personnage */
-    bool depl_perso_autorise; /* Vaut `true` si  le temps ecoule
-                              * depuis le dernier deplacement du
-                              * personnage est superieur a son
-                              * allure. */
-    Direction dir_perso; /*Direction actuelle du personnage */
+    Coordonnees taille; 
+    Objet** objets; 
+    /* Définition du personnage */
+    Coordonnees coo_perso; 
+    unsigned long allure_perso; 
+    bool depl_perso_autorise; 
+    Direction dir_perso; 
     unsigned long moment_depl_perso;
     bool est_vivant;
+    bool est_niveau_termine;
+    Coordonnees coo_destination;
     
 } Niveau, *Plateau;
 
@@ -76,5 +74,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees);
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau);
 
 bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y);
+
+bool check_level_reached(Plateau niveau);
 
 #endif

@@ -20,7 +20,7 @@ void init_niveaux(Plateau niveau, Coordonnees taille){
 Plateau niveau0() {
 
     Plateau niveau;
-    Coordonnees taille_niveau;
+    Coordonnees taille_niveau, coo_destination;
     taille_niveau.x = 5;
     taille_niveau.y = 10;
     niveau = malloc_Niveau(taille_niveau);
@@ -40,7 +40,9 @@ Plateau niveau0() {
     niveau->objets[3][5].type = LANCEUR;
     niveau->objets[3][5].donnee_suppl = gen2;
     niveau->objets[4][9].type = DESTINATION;
-	
+	coo_destination.x = 4;
+    coo_destination.y = 9;
+    niveau->coo_destination = coo_destination;
     /* init mur */
     niveau->objets[1][0].type = MUR;
     niveau->objets[1][1].type = MUR;
@@ -68,7 +70,7 @@ Plateau niveau0() {
 Plateau niveau1(){
 
     Plateau niveau;
-    Coordonnees taille_niveau;
+    Coordonnees taille_niveau, coo_destination;
     taille_niveau.x = 5;
     taille_niveau.y = 10;
     niveau = malloc_Niveau(taille_niveau);
@@ -88,6 +90,8 @@ Plateau niveau1(){
 	gen3->allure_proj = une_milliseconde*300;
     gen3->intervalle = une_seconde;
 
+    niveau->allure_perso = une_milliseconde * 150;
+
 	niveau->objets[4][0].type = LANCEUR;
     niveau->objets[4][0].donnee_suppl = gen;
     niveau->objets[1][6].type = LANCEUR;
@@ -95,7 +99,9 @@ Plateau niveau1(){
 	niveau->objets[3][9].type = LANCEUR;
     niveau->objets[3][9].donnee_suppl = gen3;
     niveau->objets[0][3].type = DESTINATION;
-
+    coo_destination.x = 0; 
+    coo_destination.y = 3;
+    niveau->coo_destination = coo_destination;
     /* init mur */
     niveau->objets[0][2].type = MUR;
     niveau->objets[1][2].type = MUR;
@@ -117,7 +123,7 @@ Plateau niveau1(){
 Plateau niveau2(){
 
 	Plateau niveau;
-    Coordonnees taille_niveau;
+    Coordonnees taille_niveau, coo_destination;
     taille_niveau.x = 8;
     taille_niveau.y = 12;
     niveau = malloc_Niveau(taille_niveau);
@@ -150,7 +156,9 @@ Plateau niveau2(){
 	niveau->objets[6][9].type = LANCEUR;
     niveau->objets[6][9].donnee_suppl = gen4;
     niveau->objets[0][0].type = DESTINATION;
-
+    coo_destination.x = 0;
+    coo_destination.y = 0;
+    niveau->coo_destination = coo_destination;
 	/* init mur */
     niveau->objets[1][5].type = MUR;
 
@@ -188,6 +196,7 @@ Plateau niveau2(){
 	niveau->coo_perso.x = 7;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+    niveau->allure_perso = une_milliseconde * 150;
 
 	return niveau;
 
@@ -197,7 +206,7 @@ Plateau niveau2(){
 Plateau niveau3(){
 
 	Plateau niveau;
-    Coordonnees taille_niveau;
+    Coordonnees taille_niveau, coo_dest;
     taille_niveau.x = 8;
     taille_niveau.y = 12;
     niveau = malloc_Niveau(taille_niveau);
@@ -224,7 +233,9 @@ Plateau niveau3(){
 	niveau->objets[5][2].type = LANCEUR;
     niveau->objets[5][2].donnee_suppl = gen4;
     niveau->objets[0][6].type = DESTINATION;
-
+    coo_dest.x = 0;
+    coo_dest.y = 6;
+    niveau->coo_destination = coo_dest;
 	/* init mur */
     niveau->objets[1][0].type = MUR;
     niveau->objets[1][1].type = MUR;
@@ -254,6 +265,7 @@ Plateau niveau3(){
 	niveau->coo_perso.x = 3;
     niveau->coo_perso.y = 4;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+    niveau->allure_perso = une_milliseconde * 150;
 
 	return niveau;
 }

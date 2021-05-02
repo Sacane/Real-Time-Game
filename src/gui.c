@@ -2,28 +2,19 @@
 
 
 void init_array_img(MLV_Image* array_img[], int size_case){
+	
 	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
-	MLV_resize_image(array_img[PROJECTILE_EAST], size_case, size_case);
 	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");
-	MLV_resize_image(array_img[PROJECTILE_NORTH], size_case, size_case);
 	array_img[PROJECTILE_SOUTH] = MLV_load_image("assets/projectiles/proj_south.png");
-	MLV_resize_image(array_img[PROJECTILE_SOUTH], size_case, size_case);
 	array_img[PROJECTILE_WEST] = MLV_load_image("assets/projectiles/proj_west.png");
-	MLV_resize_image(array_img[PROJECTILE_WEST], size_case, size_case);
 	array_img[CHARACTER_EAST] = MLV_load_image("assets/character/character_east.png");
-	MLV_resize_image(array_img[CHARACTER_EAST], size_case, size_case);
 	array_img[CHARACTER_NORTH] = MLV_load_image("assets/character/character_north.png");
-	MLV_resize_image(array_img[CHARACTER_NORTH], size_case, size_case);
 	array_img[CHARACTER_SOUTH] = MLV_load_image("assets/character/character_south.png");
-	MLV_resize_image(array_img[CHARACTER_SOUTH], size_case, size_case);
 	array_img[CHARACTER_WEST] = MLV_load_image("assets/character/character_west.png");
-	MLV_resize_image(array_img[CHARACTER_WEST], size_case, size_case);
 	array_img[WALL] = MLV_load_image("assets/Wall.png");
-	MLV_resize_image(array_img[WALL], size_case, size_case);
 	array_img[LAUNCHER] = MLV_load_image("assets/launcher.png");
-	MLV_resize_image(array_img[LAUNCHER], size_case, size_case);
 	array_img[DEST] = MLV_load_image("assets/dest.png");
-	MLV_resize_image(array_img[DEST], size_case, size_case);
+	
 }
 
 void resize_all_img(MLV_Image* array_img[],  int width, int height){

@@ -47,7 +47,14 @@ Plateau read_file(char* name_file){
                 res->objets[x][y].type = MUR;
                 res->objets[x][y].donnee_suppl = NULL;
                 break;
-                free(gen);
+            case DESTINATION:
+                printf("Filling destination...");
+                fscanf(in, " %u x %u", &x, &y);
+                res->objets[x][y].type = DESTINATION;
+                res->coo_destination.x = x;
+                res->coo_destination.y = y;
+                printf("OK\n");
+                break;
             default:
                 break;
         }

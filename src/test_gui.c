@@ -1,7 +1,5 @@
 #include "../include/test_gui.h"
 
-
-
 void launch_gui(Plateau niveau){
     unsigned int x, y;
     
@@ -32,14 +30,11 @@ void launch_gui(Plateau niveau){
         if(niveau->est_vivant == false){
             break;
         }
-        while(MLV_get_event(&touche, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL) != MLV_NONE){
-            verifie_mouvement_personnage(niveau);
+        verifie_mouvement_personnage(niveau);
+        while(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) != MLV_NONE){
             action_listener(touche, niveau);
         }
-        if(touche == MLV_KEYBOARD_ESCAPE){
-            break;
-        }
+        
         if (un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
             execute_evenement(e, tas, niveau);
@@ -53,10 +48,11 @@ void launch_gui(Plateau niveau){
             
         }   
         else
-            millisleep (100);
-        MLV_actualise_window();
+            millisleep (10);
+        
     }
     MLV_free_image(font);
+    free_array_img(array_img);
     MLV_free_window();
     printf("program ended in : %lums\n", maintenant());
     free_Tas(tas);

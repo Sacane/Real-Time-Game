@@ -6,12 +6,13 @@
 #include "../include/config_stdin.h"
 
 
-void launch_command(Plateau niveau){
+static void launch_command(Plateau niveau, bool *is_reached){
     
     init_stdin();
     Tas* tas = construit_Tas(niveau);
     Evenement e;
 	char touche;
+
     printf("affichage du tas au début : \n");
     affiche_Niveau(niveau);
     printf("\n");
@@ -53,6 +54,10 @@ void launch_command(Plateau niveau){
         }   
         else
             millisleep (10); 
+        if(check_level_reached(niveau)){
+            (*is_reached) = true;
+            break;
+        }
         if(niveau->est_vivant == false){
             break;
         }
@@ -70,7 +75,7 @@ int main(int argc, char* argv[]) {
     char* name_file = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
-    
+    bool is_reached = false;
     
     opt_management(argc, argv, &mode, name_file, &niveau);
 
@@ -82,13 +87,19 @@ int main(int argc, char* argv[]) {
             main_test();
             break;
         case COMMAND:
-            launch_command(niveau);
+            launch_command(niveau, &is_reached);
             break;
         case GRAPHIC:
             launch_gui(niveau); 
             break;
         default:
             break;
+    }
+    if(is_reached){
+        printf("Félicitation vous avez fini le niveau !\n");
+    }
+    else{
+        printf("Vous avez perdu ! \n");
     }
     free_Niveau(niveau);
     free(name_file);

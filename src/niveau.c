@@ -9,7 +9,7 @@ Plateau malloc_Niveau (Coordonnees taille){
     tmp = (Plateau)malloc(sizeof(Niveau));
     tmp->taille = taille;
     tmp->est_vivant = true;
-
+    tmp->est_niveau_termine = false;
     tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
     for(i = 0; i < taille.x; i++){
       tmp->objets[i] = (Objet*)malloc(sizeof(Objet) * taille.y);
@@ -166,7 +166,7 @@ void deplace_joueur(Plateau niveau){
             break;
         case BAS:
             niveau->coo_perso.x += 1;
-            break;
+            break; 
         case DROITE:
             niveau->coo_perso.y += 1;
             break;
@@ -186,4 +186,10 @@ void verifie_mouvement_personnage(Plateau niveau){
 	if(maintenant() >= niveau->moment_depl_perso){
 		niveau->depl_perso_autorise = true;
 	}
+}
+
+bool check_level_reached(Plateau niveau){
+    assert(niveau != NULL);
+    
+    return est_coordonnee_equivalent(niveau->coo_perso, niveau->coo_destination);
 }
