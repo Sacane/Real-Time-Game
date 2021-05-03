@@ -61,6 +61,10 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau 
                     *mode = GRAPHIC;
                     printf("Launch program in graphic mode\n");
                 }
+                else{
+                    printf("Mode inconnue\n");
+                    *mode = ERROR;
+                }
                 break;
                 
 

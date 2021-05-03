@@ -42,6 +42,10 @@ Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
 void free_Niveau (Plateau niveau); /* Libere la memoire prise par un
                                     * Niveau */
 
+
+void init_niveaux(Plateau niveau, Coordonnees taille);
+
+
 /**
  * \arg niveau : plateau concernant le déplacement du joueur
  * Deplace le joueur selon une direction renseigné

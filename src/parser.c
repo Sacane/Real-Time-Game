@@ -32,6 +32,7 @@ Plateau read_file(char* name_file){
     while(fscanf(in, "%s", typeObject) != EOF){
         Generation *gen = (Generation*)malloc(sizeof(Generation));
         switch(str_to_obj(typeObject)){
+            
             case LANCEUR:
                 printf("Filling of launchers...\n");
                 fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
@@ -41,6 +42,7 @@ Plateau read_file(char* name_file){
                 res->objets[x][y].donnee_suppl = gen;
                 printf("... OK, datas check : interval %lu, allure : %lu\n", intervalle, allure);
                 break;
+
             case MUR:
                 printf("Filling of walls...\n");
                 fscanf(in, " %u x %u", &x, &y);
@@ -48,6 +50,7 @@ Plateau read_file(char* name_file){
                 res->objets[x][y].donnee_suppl = NULL;
                 free(gen);
                 break;
+
             case DESTINATION:
                 printf("Filling destination...");
                 fscanf(in, " %u x %u", &x, &y);

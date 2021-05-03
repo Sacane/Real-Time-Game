@@ -13,7 +13,7 @@
 
 #include "wrapper.h"
 
-#define INITIAL_SIZE 512
+#define INITIAL_SIZE 64
 
 /* ======== Definition du type `Objet` ====================================== */
 

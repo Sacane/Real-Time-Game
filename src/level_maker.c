@@ -1,17 +1,6 @@
 #include "../include/level_maker.h"
 
 
-void init_niveaux(Plateau niveau, Coordonnees taille){
-
-    unsigned int i, j;
-    for(i = 0; i < taille.x; i++){
-        for(j = 0; j < taille.y; j++){
-            niveau->objets[i][j].type = VIDE;
-            niveau->objets[i][j].donnee_suppl = NULL;
-        }
-    }
-}
-
 
 Plateau niveau0() {
 
