@@ -2,7 +2,6 @@
 #include "../include/test.h"
 #include "../include/test_gui.h"
 #include "../include/opt.h"
-#include "../include/parser.h"
 #include "../include/config_stdin.h"
 
 
@@ -92,15 +91,19 @@ int main(int argc, char* argv[]) {
         case GRAPHIC:
             launch_gui(niveau); 
             break;
+        case ERROR:
+            printf("Une erreur est apparue, sortie du programme\n");
+            if(NULL != niveau){
+                free_Niveau(niveau);
+                free(name_file);
+            }
+            return EXIT_FAILURE;
         default:
             break;
     }
-    if(is_reached){
-        printf("Félicitation vous avez fini le niveau !\n");
-    }
-    else{
-        printf("Vous avez perdu ! \n");
-    }
+    
+    (is_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
+
     free_Niveau(niveau);
     free(name_file);
     return EXIT_SUCCESS;

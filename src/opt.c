@@ -46,6 +46,10 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau 
                     case 3:
                         *niveau = niveau3();
                         break;
+                    default:
+                        printf("Le niveau selectionner n'existe pas\n");
+                        *mode = ERROR;
+                        break;
                 }
                 break;
             case 'm':

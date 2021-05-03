@@ -2,7 +2,6 @@
 
 void launch_gui(Plateau niveau){
     unsigned int x, y;
-    
     int decalage_x, decalage_y;
     decalage_x = (niveau->taille.y < niveau->taille.x) ? 50 : 25;
     decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
@@ -18,7 +17,7 @@ void launch_gui(Plateau niveau){
     Evenement e;
     MLV_create_window("RealTimeGame", "Game", x, y);
     printf("x : %d | y : %d\n", x, size_case * niveau->taille.x);
-    init_array_img(array_img, size_case);
+    init_array_img(array_img);
     resize_all_img(array_img, width, height);
     font = MLV_load_image("assets/font.jpeg");
     assert(font != NULL);

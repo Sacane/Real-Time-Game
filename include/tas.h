@@ -12,7 +12,7 @@
 #define __TAS__H__
 
 #include "wrapper.h"
-#include "temps.h"
+
 
 
 #define heap_father_left(i) ((int) ((i)-1) / 2)

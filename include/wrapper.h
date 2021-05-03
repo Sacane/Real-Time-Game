@@ -8,10 +8,13 @@
 #include <string.h>
 #include "temps.h"
 
-#define COMMAND 0
-#define GRAPHIC 1
-#define DEBUG 2
-#define TEST_FILE 3
+
+typedef enum{
+  COMMAND,
+  GRAPHIC,
+  DEBUG,
+  ERROR
+}Mode;
 
 typedef struct{
 

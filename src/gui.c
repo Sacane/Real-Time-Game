@@ -1,7 +1,7 @@
 #include "../include/gui.h"
 
 
-void init_array_img(MLV_Image* array_img[], int size_case){
+void init_array_img(MLV_Image* array_img[]){
 	
 	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
 	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");

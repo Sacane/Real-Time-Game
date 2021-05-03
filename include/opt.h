@@ -3,8 +3,6 @@
 
 
 #include <getopt.h>
-#include "wrapper.h"
-#include "niveau.h"
 #include "parser.h"
 #include "commande.h"
 

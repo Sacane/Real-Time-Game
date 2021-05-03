@@ -39,13 +39,14 @@ Plateau read_file(char* name_file){
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
                 res->objets[x][y].donnee_suppl = gen;
-                printf("... OK : interval %lu, allure : %lu\n", intervalle, allure);
+                printf("... OK, datas check : interval %lu, allure : %lu\n", intervalle, allure);
                 break;
             case MUR:
                 printf("Filling of walls...\n");
                 fscanf(in, " %u x %u", &x, &y);
                 res->objets[x][y].type = MUR;
                 res->objets[x][y].donnee_suppl = NULL;
+                free(gen);
                 break;
             case DESTINATION:
                 printf("Filling destination...");
@@ -54,6 +55,7 @@ Plateau read_file(char* name_file){
                 res->coo_destination.x = x;
                 res->coo_destination.y = y;
                 printf("OK\n");
+                free(gen);
                 break;
             default:
                 break;

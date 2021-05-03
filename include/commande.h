@@ -12,7 +12,7 @@
 #define __COMMANDE__H__
 
 #include "niveau.h"
-#include "temps.h"
+
 
 Plateau niveau0();
 

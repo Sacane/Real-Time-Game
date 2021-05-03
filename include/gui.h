@@ -32,7 +32,7 @@ typedef enum {
 
 
 
-void init_array_img(MLV_Image *array_img[], int size_case);
+void init_array_img(MLV_Image *array_img[]);
 
 void free_array_img(MLV_Image *array[]);
 
