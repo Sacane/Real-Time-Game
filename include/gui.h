@@ -30,8 +30,6 @@ typedef enum {
     DEST
 }typeImage;
 
-
-
 void init_array_img(MLV_Image *array_img[]);
 
 void free_array_img(MLV_Image *array[]);
@@ -48,8 +46,8 @@ void draw_Object(Objet objet);
 
 void resize_all_img(MLV_Image* array_img[],  int width, int height);
 
-void action_listener(MLV_Keyboard_button button, Plateau board);
+int action_listener(MLV_Keyboard_button button, Plateau board);
 
-void launch_gui(Plateau niveau);
+void launch_gui(Plateau niveau, bool *is_reached);
 
 #endif

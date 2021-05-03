@@ -49,8 +49,9 @@ void init_niveaux(Plateau niveau, Coordonnees taille);
 /**
  * \arg niveau : plateau concernant le déplacement du joueur
  * Deplace le joueur selon une direction renseigné
-*/
-void deplace_joueur(Plateau niveau); 
+ * \return true si le personnage ne meurt pas après son déplacement, false sinon.
+ */
+int deplace_joueur(Plateau niveau); 
 
 
 void verifie_mouvement_personnage(Plateau niveau);

@@ -465,36 +465,21 @@ static bool test_declenche_lanceur(int *total_test){
 	return true;
 }*/
 
-/*static bool test_execute_evenement(int *total_test){
+static bool test_execute_evenement(int *total_test){
     (*total_test)++;
 
-    Plateau niveau = niveau0();
-    Arbre tas;
+    Plateau niveau  = niveau0();
+    Arbre heap = construit_Tas(niveau);
 
-    tas = construit_Tas(niveau);
-
-
+    Evenement e;
+    e = ote_minimum(heap);
+    execute_evenement(e, heap, niveau);
     
-    Evenement ev = ote_minimum(tas);
-
-    execute_evenement(ev, tas, niveau);
-
-    ev = ote_minimum(tas);
-
-    execute_evenement(ev, tas, niveau);
-
-    ev = ote_minimum(tas);
-
-    execute_evenement(ev, tas, niveau);
-
-
-    free_Tas(tas);
+    free_Tas(heap);
     free_Niveau(niveau);
-    
-
 
     return true;
-}*/
+}
 
 void main_test(){
     int compteur = 0;

@@ -9,7 +9,7 @@
 static void launch_command(Plateau niveau, bool *is_reached){
     
     init_stdin();
-    Tas* tas = construit_Tas(niveau);
+    Arbre tas = construit_Tas(niveau);
     Evenement e;
 	char touche;
 
@@ -37,8 +37,11 @@ static void launch_command(Plateau niveau, bool *is_reached){
                 default:
                     break;
                 }
-                if(niveau->depl_perso_autorise == true)
-                    deplace_joueur(niveau);
+                if(niveau->depl_perso_autorise == true){
+                    if(!deplace_joueur(niveau)){
+                        break;
+                    }
+                }
             }
         }
 
@@ -90,7 +93,7 @@ int main(int argc, char* argv[]) {
             launch_command(niveau, &is_level_reached);
             break;
         case GRAPHIC:
-            launch_gui(niveau); 
+            launch_gui(niveau, &is_level_reached); 
             break;
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");

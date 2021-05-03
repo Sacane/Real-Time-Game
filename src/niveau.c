@@ -163,12 +163,12 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 /**
  * Déplace le joueur selon une direction donnée
  */ 
-void deplace_joueur(Plateau niveau){
+int deplace_joueur(Plateau niveau){
 
     assert(niveau != NULL);
     
     if(se_dirige_vers_mur(niveau->coo_perso.x, niveau->coo_perso.y, niveau->dir_perso, niveau)){
-        return;
+        return -1;
     }
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
     switch(niveau->dir_perso){
@@ -185,9 +185,14 @@ void deplace_joueur(Plateau niveau){
             niveau->coo_perso.y -= 1;
             break;
     }
+    if(niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type == PROJECTILE){
+        printf("Vous avez marché sur un projectile, Boom !\n");
+        return 0;
+    }
 	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
     niveau->depl_perso_autorise = false;
     niveau->moment_depl_perso = maintenant() + niveau->allure_perso;
+    return 1;
 }
 
 void verifie_mouvement_personnage(Plateau niveau){

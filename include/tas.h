@@ -47,20 +47,13 @@ bool est_Tas(Arbre tas);
 
 void realloc_Tas(Arbre tas);
 
-/* Renvoie `true` si un 
- * evenement doit etre 
- * effectue. */
 bool un_evenement_est_pret(Arbre tas); 
 
-Evenement ote_minimum(Arbre tas); /* Renvoie et retire de `tas` 
-                                  * l'Evenement dont le `moment` est 
-                                  * le  plus petit. */
-void ajoute_evenement(Arbre tas, Evenement n); /* Ajoute un Evenement
-                                               * a un Tas */
+Evenement ote_minimum(Arbre tas); 
+void ajoute_evenement(Arbre tas, Evenement n); 
                                             
 									 
-void affiche_Tas(Arbre tas); /* Affiche le contenu d'un tas, a des
-                             * fins de tests */
+void affiche_Tas(Arbre tas);
 
 
 
