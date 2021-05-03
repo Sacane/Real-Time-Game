@@ -76,4 +76,7 @@ bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsi
 
 bool check_level_reached(Plateau niveau);
 
+void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
+                                       * Niveau donnee en argument */
+
 #endif

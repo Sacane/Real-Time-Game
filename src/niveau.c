@@ -193,3 +193,60 @@ bool check_level_reached(Plateau niveau){
     
     return est_coordonnee_equivalent(niveau->coo_perso, niveau->coo_destination);
 }
+
+void affiche_Niveau (Plateau niveau) {
+
+	unsigned int i, j;
+    Deplacement *dep;
+	for(i = 0; i < niveau->taille.x ; i++) {
+		for(j = 0; j < niveau->taille.y; j++) {
+
+			switch (niveau->objets[i][j].type)
+			{
+			case VIDE: 
+				printf(".");
+				break;
+			case LANCEUR: 
+				printf("O");
+				break;
+			case MUR: 
+				printf("#");
+				break;
+			
+			case PROJECTILE: 
+                /* J'ai modifié ici, tu avais raison au début mais le 
+                * castage se fait au début, j't'expliquerai le castage 
+                * en vocal 
+                */
+                dep = niveau->objets[i][j].donnee_suppl;
+				switch (dep->direction)
+				{
+				case HAUT: 
+					printf("^");
+					break;
+				case GAUCHE:
+					printf("<");
+					break;
+				case BAS: 
+					printf("v");
+					break;
+				case DROITE: 
+					printf(">");
+					break;
+				}
+				break;
+
+			case PERSONNAGE:
+				printf("P");
+				break;
+			case DESTINATION:
+				printf("D");
+				break;
+			default:
+				printf(".");
+				break;
+			}
+		}
+		printf("\n");
+	}
+}

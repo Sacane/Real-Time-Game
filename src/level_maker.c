@@ -1,9 +1,5 @@
-#include "../include/commande.h"
-/* Note : 
- * Y pour aller de gauche à droite
- * X pour aller de haut en bas
- * plateau[X][Y]
-*/
+#include "../include/level_maker.h"
+
 
 void init_niveaux(Plateau niveau, Coordonnees taille){
 
@@ -268,62 +264,5 @@ Plateau niveau3(){
     niveau->allure_perso = une_milliseconde * 150;
 
 	return niveau;
-}
-
-void affiche_Niveau (Plateau niveau) {
-
-	unsigned int i, j;
-    Deplacement *dep;
-	for(i = 0; i < niveau->taille.x ; i++) {
-		for(j = 0; j < niveau->taille.y; j++) {
-
-			switch (niveau->objets[i][j].type)
-			{
-			case VIDE: 
-				printf(".");
-				break;
-			case LANCEUR: 
-				printf("O");
-				break;
-			case MUR: 
-				printf("#");
-				break;
-			
-			case PROJECTILE: 
-                /* J'ai modifié ici, tu avais raison au début mais le 
-                * castage se fait au début, j't'expliquerai le castage 
-                * en vocal 
-                */
-                dep = niveau->objets[i][j].donnee_suppl;
-				switch (dep->direction)
-				{
-				case HAUT: 
-					printf("^");
-					break;
-				case GAUCHE:
-					printf("<");
-					break;
-				case BAS: 
-					printf("v");
-					break;
-				case DROITE: 
-					printf(">");
-					break;
-				}
-				break;
-
-			case PERSONNAGE:
-				printf("P");
-				break;
-			case DESTINATION:
-				printf("D");
-				break;
-			default:
-				printf(".");
-				break;
-			}
-		}
-		printf("\n");
-	}
 }
 

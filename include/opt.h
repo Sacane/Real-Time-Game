@@ -4,7 +4,7 @@
 
 #include <getopt.h>
 #include "parser.h"
-#include "commande.h"
+#include "level_maker.h"
 
 void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau *niveau);
 

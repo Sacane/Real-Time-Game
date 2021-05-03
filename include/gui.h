@@ -50,4 +50,6 @@ void resize_all_img(MLV_Image* array_img[],  int width, int height);
 
 void action_listener(MLV_Keyboard_button button, Plateau board);
 
+void launch_gui(Plateau niveau);
+
 #endif

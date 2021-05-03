@@ -28,6 +28,4 @@ void verif_malloc(void *objet);
 
 
 
-
-
 #endif

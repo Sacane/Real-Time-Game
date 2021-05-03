@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "../include/test.h"
-#include "../include/test_gui.h"
+#include "../include/gui.h"
 #include "../include/opt.h"
 #include "../include/config_stdin.h"
+
 
 
 static void launch_command(Plateau niveau, bool *is_reached){
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
     char* name_file = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
-    bool is_reached = false;
+    bool is_level_reached = false;
     
     opt_management(argc, argv, &mode, name_file, &niveau);
 
@@ -86,7 +87,7 @@ int main(int argc, char* argv[]) {
             main_test();
             break;
         case COMMAND:
-            launch_command(niveau, &is_reached);
+            launch_command(niveau, &is_level_reached);
             break;
         case GRAPHIC:
             launch_gui(niveau); 
@@ -95,14 +96,14 @@ int main(int argc, char* argv[]) {
             printf("Une erreur est apparue, sortie du programme\n");
             if(NULL != niveau){
                 free_Niveau(niveau);
-                free(name_file);
             }
+            free(name_file);
             return EXIT_FAILURE;
         default:
             break;
     }
-    
-    (is_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
+
+    (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
 
     free_Niveau(niveau);
     free(name_file);
