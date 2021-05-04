@@ -12,11 +12,15 @@ static void launch_command(Plateau niveau, bool *is_reached){
     Arbre tas = construit_Tas(niveau);
     Evenement e;
 	char touche;
+    int success = true;
 
     printf("affichage du tas au début : \n");
     affiche_Niveau(niveau);
     printf("\n");
     while (true) {
+        if(niveau->est_vivant == false){
+            break;
+        }
         verifie_mouvement_personnage(niveau);
         while((touche = getchar()) != EOF){
             if(niveau->depl_perso_autorise == true){
@@ -38,13 +42,16 @@ static void launch_command(Plateau niveau, bool *is_reached){
                     break;
                 }
                 if(niveau->depl_perso_autorise == true){
-                    if(!deplace_joueur(niveau)){
+                    success = deplace_joueur(niveau);
+                    if(!success){
                         break;
                     }
                 }
             }
         }
-
+        if(!success){
+            break;
+        }
         if ( un_evenement_est_pret(tas)) {
             e = ote_minimum(tas);
             execute_evenement(e, tas, niveau);
@@ -61,9 +68,7 @@ static void launch_command(Plateau niveau, bool *is_reached){
             (*is_reached) = true;
             break;
         }
-        if(niveau->est_vivant == false){
-            break;
-        }
+
     }
     free_Tas(tas);
     restaure_stdin();

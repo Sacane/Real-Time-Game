@@ -19,7 +19,7 @@ Plateau malloc_Niveau (Coordonnees taille){
 
 
 void free_Niveau (Plateau niveau){
-	
+    
     unsigned int i, j;
 
     for(i = 0; i < niveau->taille.x; i++){
@@ -230,10 +230,6 @@ void affiche_Niveau (Plateau niveau) {
 				break;
 			
 			case PROJECTILE: 
-                /* J'ai modifié ici, tu avais raison au début mais le 
-                * castage se fait au début, j't'expliquerai le castage 
-                * en vocal 
-                */
                 dep = niveau->objets[i][j].donnee_suppl;
 				switch (dep->direction)
 				{

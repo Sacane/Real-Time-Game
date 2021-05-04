@@ -15,6 +15,7 @@ Plateau niveau0() {
     Generation* gen2;
     gen2 = (Generation*)malloc(sizeof(Generation));
     gen = (Generation*)malloc(sizeof(Generation));
+
     gen2->allure_proj = une_milliseconde*300;
     gen2->intervalle = une_seconde;
     gen->allure_proj = une_milliseconde*300;
@@ -45,7 +46,7 @@ Plateau niveau0() {
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 300;
+    niveau->allure_perso = une_milliseconde * 100;
 
 
     return niveau;

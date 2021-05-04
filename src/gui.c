@@ -61,6 +61,63 @@ void init_plateau(Plateau niveau, int height, MLV_Image* font){
     MLV_actualise_window();
 }
 
+static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
+	int x_height, y_height;
+	x_height = y_source * width;
+	y_height = x_source * height;
+	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+	switch(niveau->objets[x_source][y_source].type){
+		case VIDE: 
+			break;
+		case PROJECTILE:
+			depl = niveau->objets[x_source][y_source].donnee_suppl;
+			switch(depl->direction){
+				case HAUT:
+					MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
+					break;
+				case BAS:
+					MLV_draw_image(array_img[PROJECTILE_SOUTH], x_height, y_height);
+					break;
+				case DROITE:
+					MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
+					break;
+				case GAUCHE:
+					MLV_draw_image(array_img[PROJECTILE_WEST], x_height, y_height);
+					break;
+			}
+			break;
+		case LANCEUR:
+			MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
+			break;
+		case PERSONNAGE:
+			switch(niveau->dir_perso){
+				case HAUT:
+					MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
+					break;
+				case BAS:
+					MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
+					break;
+				case DROITE:
+					MLV_draw_image(array_img[CHARACTER_EAST], x_height, y_height);
+					break;
+				case GAUCHE:
+					MLV_draw_image(array_img[CHARACTER_WEST], x_height, y_height);
+					break;
+			}
+			break;
+		case MUR:
+			MLV_draw_image(array_img[WALL], x_height, y_height);
+			break;
+		case DESTINATION:
+			MLV_draw_image(array_img[DEST], x_height, y_height);
+			break;
+		default:
+			break;
+	}
+
+	
+}
+
 void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
 
 	unsigned int i, j;
@@ -69,61 +126,99 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, uns
 	MLV_draw_image(font, 0, 0);
 	for(i = 0; i < niveau->taille.x; ++i){
 		for(j = 0; j < niveau->taille.y; ++j){
-			x_height = j * width;
-			y_height = i * height;
-			switch(niveau->objets[i][j].type){
-				case VIDE: 
+			draw_img(niveau, array_img, i, j, width, height);
+		}
+	}
+	MLV_actualise_window();
+}
+
+static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
+	
+	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
+	depl = board->objets[coo_proj.x][coo_proj.y].donnee_suppl;
+	if(se_dirige_vers_mur(coo_proj.x, coo_proj.y, depl->direction, board)){
+		return;
+	}
+
+	switch(depl->direction){
+		case HAUT:
+			draw_img(board, array_img, coo_proj.x - 1, coo_proj.y, width, height);
+			break;
+		case BAS:
+			draw_img(board, array_img, coo_proj.x + 1, coo_proj.y, width, height);
+			break;
+		case DROITE:
+			draw_img(board, array_img, coo_proj.x, coo_proj.y + 1, width, height);
+			break;
+		case GAUCHE:
+			draw_img(board, array_img, coo_proj.x, coo_proj.y - 1, width, height);
+			break;
+	}
+
+
+}
+
+static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
+	Direction direction;
+
+	for(direction = HAUT; direction <= DROITE; direction++){
+		if(!se_dirige_vers_mur(coo_launcher.x, coo_launcher.y, direction, board)){
+			switch(direction){
+				case HAUT:
+					draw_img(board, array_img, coo_launcher.x - 1, coo_launcher.y, width, height);
 					break;
-				case PROJECTILE:
-					depl = niveau->objets[i][j].donnee_suppl;
-					switch(depl->direction){
-						case HAUT:
-							MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
-							break;
-						case BAS:
-							MLV_draw_image(array_img[PROJECTILE_SOUTH], x_height, y_height);
-							break;
-						case DROITE:
-							MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
-							break;
-						case GAUCHE:
-							MLV_draw_image(array_img[PROJECTILE_WEST], x_height, y_height);
-							break;
-					}
+				case DROITE:
+					draw_img(board, array_img, coo_launcher.x, coo_launcher.y + 1, width, height);
 					break;
-				case LANCEUR:
-					MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
+				case GAUCHE:
+					draw_img(board, array_img, coo_launcher.x, coo_launcher.y - 1, width, height);
 					break;
-				case PERSONNAGE:
-					switch(niveau->dir_perso){
-						case HAUT:
-							MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
-							break;
-						case BAS:
-							MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
-							break;
-						case DROITE:
-							MLV_draw_image(array_img[CHARACTER_EAST], x_height, y_height);
-							break;
-						case GAUCHE:
-							MLV_draw_image(array_img[CHARACTER_WEST], x_height, y_height);
-							break;
-					}
-					break;
-				case MUR:
-					MLV_draw_image(array_img[WALL], x_height, y_height);
-					break;
-				case DESTINATION:
-					MLV_draw_image(array_img[DEST], x_height, y_height);
-					break;
-				default:
+				case BAS:
+					draw_img(board, array_img, coo_launcher.x + 1, coo_launcher.y, width, height);
 					break;
 			}
 		}
 	}
 }
 
+static void refresh_character(Coordonnees coo_obj, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
+	
+	switch(board->objets[coo_obj.x][coo_obj.y].type){
+		case PERSONNAGE:
+			switch(board->dir_perso){
+				case HAUT:
+					if(!se_dirige_vers_mur(coo_obj.x + 1, coo_obj.y, HAUT, board)){
+						MLV_draw_partial_image(font, (coo_obj.y) * width, (coo_obj.x + 1) * height, width, height, (coo_obj.y) * width, (coo_obj.x + 1) * height);
+					}
+					break;
+				case DROITE:
+					if(!se_dirige_vers_mur(coo_obj.x, coo_obj.y - 1, DROITE, board)){
+						MLV_draw_partial_image(font, (coo_obj.y - 1) * width, (coo_obj.x) * height, width, height, (coo_obj.y - 1) * width, (coo_obj.x) * height);
+					}
+					break;
+				case GAUCHE:
+					if(!se_dirige_vers_mur(coo_obj.x, coo_obj.y + 1, GAUCHE, board)){
+						MLV_draw_partial_image(font, (coo_obj.y + 1) * width, (coo_obj.x) * height, width, height, (coo_obj.y + 1) * width, (coo_obj.x) * height);
+					}
+					break;
+				case BAS:
+					if(!se_dirige_vers_mur(coo_obj.x - 1, coo_obj.y, BAS, board)){
+						MLV_draw_partial_image(font, (coo_obj.y) * width, (coo_obj.x - 1) * height, width, height, (coo_obj.y) * width, (coo_obj.x - 1) * height);
+					}
+					break;
+			}
+			break;
+		default:
+			return;
+		
+	}
+	draw_img(board, array_img, coo_obj.x, coo_obj.y, width, height);
+	MLV_actualise_window();
+}
+
 int action_listener(MLV_Keyboard_button button, Plateau board){
+	int check;
 	switch(button){
 		case MLV_KEYBOARD_z:
 			board->dir_perso = HAUT;
@@ -137,13 +232,15 @@ int action_listener(MLV_Keyboard_button button, Plateau board){
 		case MLV_KEYBOARD_d:
 			board->dir_perso = DROITE;
 			break;
+		case MLV_KEYBOARD_ESCAPE:
+			return 0;
 		default:
-			return false;
+			return -1;
 	}
 	if(board->depl_perso_autorise == true){
 		return deplace_joueur(board);
 	}
-	return true;
+	return -1;
 }
 
 void launch_gui(Plateau niveau, bool *is_reached){
@@ -155,7 +252,8 @@ void launch_gui(Plateau niveau, bool *is_reached){
     MLV_Keyboard_button touche;
 	Arbre tas;
 	Evenement e;
-
+	TypeObjet obj;
+	
 	MLV_get_desktop_size(&x, &y);
     decalage_x = (niveau->taille.y < niveau->taille.x) ? 50 : 25;
     decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
@@ -174,31 +272,51 @@ void launch_gui(Plateau niveau, bool *is_reached){
 		exit(1);
 	}
     MLV_resize_image(font, width * niveau->taille.y, height * niveau->taille.x);
-
-    update_plateau(niveau, array_img, font, width, height);
-    niveau->dir_perso = DROITE;
+	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->coo_perso.y, niveau->coo_perso.x);
+    
+	niveau->dir_perso = BAS;
+	update_plateau(niveau, array_img, font, width, height);
     while (true) {
         if(niveau->est_vivant == false){
             break;
         }
+		
         verifie_mouvement_personnage(niveau);
         while(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) != MLV_NONE){
 			
-			if(!action_listener(touche, niveau)){
-				niveau->est_vivant = false;
-				break;
+			switch(action_listener(touche, niveau)){
+				case 0:
+					niveau->est_vivant = false;
+					break;
+				case 1:
+					refresh_character(niveau->coo_perso, niveau, width, height, array_img, font);
+				case -1:
+					break;
+				default:
+					break;
 			}
         }
         
-        if (un_evenement_est_pret(tas)) {
+        if (un_evenement_est_pret(tas)){
             e = ote_minimum(tas);
+			obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
             execute_evenement(e, tas, niveau);
+			if(obj == PROJECTILE){
+				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+			}else if(obj == LANCEUR){
+				refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+			}
             while(e.moment == tas->valeurs[0].moment){
                 e = ote_minimum(tas);
-                execute_evenement(e, tas, niveau);
-            }
-            
-            update_plateau(niveau, array_img, font, width, height);
+				obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
+				execute_evenement(e, tas, niveau);
+				if(obj == PROJECTILE){
+					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+				}else if(obj == LANCEUR){
+					refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+				}
+			}
+			
             MLV_actualise_window();
             
         }   
@@ -213,7 +331,7 @@ void launch_gui(Plateau niveau, bool *is_reached){
     MLV_free_image(font);
     free_array_img(array_img);
     MLV_free_window();
-    printf("program ended in : %lu seconds\n", clock() / CLOCKS_PER_SEC);
+    printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
     free_Tas(tas);
     printf("end_free\n");
 }
