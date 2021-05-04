@@ -114,15 +114,12 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 		default:
 			break;
 	}
-
-	
 }
 
 void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
 
 	unsigned int i, j;
-	int x_height, y_height;
-	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+
 	MLV_draw_image(font, 0, 0);
 	for(i = 0; i < niveau->taille.x; ++i){
 		for(j = 0; j < niveau->taille.y; ++j){
@@ -155,8 +152,6 @@ static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int
 			draw_img(board, array_img, coo_proj.x, coo_proj.y - 1, width, height);
 			break;
 	}
-
-
 }
 
 static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
@@ -218,7 +213,7 @@ static void refresh_character(Coordonnees coo_obj, Plateau board, unsigned int w
 }
 
 int action_listener(MLV_Keyboard_button button, Plateau board){
-	int check;
+
 	switch(button){
 		case MLV_KEYBOARD_z:
 			board->dir_perso = HAUT;
@@ -239,7 +234,7 @@ int action_listener(MLV_Keyboard_button button, Plateau board){
 	}
 	if(board->depl_perso_autorise == true){
 		return deplace_joueur(board);
-	}
+	}++++++++++
 	return -1;
 }
 
@@ -296,6 +291,141 @@ void launch_gui(Plateau niveau, bool *is_reached){
 					break;
 			}
         }
+        
+        if (un_evenement_est_pret(tas)){
+            e = ote_minimum(tas);
+			obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
+            execute_evenement(e, tas, niveau);
+			if(obj == PROJECTILE){
+				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+			}else if(obj == LANCEUR){
+				refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+			}
+            while(e.moment == tas->valeurs[0].moment){
+                e = ote_minimum(tas);
+				obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
+				execute_evenement(e, tas, niveau);
+				if(obj == PROJECTILE){
+					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+				}else if(obj == LANCEUR){
+					refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+				}
+			}
+			
+            MLV_actualise_window();
+            
+        }   
+        else
+            millisleep (10);
+		if(check_level_reached(niveau)){
+			(*is_reached) = true;
+			break;
+		}
+        
+    }
+    MLV_free_image(font);
+    free_array_img(array_img);
+    MLV_free_window();
+    printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
+    free_Tas(tas);
+    printf("end_free\n");
+}
+
+void launch_gui_bis(Plateau niveau, bool *is_reached){
+    unsigned int x, y;
+    int decalage_x, decalage_y;
+    MLV_Image *font;
+    MLV_Image *array_img[11];
+	unsigned int width, height;
+    MLV_Keyboard_button touche;
+	Arbre tas;
+	Evenement e;
+	TypeObjet obj;
+	
+	MLV_get_desktop_size(&x, &y);
+    decalage_x = (niveau->taille.y < niveau->taille.x) ? 50 : 25;
+    decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
+	width = (x / (niveau->taille.y)) - decalage_y;
+	height = (y / niveau->taille.x) - decalage_x; 
+
+    tas = construit_Tas (niveau);
+
+    MLV_create_window("RealTimeGame", "Game", x, y);
+
+    init_array_img(array_img);
+    resize_all_img(array_img, width, height);
+    font = MLV_load_image("assets/font.jpeg");
+	if(NULL == font){
+		fprintf(stderr, "Image non-existente ou impossible à charger\n");
+		exit(1);
+	}
+    MLV_resize_image(font, width * niveau->taille.y, height * niveau->taille.x);
+	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->coo_perso.y, niveau->coo_perso.x);
+    
+	niveau->dir_perso = BAS;
+	update_plateau(niveau, array_img, font, width, height);
+    while (true) {
+        if(niveau->est_vivant == false){
+            break;
+        }
+		
+        verifie_mouvement_personnage(niveau);
+        if(MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED){
+			touche = MLV_KEYBOARD_z;
+			switch(action_listener(touche, niveau)){
+				case 0:
+					niveau->est_vivant = false;
+					break;
+				case 1:
+					refresh_character(niveau->coo_perso, niveau, width, height, array_img, font);
+				case -1:
+					break;
+				default:
+					break;
+			}
+        }
+		if(MLV_get_keyboard_state(MLV_KEYBOARD_s) == MLV_PRESSED){
+			touche = MLV_KEYBOARD_s;
+			switch(action_listener(touche, niveau)){
+				case 0:
+					niveau->est_vivant = false;
+					break;
+				case 1:
+					refresh_character(niveau->coo_perso, niveau, width, height, array_img, font);
+				case -1:
+					break;
+				default:
+					break;
+			}
+		}
+		if(MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED){
+			touche = MLV_KEYBOARD_q;
+			switch(action_listener(touche, niveau)){
+				case 0:
+					niveau->est_vivant = false;
+					break;
+				case 1:
+					refresh_character(niveau->coo_perso, niveau, width, height, array_img, font);
+				case -1:
+					break;
+				default:
+					break;
+			}
+		}
+		if(MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED){
+			touche = MLV_KEYBOARD_d;
+			switch(action_listener(touche, niveau)){
+				case 0:
+					niveau->est_vivant = false;
+					break;
+				case 1:
+					refresh_character(niveau->coo_perso, niveau, width, height, array_img, font);
+				case -1:
+					break;
+				default:
+					break;
+			}
+		}
         
         if (un_evenement_est_pret(tas)){
             e = ote_minimum(tas);

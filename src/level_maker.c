@@ -46,7 +46,7 @@ Plateau niveau0() {
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 100;
+    niveau->allure_perso = une_milliseconde * 50;
 
 
     return niveau;
@@ -76,7 +76,7 @@ Plateau niveau1(){
 	gen3->allure_proj = une_milliseconde*300;
     gen3->intervalle = une_seconde;
 
-    niveau->allure_perso = une_milliseconde * 150;
+    niveau->allure_perso = une_milliseconde * 50;
 
 	niveau->objets[4][0].type = LANCEUR;
     niveau->objets[4][0].donnee_suppl = gen;
@@ -182,7 +182,7 @@ Plateau niveau2(){
 	niveau->coo_perso.x = 7;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 150;
+    niveau->allure_perso = une_milliseconde * 50;
 
 	return niveau;
 
@@ -251,7 +251,7 @@ Plateau niveau3(){
 	niveau->coo_perso.x = 3;
     niveau->coo_perso.y = 4;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 150;
+    niveau->allure_perso = une_milliseconde * 50;
 
 	return niveau;
 }

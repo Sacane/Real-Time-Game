@@ -50,4 +50,6 @@ int action_listener(MLV_Keyboard_button button, Plateau board);
 
 void launch_gui(Plateau niveau, bool *is_reached);
 
+void launch_gui_bis(Plateau niveau, bool *is_reached);
+
 #endif
