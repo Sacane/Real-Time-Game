@@ -19,7 +19,6 @@ typedef struct Niveau{
     
     Coordonnees taille; 
     Objet** objets; 
-    /* Définition du personnage */
     Coordonnees coo_perso; 
     unsigned long allure_perso; 
     bool depl_perso_autorise; 

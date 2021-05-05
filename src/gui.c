@@ -234,7 +234,7 @@ int action_listener(MLV_Keyboard_button button, Plateau board){
 	}
 	if(board->depl_perso_autorise == true){
 		return deplace_joueur(board);
-	}++++++++++
+	}
 	return -1;
 }
 
@@ -254,7 +254,7 @@ void launch_gui(Plateau niveau, bool *is_reached){
     decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
 	width = (x / (niveau->taille.y)) - decalage_y;
 	height = (y / niveau->taille.x) - decalage_x; 
-
+	
     tas = construit_Tas (niveau);
 
     MLV_create_window("RealTimeGame", "Game", x, y);
