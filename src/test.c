@@ -465,12 +465,181 @@ static bool test_declenche_lanceur(int *total_test){
 	return true;
 }*/
 
+static bool test_equals_obj(int *total_test){
+    (*total_test)++;
+    Objet obj1;
+    Objet obj2;
+    Objet obj3;
+    Objet obj4;
+
+    Deplacement* dep1 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep2 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep3 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep4 = (Deplacement *)malloc(sizeof(Deplacement));
+
+    dep1->allure = 3000;
+    dep2->allure = 3000;
+    dep3->allure = 3400;
+    dep4->allure = 3000;
+
+    dep1->direction = BAS;
+    dep2->direction = BAS;
+    dep3->direction = HAUT;
+    dep4->direction = DROITE;
+
+    obj1.type = PROJECTILE;
+    obj2.type = PROJECTILE;
+    obj3.type = PROJECTILE;
+    obj4.type = PROJECTILE;
+
+    obj1.donnee_suppl = dep1;
+    obj2.donnee_suppl = dep2;
+    obj3.donnee_suppl = dep3;
+    obj4.donnee_suppl = dep4;
+
+    if(!equals_obj(obj1, obj2)){
+        printf("Erreur, obj1 et obj2 devraient être pareil\n");
+        return false;
+    }
+
+    if(equals_obj(obj1, obj3)){
+        printf("Erreur, obj1 et obj3 devraient être différent\n");
+        return false;
+    }
+
+    if(equals_obj(obj2, obj4)){
+        printf("Erreur, obj2 et obj4 devraient être différent\n");
+        return false;
+    }
+    
+    free(dep1);
+    free(dep2);
+    free(dep3);
+    free(dep4);
+
+    return true;
+}
+
+
+static int get_size(List_obj list){
+    
+    int i = 0;
+    List_obj tmp = list;
+    if(list == NULL){
+        return 0;
+    }
+    while(tmp != NULL){
+        i++;
+        tmp = tmp->next;
+    }
+    return i;
+
+}
+
+static bool test_add_obj_in_lst(int *total_test){
+
+    (*total_test)++;
+    int size;
+    List_obj lst = NULL;
+    Objet obj1, obj2;
+    Deplacement* dep1 = (Deplacement*)malloc(sizeof(Deplacement));
+    Deplacement* dep2 = (Deplacement*)malloc(sizeof(Deplacement));
+    dep1->allure = 300;
+    dep1->direction = BAS;
+    dep2->allure = 100;
+    dep2->direction = DROITE;
+
+    obj1.donnee_suppl = dep1;
+    obj1.type = PROJECTILE;
+
+    obj2.donnee_suppl = dep2;
+    obj2.type = PROJECTILE;
+
+
+    add_obj_in_lst(&lst, obj1);
+    if(lst == NULL){
+        printf("Erreur, la liste n'a pas été alloué\n");
+        return false;
+    }
+
+    if(lst->obj.type != PROJECTILE){
+        printf("erreur, le type de l'objet devrait être un projectile\n");
+    }
+    
+    add_obj_in_lst(&lst, obj2);
+    size = get_size(lst);
+
+    if(size != 2){
+        printf("Nombre incorrect d'élément\n");
+        return false;
+    }
+    printf("free\n");
+
+    free_list(lst);
+    return true;
+}
+
+static bool test_delete_obj_in_lst(int *total_test){
+    (*total_test)++;
+    int size;
+
+    List_obj lst = NULL;
+    Objet obj1;
+    Objet obj2;
+    Objet obj3;
+    Objet obj4;
+
+    Deplacement* dep1 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep2 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep3 = (Deplacement *)malloc(sizeof(Deplacement));
+    Deplacement* dep4 = (Deplacement *)malloc(sizeof(Deplacement));
+
+    dep1->allure = 3000;
+    dep2->allure = 2800;
+    dep3->allure = 3400;
+    dep4->allure = 3500;
+
+    dep1->direction = BAS;
+    dep2->direction = BAS;
+    dep3->direction = HAUT;
+    dep4->direction = DROITE;
+
+    obj1.type = PROJECTILE;
+    obj2.type = PROJECTILE;
+    obj3.type = PROJECTILE;
+    obj4.type = PROJECTILE;
+
+    obj1.donnee_suppl = dep1;
+    obj2.donnee_suppl = dep2;
+    obj3.donnee_suppl = dep3;
+    obj4.donnee_suppl = dep4;
+
+    add_obj_in_lst(&lst, obj1);
+    add_obj_in_lst(&lst, obj2);
+    add_obj_in_lst(&lst, obj3);
+    add_obj_in_lst(&lst, obj4);
+
+    lst = delete_obj_in_list(lst, obj2);
+
+    size = get_size(lst);
+
+    if(size != 3){
+        printf("Erreur, Un élément n'a pas été supprimé\n");
+        return false;
+    }
+
+    
+
+    free_list(lst);
+    return true;
+}
+
 static bool test_execute_evenement(int *total_test){
     (*total_test)++;
 
     Plateau niveau  = niveau0();
     Arbre heap = construit_Tas(niveau);
-
+    
     Evenement e;
     e = ote_minimum(heap);
     execute_evenement(e, heap, niveau);
@@ -478,6 +647,63 @@ static bool test_execute_evenement(int *total_test){
     free_Tas(heap);
     free_Niveau(niveau);
 
+    return true;
+}
+
+static bool test_deplace_projectile_haut_b(int *total_test){
+    *total_test += 1;
+    Board board = niveau0_b();
+    Objet projectile;
+    Deplacement *dep;
+    
+    dep = (Deplacement*)malloc(sizeof(Deplacement));
+    dep->direction = HAUT;
+    dep->allure = une_milliseconde * 350;
+
+    Coordonnees initial_position;
+    initial_position.x = 3;
+    initial_position.y = 2;
+
+    projectile.donnee_suppl = dep;
+    projectile.type = PROJECTILE;
+
+    verif_malloc(dep);  
+
+
+    add_obj_in_lst(&board->box[3][2], projectile);
+    
+
+    deplace_projectile_b(board, &initial_position, projectile);
+
+    
+    if(is_type_in_lst(board->box[3][2], PROJECTILE)){
+        printf("Le projectile n'a pas été déplacer (3, 2)\n");
+        return false;
+    }
+
+
+    if(!is_type_in_lst(board->box[2][2], PROJECTILE)){
+        printf("Le projectile n'est pas à l'endroit attendue (2, 2)\n");
+        return false;
+    }
+
+    deplace_projectile_b(board, &initial_position, projectile);
+
+    if(!is_type_in_lst(board->box[1][2], MUR)){
+        printf("Le mur a été modifié par un projectile (haut) !\n");
+        return false;
+    }
+    if(is_type_in_lst(board->box[1][2], PROJECTILE)){
+        printf("Le projectile est au même endroit qu'un mur ! (1, 2) !\n");
+        return false;
+    }
+
+    if(is_type_in_lst(board->box[2][2], PROJECTILE)){
+        printf("Le projectile n'a pas été effacé (2, 2)!\n");
+        return false;
+    }
+
+    free_board(board);
     return true;
 }
 
@@ -550,7 +776,35 @@ void main_test(){
         printf("test de la fonction 'declenche_lanceur' : échoué\n");
     }
 
-    
+    if(test_equals_obj(&total_test)){
+        compteur++;
+        printf("test de la fonction 'equals_obj' : réussi\n");
+    }
+    else{
+        printf("test de la fonction 'equals_obj' : échoué\n");
+    }
+    if(test_add_obj_in_lst(&total_test)){
+        compteur++;
+        printf("test de la fonction 'add_obj_in_lst' : réussi\n");
+    }
+    else{
+        printf("test de la fonction 'add_obj_in_lst' : échoué");
+    }
+    if(test_delete_obj_in_lst(&total_test)){
+        compteur++;
+        printf("test de la fonction 'delete_obj_in_lst' : réussi\n");
+    }
+    else{
+        printf("test de la fonction 'delete_obj_in_lst' : échoué\n");
+    }
+    if(test_deplace_projectile_haut_b(&total_test)){
+        compteur++;
+        printf("test de la fonction 'test_deplace_projectile_haut_b' : réussi\n");
+    }
+    else{
+        printf("test de la fonction 'test_deplace_projectile_haut_b' : échoué\n");
+    }
+
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }

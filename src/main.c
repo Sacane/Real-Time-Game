@@ -111,7 +111,11 @@ int main(int argc, char* argv[]) {
             break;
     }
 
-    (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
+    
+    if(mode == GRAPHIC || mode == COMMAND){
+        (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
+    }
+    
 
     free_Niveau(niveau);
     free(name_file);

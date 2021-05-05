@@ -3,7 +3,11 @@
 
 #include "niveau.h"
 
+#include "board.h"
+
 Plateau niveau0();
+
+Board niveau0_b();
 
 Plateau niveau1();
 

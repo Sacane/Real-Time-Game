@@ -1,6 +1,7 @@
 #include "../include/level_maker.h"
+#include "../include/board.h"
 
-
+/* a modifié en local*/
 
 Plateau niveau0() {
 
@@ -50,6 +51,72 @@ Plateau niveau0() {
 
 
     return niveau;
+}
+
+
+Board niveau0_b(){
+
+    Board board;
+    Player player;
+    Coordonnees size_board, coo_destination;
+    size_board.x = 5;
+    size_board.y = 10;
+    coo_destination.x = 4;
+    coo_destination.y = 9;
+    player.coo_player.x = 4;
+    player.coo_player.y = 0;
+
+    board = malloc_board(size_board);
+
+    init_board(board, size_board);
+
+    init_player(player.coo_player, player.dir_player);
+
+    Generation* gen;
+    Generation* gen2;
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen2 = (Generation*)malloc(sizeof(Generation));
+
+    gen->allure_proj = une_milliseconde*300;
+    gen->intervalle = une_seconde;
+    gen2->allure_proj = une_milliseconde*300;
+    gen2->intervalle = une_seconde;
+
+    Objet wall;
+    wall.type = MUR;
+    wall.donnee_suppl = NULL;
+
+    Objet destination;
+    destination.type = DESTINATION;
+    destination.donnee_suppl = NULL;
+
+
+    Objet launcher1;
+    launcher1.type = LANCEUR;
+    launcher1.donnee_suppl = gen;
+
+    Objet launcher2;
+    launcher2.type = LANCEUR;
+    launcher2.donnee_suppl = gen2;
+
+    add_obj_in_lst(&board->box[1][0], wall);
+    add_obj_in_lst(&board->box[1][1], wall);
+    add_obj_in_lst(&board->box[1][2], wall);
+    add_obj_in_lst(&board->box[1][3], wall);
+    add_obj_in_lst(&board->box[1][4], wall);
+    add_obj_in_lst(&board->box[1][5], wall);
+    add_obj_in_lst(&board->box[1][6], wall);
+    add_obj_in_lst(&board->box[1][7], wall);
+    add_obj_in_lst(&board->box[1][8], wall);
+    add_obj_in_lst(&board->box[2][8], wall);
+    add_obj_in_lst(&board->box[3][8], wall);
+    add_obj_in_lst(&board->box[4][8], wall);
+
+    add_obj_in_lst(&board->box[4][9], destination);
+    add_obj_in_lst(&board->box[0][0], launcher1);
+    add_obj_in_lst(&board->box[3][5], launcher2);
+
+    return board;
 }
 
 
