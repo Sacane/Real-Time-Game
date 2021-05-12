@@ -70,6 +70,8 @@ typedef struct {
 */
 void remplis_projectile(Objet* obj, Deplacement* deplacement);
 
+void print_kind_object(Objet object);
+
 /*
  * Modifie les propriétés de l'objet lanceur en lui attribuant la génération gen en tant que lanceur
 */

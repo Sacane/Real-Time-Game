@@ -4,6 +4,7 @@
 
 #include "objet.h"
 
+#define ARR_SIZE 10
 
 typedef struct objects{
 	
@@ -26,5 +27,7 @@ int add_object_in_array(Array array, Objet obj);
 Objet extract_object_in_array(Array array, unsigned int index);
 
 bool is_type_in_lst(Array lst_obj, TypeObjet kindObject);
+
+
 
 #endif

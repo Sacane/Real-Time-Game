@@ -1,5 +1,5 @@
 #include "../include/gui.h"
-
+/*
 
 void init_array_img(MLV_Image* array_img[]){
 	
@@ -464,4 +464,4 @@ void launch_gui_bis(Plateau niveau, bool *is_reached){
     printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
     free_Tas(tas);
     printf("end_free\n");
-}
+}*/

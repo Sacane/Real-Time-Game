@@ -2,11 +2,11 @@
 
 
 
-void free_obj(Obj object){
-    if(object->donnee_suppl){
-        free(object->donnee_suppl);
+void free_obj(Objet object){
+    if(object.donnee_suppl){
+        free(object.donnee_suppl);
     }
-    free(object);
+
 }
 
 Array malloc_arr_objects(int capacity){
@@ -15,19 +15,19 @@ Array malloc_arr_objects(int capacity){
     verif_malloc(array);
     array->capacity = capacity;
     array->size = 0;
+    array->obj = (Objet*)malloc(sizeof(Objet) * capacity);
     return array;
 }
 
 void free_array_obj(Array array){
     unsigned int i;
     for(i = 0; i < array->size; i++){
-        if(array->obj[i].donnee_suppl){
-            free_obj(array->obj[i].donnee_suppl);
-        }
+        free_obj(array->obj[i]);
     }
 }
 
 void big_free_array(Array array){
+
     free_array_obj(array);
     free(array->obj);
     free(array);
@@ -54,10 +54,21 @@ Objet extract_object_in_array(Array array, unsigned int index){
     tmp = array->obj[index];
     if(array->obj[index].donnee_suppl){
         free(array->obj[index].donnee_suppl);
+        array->obj[index].donnee_suppl = NULL;
     }
 
     if(index != array->size){
-        array->obj[array->size] = array->obj[index];
+        printf("this case\n");
+        if(array->obj[array->size - 1].donnee_suppl){
+            array->obj[array->size - 1].type = array->obj[index].type;
+            array->obj[index].donnee_suppl = malloc(sizeof(*(array->obj[index].donnee_suppl)));
+            memcpy(array->obj[index].donnee_suppl, array->obj[array->size - 1].donnee_suppl, sizeof(*(array->obj[index].donnee_suppl)));
+            free(array->obj[array->size - 1].donnee_suppl);
+        }
+        else{
+            printf(" this \n");
+            array->obj[index] = array->obj[array->size-1];
+        }
     }
 
     array->size--;

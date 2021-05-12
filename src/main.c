@@ -90,6 +90,7 @@ int main(int argc, char* argv[]) {
     if(niveau == NULL){
         niveau = niveau0();
     }
+    
     switch(mode){
         case DEBUG:
             main_test();
@@ -98,7 +99,7 @@ int main(int argc, char* argv[]) {
             launch_command(niveau, &is_level_reached);
             break;
         case GRAPHIC:
-            launch_gui_bis(niveau, &is_level_reached); 
+            /*launch_gui_bis(niveau, &is_level_reached); */
             break;
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");

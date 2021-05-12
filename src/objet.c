@@ -18,21 +18,23 @@ void remplis_lanceur(Objet* lanceur, Generation* gen){
 }
 
 bool equals_obj(Objet obj1, Objet obj2){
-    Deplacement* depl;
-    Deplacement* depl2;
+    
+    Deplacement* depl = malloc(sizeof(Deplacement));
+    Deplacement* depl2 = malloc(sizeof(sizeof(Deplacement)));
 
     if(obj1.type != obj2.type){
+        free(depl);
+        free(depl2);
         return false;
     }
     switch(obj1.type){
         case PROJECTILE:
-            depl = (Deplacement*)malloc(sizeof(Deplacement));
-            depl2 = (Deplacement*)malloc(sizeof(sizeof(Deplacement)));
-            depl = obj1.donnee_suppl;
-            depl2 = obj2.donnee_suppl;
+            memcpy(depl, obj1.donnee_suppl, sizeof(Deplacement));
+            memcpy(depl2, obj2.donnee_suppl, sizeof(Deplacement));
             if(depl->direction != depl2->direction
             || depl->direction != depl2->direction){
-
+                free(depl);
+                free(depl2);
                 return false;
             }
 
@@ -40,6 +42,8 @@ bool equals_obj(Objet obj1, Objet obj2){
         default:    
             break;
     }
+    free(depl);
+    free(depl2);
     return true;
 }
 
@@ -83,7 +87,28 @@ void free_list(List_obj list){
 
 }
 
-
+void print_kind_object(Objet object){
+    switch(object.type){
+        case VIDE:
+            printf("EMPTY\n");
+            break;
+        case MUR:
+            printf("WALL\n");
+            break;
+        case LANCEUR:
+            printf("LAUNCHER\n");
+            break;
+        case PROJECTILE:
+            printf("PROJECTILE\n");
+            break;
+        case PERSONNAGE:
+            printf("CHARACTER\n");
+            break;
+        default:
+            printf("Unrecognized kind\n");
+            break;
+    }
+}
 
 void add_obj_in_lst(List_obj *list, Objet obj){
     if(*list != NULL){

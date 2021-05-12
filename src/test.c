@@ -521,10 +521,89 @@ static bool test_equals_obj(int *total_test){
 }
 
 
+static bool test_add_object_in_array(int *total_test){
+    (*total_test)++;
+    Array obj_array = NULL;
+    int index;
+    obj_array = malloc_arr_objects(ARR_SIZE);
+    
+    Objet wall;
+    wall.donnee_suppl = NULL;
+    wall.type = MUR;
+    Objet launcher;
+    Generation* gen_launcher = (Generation*)malloc(sizeof(Generation));
+    gen_launcher->allure_proj = 300;
+    gen_launcher->intervalle = 1000;
+    launcher.donnee_suppl = gen_launcher;
+    launcher.type = LANCEUR;
+
+    index = add_object_in_array(obj_array, wall);
+    if(obj_array->size == 0){
+        printf("Size non actualisé après ajout\n");
+        big_free_array(obj_array);
+        return false;
+    }
+
+    if(obj_array->obj[0].type != MUR){
+        printf("Ajout non effectué sur le bon objet\n");
+        big_free_array(obj_array);
+        return false;
+    }
+    index = add_object_in_array(obj_array, launcher);
+
+    big_free_array(obj_array);
+    return true;
+}
+
+static bool test_extract_object_in_array(int *total_test){
+    (*total_test)++;
+    Array obj_array = NULL;
+    int index;
+    obj_array = malloc_arr_objects(ARR_SIZE);
+    Objet character;
+
+    character.type = PERSONNAGE;
+    character.donnee_suppl = NULL;
+
+    Objet wall;
+    wall.donnee_suppl = NULL;
+    wall.type = MUR;
+    Objet launcher;
+    Generation* gen_launcher = (Generation*)malloc(sizeof(Generation));
+    gen_launcher->allure_proj = 300;
+    gen_launcher->intervalle = 1000;
+    launcher.donnee_suppl = gen_launcher;
+    launcher.type = LANCEUR;
 
 
+    
+    index = add_object_in_array(obj_array, wall);
+    index = add_object_in_array(obj_array, launcher);
+    index = add_object_in_array(obj_array, character);
 
+    Objet tmp = extract_object_in_array(obj_array, 1);
 
+    
+    if(obj_array->size != 2){
+        printf("Error, size not updated correctly\n");
+        big_free_array(obj_array);
+        return false;
+    }
+
+    print_kind_object(obj_array->obj[1]);
+
+    if(obj_array->obj[1].type != PERSONNAGE){
+        printf("Erreur lors du remplacement : Le type de l'objet en index 1 devrait être ''personnage''\n");
+        big_free_array(obj_array);
+        return false;
+    }
+
+    print_kind_object(tmp);
+    printf("index : %d\n", index);
+
+    big_free_array(obj_array);
+    return true;
+}
 
 static void qtest(const char* nom_func, int *counter, int *total_test, bool(*test_function)(int *total_test)){
     if(test_function(total_test)){
@@ -557,6 +636,10 @@ void main_test(){
     qtest("test_declenche_lanceur", &compteur, &total_test, test_declenche_lanceur);
 
     qtest("test_equals_obj", &compteur, &total_test, test_equals_obj);
+
+    qtest("test_add_object_in_array", &compteur, &total_test, test_add_object_in_array);
+
+    qtest("test_extract_object_in_array", &compteur, &total_test, test_extract_object_in_array);
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }
