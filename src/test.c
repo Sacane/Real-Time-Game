@@ -583,7 +583,6 @@ static bool test_extract_object_in_array(int *total_test){
 
     Objet tmp = extract_object_in_array(obj_array, 1);
 
-    
     if(obj_array->size != 2){
         printf("Error, size not updated correctly\n");
         big_free_array(obj_array);
@@ -597,11 +596,45 @@ static bool test_extract_object_in_array(int *total_test){
         big_free_array(obj_array);
         return false;
     }
+    free(tmp.donnee_suppl);
+
+    tmp = extract_object_in_array(obj_array, 0);
+
+    if(obj_array->obj[0].type != PERSONNAGE){
+        printf("Erreur lors de remplacement : Personnage devrait être en première position\n");
+        big_free_array(obj_array);
+        return false;
+    }
 
     print_kind_object(tmp);
     printf("index : %d\n", index);
+    printf("size : %d\n", obj_array->size);
 
+    
     big_free_array(obj_array);
+    return true;
+}
+
+static bool test_move_projectile(int *total_test){
+    (*total_test)++;
+
+    Board gameboard = board_level0();
+
+
+    Objet projectile;
+    Deplacement* dep = (Deplacement*)malloc(sizeof(Deplacement));
+    dep->allure = 300;
+    dep->direction = DROITE;
+
+    projectile.donnee_suppl = dep;
+
+    projectile.type = PROJECTILE;
+
+
+    free(dep);
+    free_board(gameboard);
+
+
     return true;
 }
 
@@ -614,6 +647,9 @@ static void qtest(const char* nom_func, int *counter, int *total_test, bool(*tes
         printf("test function '%s' : failure\n", nom_func);
     }
 }
+
+
+
 
 void main_test(){
     int compteur = 0;
@@ -640,6 +676,8 @@ void main_test(){
     qtest("test_add_object_in_array", &compteur, &total_test, test_add_object_in_array);
 
     qtest("test_extract_object_in_array", &compteur, &total_test, test_extract_object_in_array);
+
+    qtest("test_move_projectile", &compteur, &total_test, test_move_projectile);
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }

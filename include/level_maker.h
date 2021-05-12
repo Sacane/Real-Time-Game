@@ -17,5 +17,6 @@ Plateau niveau2();
  
 Plateau niveau3();
 
+Board board_level0();
 
 #endif

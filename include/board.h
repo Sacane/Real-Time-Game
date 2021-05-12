@@ -34,8 +34,7 @@ Board malloc_board(Coordonnees size);
 void free_board(Board board);
 
 
-void deplace_projectile_b(Board board, Coordonnees *coordonnees, Objet projectile);
 
-int deplace_joueur_b(Board board, Objet player_obj, Player *player);
+void move_projectile(Board gameboard, Coordonnees *coo_proj,unsigned int index);
 
 #endif

@@ -21,14 +21,16 @@ Board malloc_board(Coordonnees size){
     
     Board board; 
     unsigned int i, j;
-
+    
     board = (Board)malloc(sizeof(Game));
+    board->size = size;
     board->box = (Array**)malloc(sizeof(Objects*) * size.x * size.y); 
     board->est_niveau_termine = false;
     for(i=0; i < size.x; i++){
         board->box[i] = (Array*)malloc(sizeof(Objects)*size.y);
         for(j = 0; j < size.y; j++){
             board->box[i][j] = NULL;
+            board->box[i][j] = malloc_arr_objects(ARR_SIZE);
         }
     }
     return board;
@@ -40,6 +42,7 @@ void free_board(Board board){
 
     for(i = 0; i < board->size.x; i++){
         for(j = 0; j < board->size.y; j++){
+
             if(board->box[i][j])
                 big_free_array(board->box[i][j]);
         }
@@ -79,6 +82,82 @@ bool se_dirige_vers_obstacle(unsigned int x, unsigned int y, Direction direction
     }
 
     return false;
+}
+
+bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board){
+    if((coo_obj.x <= 0 && direction == HAUT) || (coo_obj.x >= board->size.x-1 && direction == BAS)||
+    (coo_obj.y <= 0 && direction == GAUCHE) || (coo_obj.y >= board->size.y - 1 && direction == DROITE)){
+        return false;
+    }
+
+    switch(direction){
+        case HAUT:
+            if(is_type_in_lst((board->box[coo_obj.x-1][coo_obj.y]), MUR)){
+                return false;
+            }
+            break;
+        case BAS:
+            if(is_type_in_lst(board->box[coo_obj.x+1][coo_obj.y], MUR)){
+                return false;
+            }
+            break;
+        case GAUCHE:
+            if(is_type_in_lst(board->box[coo_obj.x][coo_obj.y-1], MUR)){
+                return false;
+            }
+            break;
+        case DROITE:
+            if(is_type_in_lst(board->box[coo_obj.x][coo_obj.y+1], MUR)){
+                return false;
+            }
+            break;
+    }
+
+    return true;
+}
+
+void move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index){
+    assert(gameboard != NULL);
+    assert(index <= gameboard->box[coo_proj->x][coo_proj->y]->size);
+    assert(gameboard->box[coo_proj->x][coo_proj->y]->obj[index].type == PROJECTILE);
+    
+    Deplacement* deplacement;
+    deplacement = (Deplacement*)malloc(sizeof(Deplacement));
+
+    memcpy(deplacement, gameboard->box[coo_proj->x][coo_proj->y]->obj[index].donnee_suppl, sizeof(Deplacement));
+
+    Objet projectile = extract_object_in_array(gameboard->box[coo_proj->x][coo_proj->y], index);
+    if(!is_object_moveable(*coo_proj, deplacement->direction, gameboard)){
+        free(deplacement);
+        return;
+    }
+
+    
+
+    switch((deplacement)->direction){
+
+        case HAUT:
+        
+            add_object_in_array(gameboard->box[coo_proj->x - 1][coo_proj->y], projectile);
+
+            break;
+        case BAS:
+        
+            add_object_in_array(gameboard->box[coo_proj->x + 1][coo_proj->y], projectile);
+            
+            break;
+        case DROITE:
+
+            add_object_in_array(gameboard->box[coo_proj->x][coo_proj->y + 1], projectile);
+
+            break;
+        case GAUCHE:
+            
+            add_object_in_array(gameboard->box[coo_proj->x][coo_proj->y - 1], projectile);
+		
+            break;
+    }
+    free(deplacement);
 }
 
 
