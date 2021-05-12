@@ -521,290 +521,42 @@ static bool test_equals_obj(int *total_test){
 }
 
 
-static int get_size(List_obj list){
-    
-    int i = 0;
-    List_obj tmp = list;
-    if(list == NULL){
-        return 0;
+
+
+
+
+
+static void qtest(const char* nom_func, int *counter, int *total_test, bool(*test_function)(int *total_test)){
+    if(test_function(total_test)){
+        (*counter)++;
+        printf("test function '%s' : success\n", nom_func);
     }
-    while(tmp != NULL){
-        i++;
-        tmp = tmp->next;
+    else{
+        printf("test function '%s' : failure\n", nom_func);
     }
-    return i;
-
-}
-
-static bool test_add_obj_in_lst(int *total_test){
-
-    (*total_test)++;
-    int size;
-    List_obj lst = NULL;
-    Objet obj1, obj2;
-    Deplacement* dep1 = (Deplacement*)malloc(sizeof(Deplacement));
-    Deplacement* dep2 = (Deplacement*)malloc(sizeof(Deplacement));
-    dep1->allure = 300;
-    dep1->direction = BAS;
-    dep2->allure = 100;
-    dep2->direction = DROITE;
-
-    obj1.donnee_suppl = dep1;
-    obj1.type = PROJECTILE;
-
-    obj2.donnee_suppl = dep2;
-    obj2.type = PROJECTILE;
-
-
-    add_obj_in_lst(&lst, obj1);
-    if(lst == NULL){
-        printf("Erreur, la liste n'a pas été alloué\n");
-        return false;
-    }
-
-    if(lst->obj.type != PROJECTILE){
-        printf("erreur, le type de l'objet devrait être un projectile\n");
-    }
-    
-    add_obj_in_lst(&lst, obj2);
-    size = get_size(lst);
-
-    if(size != 2){
-        printf("Nombre incorrect d'élément\n");
-        return false;
-    }
-    printf("free\n");
-
-    free_list(lst);
-    return true;
-}
-
-static bool test_delete_obj_in_lst(int *total_test){
-    (*total_test)++;
-    int size;
-
-    List_obj lst = NULL;
-    Objet obj1;
-    Objet obj2;
-    Objet obj3;
-    Objet obj4;
-
-    Deplacement* dep1 = (Deplacement *)malloc(sizeof(Deplacement));
-    Deplacement* dep2 = (Deplacement *)malloc(sizeof(Deplacement));
-    Deplacement* dep3 = (Deplacement *)malloc(sizeof(Deplacement));
-    Deplacement* dep4 = (Deplacement *)malloc(sizeof(Deplacement));
-
-    dep1->allure = 3000;
-    dep2->allure = 2800;
-    dep3->allure = 3400;
-    dep4->allure = 3500;
-
-    dep1->direction = BAS;
-    dep2->direction = BAS;
-    dep3->direction = HAUT;
-    dep4->direction = DROITE;
-
-    obj1.type = PROJECTILE;
-    obj2.type = PROJECTILE;
-    obj3.type = PROJECTILE;
-    obj4.type = PROJECTILE;
-
-    obj1.donnee_suppl = dep1;
-    obj2.donnee_suppl = dep2;
-    obj3.donnee_suppl = dep3;
-    obj4.donnee_suppl = dep4;
-
-    add_obj_in_lst(&lst, obj1);
-    add_obj_in_lst(&lst, obj2);
-    add_obj_in_lst(&lst, obj3);
-    add_obj_in_lst(&lst, obj4);
-
-    lst = delete_obj_in_list(lst, obj2);
-
-    size = get_size(lst);
-
-    if(size != 3){
-        printf("Erreur, Un élément n'a pas été supprimé\n");
-        return false;
-    }
-
-    
-
-    free_list(lst);
-    return true;
-}
-
-static bool test_execute_evenement(int *total_test){
-    (*total_test)++;
-
-    Plateau niveau  = niveau0();
-    Arbre heap = construit_Tas(niveau);
-    
-    Evenement e;
-    e = ote_minimum(heap);
-    execute_evenement(e, heap, niveau);
-    
-    free_Tas(heap);
-    free_Niveau(niveau);
-
-    return true;
-}
-
-static bool test_deplace_projectile_haut_b(int *total_test){
-    *total_test += 1;
-    Board board = niveau0_b();
-    Objet projectile;
-    Deplacement *dep;
-    
-    dep = (Deplacement*)malloc(sizeof(Deplacement));
-    dep->direction = HAUT;
-    dep->allure = une_milliseconde * 350;
-
-    Coordonnees initial_position;
-    initial_position.x = 3;
-    initial_position.y = 2;
-
-    projectile.donnee_suppl = dep;
-    projectile.type = PROJECTILE;
-
-    verif_malloc(dep);  
-
-
-    add_obj_in_lst(&board->box[3][2], projectile);
-    
-
-    deplace_projectile_b(board, &initial_position, projectile);
-
-    
-    if(is_type_in_lst(board->box[3][2], PROJECTILE)){
-        printf("Le projectile n'a pas été déplacer (3, 2)\n");
-        return false;
-    }
-
-
-    if(!is_type_in_lst(board->box[2][2], PROJECTILE)){
-        printf("Le projectile n'est pas à l'endroit attendue (2, 2)\n");
-        return false;
-    }
-
-    deplace_projectile_b(board, &initial_position, projectile);
-
-    if(!is_type_in_lst(board->box[1][2], MUR)){
-        printf("Le mur a été modifié par un projectile (haut) !\n");
-        return false;
-    }
-    if(is_type_in_lst(board->box[1][2], PROJECTILE)){
-        printf("Le projectile est au même endroit qu'un mur ! (1, 2) !\n");
-        return false;
-    }
-
-    if(is_type_in_lst(board->box[2][2], PROJECTILE)){
-        printf("Le projectile n'a pas été effacé (2, 2)!\n");
-        return false;
-    }
-
-    free_board(board);
-    return true;
 }
 
 void main_test(){
     int compteur = 0;
     int total_test = 0;
 
-    if(test_ajoute_evenement(&total_test) == true){
-        compteur++;
-        printf("test 'ajoute_evenement' : réussi\n");
-    }
-    else{
-        printf("test 'ajoute_evenement' : échoué\n");
-    }
+    qtest("test_ajoute_evenement", &compteur, &total_test, test_ajoute_evenement);
 
-	if(test_ote_minimum(&total_test) == true){
-        compteur++;
-        printf("test 'ote_minimum' : réussi\n");
-    }
-    else{
-        printf("test 'ote_minimum' : échoué\n");
-    }
-    
-    if(test_contruit_tas(&total_test) == true){
-        compteur++;
-        printf("test 'construit_tas' : réussi\n");
-    }
-    else{
-        printf("test 'construit_tas' : échoué\n");
-    }
+    qtest("test_ote_minimum", &compteur, &total_test, test_ote_minimum);
 
-	if(test_deplace_projectile_haut(&total_test) == true){
-        compteur++;
-        printf("test vers le haut 'deplace_projectile_haut' : réussi\n");
-    }
-    else{
-        printf("test vers le haut 'deplace_projectile_haut' : échoué\n");
-    }
-	
-	if(test_deplace_projectile_bas(&total_test) == true){
-        compteur++;
-        printf("test vers le bas 'deplace_projectile_bas' : réussi\n");
-    }
-    else{
-        printf("test vers le bas 'deplace_projectile_bas' : échoué\n");
-    }
-	
-	if(test_deplace_projectile_droite(&total_test) == true){
-        compteur++;
-        printf("test vers la droite 'deplace_projectile_droite' : réussi\n");
-    }
-    else{
-        printf("test vers la droite 'deplace_projectile_droite' : échoué\n");
-    }
-	
-	if(test_deplace_projectile_gauche(&total_test) == true){
-        compteur++;
-        printf("test vers la gauche 'deplace_projectile_gauche' : réussi\n");
-    }
-    else{
-        printf("test vers la gauche 'deplace_projectile_gauche' : échoué\n");
-    }
+    qtest("test_contruit_tas", &compteur, &total_test, test_contruit_tas);
 
-    
-    if(test_declenche_lanceur(&total_test)){
-        compteur++;
-        printf("test de la fonction 'declenche_lanceur' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'declenche_lanceur' : échoué\n");
-    }
+    qtest("test_deplace_projectile_haut", &compteur, &total_test, test_deplace_projectile_haut);
 
-    if(test_equals_obj(&total_test)){
-        compteur++;
-        printf("test de la fonction 'equals_obj' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'equals_obj' : échoué\n");
-    }
-    if(test_add_obj_in_lst(&total_test)){
-        compteur++;
-        printf("test de la fonction 'add_obj_in_lst' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'add_obj_in_lst' : échoué");
-    }
-    if(test_delete_obj_in_lst(&total_test)){
-        compteur++;
-        printf("test de la fonction 'delete_obj_in_lst' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'delete_obj_in_lst' : échoué\n");
-    }
-    if(test_deplace_projectile_haut_b(&total_test)){
-        compteur++;
-        printf("test de la fonction 'test_deplace_projectile_haut_b' : réussi\n");
-    }
-    else{
-        printf("test de la fonction 'test_deplace_projectile_haut_b' : échoué\n");
-    }
+	qtest("test_deplace_projectile_bas", &compteur, &total_test, test_deplace_projectile_bas);
 
+	qtest("test_deplace_projectile_droite", &compteur, &total_test, test_deplace_projectile_droite);
+
+    qtest("test_deplace_projectile_gauche", &compteur, &total_test, test_deplace_projectile_gauche);
+
+    qtest("test_declenche_lanceur", &compteur, &total_test, test_declenche_lanceur);
+
+    qtest("test_equals_obj", &compteur, &total_test, test_equals_obj);
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }

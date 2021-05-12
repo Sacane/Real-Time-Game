@@ -22,7 +22,7 @@ typedef enum {
 	PROJECTILE,        PERSONNAGE,        DESTINATION,
 } TypeObjet;
 
-typedef struct {
+typedef struct object{
 	TypeObjet type;     /* Type de l'objet */
 	void* donnee_suppl; /* Donnee supplementaire: son type depend de 
 						* `type` ci-dessus :
@@ -30,7 +30,8 @@ typedef struct {
 						* - Generation* si type == LANCEUR
 						* - donnee\_suppl vaut NULL pour les 
 						*   autres types. */
-} Objet;
+	int index;
+} Objet, *Obj;
 
 
 typedef struct listObj{
@@ -90,7 +91,8 @@ List_obj delete_obj_in_list(List_obj list, Objet obj);
 /*Libère l'éspace mémoire de la liste*/
 void free_list(List_obj list);
 
-bool is_type_in_lst(List_obj lst_obj, TypeObjet kindObject);
+
+
 
 
 #endif

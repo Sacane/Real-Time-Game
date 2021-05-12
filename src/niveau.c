@@ -34,7 +34,7 @@ void free_Niveau (Plateau niveau){
     free(niveau);
 }
 
-
+ 
 void init_niveaux(Plateau niveau, Coordonnees taille){
 
     unsigned int i, j;

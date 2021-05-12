@@ -20,7 +20,7 @@ void remplis_lanceur(Objet* lanceur, Generation* gen){
 bool equals_obj(Objet obj1, Objet obj2){
     Deplacement* depl;
     Deplacement* depl2;
-    Direction dir;
+
     if(obj1.type != obj2.type){
         return false;
     }
@@ -83,9 +83,7 @@ void free_list(List_obj list){
 
 }
 
-bool sup_filled(List_obj lst){
-    return true;
-}
+
 
 void add_obj_in_lst(List_obj *list, Objet obj){
     if(*list != NULL){
@@ -119,20 +117,6 @@ List_obj delete_obj_in_list(List_obj list, Objet obj){
     }
     return list;
 }
-
-
-bool is_type_in_lst(List_obj lst_obj, TypeObjet kindObject){
-    
-    if(NULL == lst_obj){
-        return false;
-    }
-    if(lst_obj->obj.type == kindObject){
-        return true;
-    }
-    return is_type_in_lst(lst_obj->next, kindObject); 
-
-}
-
 
 
 

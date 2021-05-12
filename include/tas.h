@@ -23,7 +23,8 @@ typedef struct {
                         * nombre de "tick" du processeur
                         * Voir Gestion du temps */
 
-    Coordonnees coo_obj; /* Objet affecte */
+    Coordonnees coo_obj; /* coordonnée de Objet affecte */
+	unsigned int index; /* index de l'objet affecté */
 } Evenement;
 
 
@@ -35,6 +36,7 @@ typedef struct {
 	Evenement* valeurs;/* Tableau d'Evenements de taille `capacite` et
 						* dont les `taille` premieres cases sont 
 						* utilisees. */
+	
 } Tas, *Arbre;
 
 bool estTas(Arbre arbre);

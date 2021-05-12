@@ -1,8 +1,7 @@
 #ifndef __BOARD__H__
 #define __BOARD__H__
 
-#include "objet.h"
-
+#include "array_obj.h"
 #include "niveau.h"
 
 typedef struct Player{
@@ -19,7 +18,7 @@ typedef struct Player{
 typedef struct game{
 
     Coordonnees size;
-    List_obj **box;
+    Array **box;
     Player player1;
     Player player2;
     Coordonnees coo_destination;
@@ -33,8 +32,6 @@ Player init_player(Coordonnees coordonnee, Direction dir_player);
 Board malloc_board(Coordonnees size);
 
 void free_board(Board board);
-
-void init_board(Board board, Coordonnees size);
 
 
 void deplace_projectile_b(Board board, Coordonnees *coordonnees, Objet projectile);

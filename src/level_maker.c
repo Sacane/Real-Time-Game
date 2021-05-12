@@ -54,7 +54,7 @@ Plateau niveau0() {
 }
 
 
-Board niveau0_b(){
+/*Board niveau0_b(){
 
     Board board;
     Player player;
@@ -117,7 +117,7 @@ Board niveau0_b(){
     add_obj_in_lst(&board->box[3][5], launcher2);
 
     return board;
-}
+}*/
 
 
 Plateau niveau1(){
