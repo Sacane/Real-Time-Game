@@ -14,6 +14,8 @@
 #include "niveau.h"
 #include "tas.h"
 #include <string.h>
+#include "array_obj.h"
+#include "board.h"
 
 Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
                                      * Evenements initiaux d'un 
@@ -27,5 +29,11 @@ void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile,
 * objet dans le Niveau , verifier si la partie est terminee,
 * ajouter de nouveaux evenements au Tas , etc. */
 void execute_evenement ( Evenement e, Arbre tas, Niveau* niveau);
+
+void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur);
+
+int create_projectile_by_direction(Board board, Arbre heap, Direction direction, Coordonnees pos_launcher, unsigned int index);
+
+Arbre build_heap_by_board(Board board);
 
 #endif

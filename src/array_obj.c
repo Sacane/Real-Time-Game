@@ -35,7 +35,7 @@ void big_free_array(Array array){
 
 /* ajoute l'objet dans le tableau, retourne l'indice dans lequel l'objet a été ajouter */
 int add_object_in_array(Array array, Objet obj){
-
+    
     int res = array->size;
     array->obj[(array->size)].type = obj.type;
     array->obj[(array->size)].donnee_suppl = NULL;
@@ -64,34 +64,31 @@ Objet extract_object_in_array(Array array, unsigned int index){
     if(array->obj[index].donnee_suppl){
         tmp.donnee_suppl = malloc(sizeof(*(array->obj[index].donnee_suppl)));
         memcpy(tmp.donnee_suppl, array->obj[index].donnee_suppl, sizeof(*(array->obj[index].donnee_suppl)));
-        printf("AH\n");
         free(array->obj[index].donnee_suppl);
         array->obj[index].donnee_suppl = NULL;
     }
     else{
         tmp.donnee_suppl = NULL;
     }
-
-    if(index != array->size){
-        printf("this case\n");
-        if(array->obj[array->size - 1].donnee_suppl){
-            array->obj[array->size - 1].type = array->obj[index].type;
-            array->obj[index].donnee_suppl = malloc(sizeof(*(array->obj[index].donnee_suppl)));
-            memcpy(array->obj[index].donnee_suppl, array->obj[array->size - 1].donnee_suppl, sizeof(*(array->obj[index].donnee_suppl)));
-            free(array->obj[array->size - 1].donnee_suppl);
-        }
-        else{
-            printf(" this \n");
-            array->obj[index] = array->obj[array->size-1];
-        }
-    }
-    
-    array->size--;
+    array->obj[index].type = VIDE;
     return tmp;
+}
+
+bool is_wall_in_box(Array array){
+    if(array->size == 0){
+        return false;
+    }
+    if(array[0].obj->type == MUR){
+        return true;
+    }
+    return false;
 }
 
 bool is_type_in_lst(Array array, TypeObjet kindObject){
     unsigned int i;
+    if(array->size == 0){
+        return false;
+    }
     for(i = 0; i < array->size; i++){
         if(kindObject == array[i].obj->type){
             return true;

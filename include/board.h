@@ -33,8 +33,7 @@ Board malloc_board(Coordonnees size);
 
 void free_board(Board board);
 
-
-
 void move_projectile(Board gameboard, Coordonnees *coo_proj,unsigned int index);
+bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board);
 
 #endif

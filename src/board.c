@@ -42,12 +42,11 @@ void free_board(Board board){
 
     for(i = 0; i < board->size.x; i++){
         for(j = 0; j < board->size.y; j++){
-
-            if(board->box[i][j])
-                big_free_array(board->box[i][j]);
+            big_free_array(board->box[i][j]);
         }
         free(board->box[i]);
     }
+    free(board->box);
     free(board);
 }
 
@@ -92,22 +91,22 @@ bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board){
 
     switch(direction){
         case HAUT:
-            if(is_type_in_lst((board->box[coo_obj.x-1][coo_obj.y]), MUR)){
+            if(is_wall_in_box((board->box[coo_obj.x-1][coo_obj.y]))){
                 return false;
             }
             break;
         case BAS:
-            if(is_type_in_lst(board->box[coo_obj.x+1][coo_obj.y], MUR)){
+            if(is_wall_in_box(board->box[coo_obj.x+1][coo_obj.y])){
                 return false;
             }
             break;
         case GAUCHE:
-            if(is_type_in_lst(board->box[coo_obj.x][coo_obj.y-1], MUR)){
+            if(is_wall_in_box(board->box[coo_obj.x][coo_obj.y-1])){
                 return false;
             }
             break;
         case DROITE:
-            if(is_type_in_lst(board->box[coo_obj.x][coo_obj.y+1], MUR)){
+            if(is_wall_in_box(board->box[coo_obj.x][coo_obj.y+1])){
                 return false;
             }
             break;
@@ -127,12 +126,11 @@ void move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index)
     memcpy(deplacement, gameboard->box[coo_proj->x][coo_proj->y]->obj[index].donnee_suppl, sizeof(Deplacement));
 
     Objet projectile = extract_object_in_array(gameboard->box[coo_proj->x][coo_proj->y], index);
+    
     if(!is_object_moveable(*coo_proj, deplacement->direction, gameboard)){
         free(deplacement);
         return;
     }
-
-    
 
     switch((deplacement)->direction){
 
@@ -158,6 +156,7 @@ void move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index)
             break;
     }
     free(deplacement);
+    
 }
 
 

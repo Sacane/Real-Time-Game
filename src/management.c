@@ -25,7 +25,33 @@ Arbre construit_Tas(Plateau niveau){
 	return arbre;
 }
 
-static void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
+Arbre build_heap_by_board(Board board){
+	Arbre heap;
+    heap = malloc_Tas(INITIAL_SIZE); 
+	Evenement evenement;
+	unsigned int i, j, k;
+    Generation *gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
+	for(i = 0; i < board->size.x ; i++){
+		for(j = 0; j < board->size.y; j++){
+            for(k = 0; k < board->box[i][j]->size; k++){
+                printf("test\n");
+                if(board->box[i][j]->obj[k].type == LANCEUR){
+                    memcpy(gen, board->box[i][j]->obj[k].donnee_suppl, sizeof(Generation));
+                    evenement.coo_obj.x = i;
+                    evenement.coo_obj.y = j;
+                    evenement.index = k;
+                    evenement.moment = gen->intervalle;
+                    ajoute_evenement(heap, evenement);
+                }
+            }
+		}
+	}
+    free(gen);
+	return heap;
+}
+
+void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
 	
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
@@ -159,4 +185,96 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
         default:
             break;
     }
+}
+
+int create_projectile_by_direction(Board board, Arbre heap, Direction direction, Coordonnees pos_launcher, unsigned int index){
+    assert(board->box[pos_launcher.x][pos_launcher.y]->obj[index].type == LANCEUR);
+
+    Coordonnees coo_projectile;
+    Deplacement *depl = NULL;
+    Generation *gen = NULL;
+    Objet projectile_created;
+    int index_tmp;
+    Evenement ev_projectile;
+
+    gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
+    depl = (Deplacement*)malloc(sizeof(Deplacement));
+    verif_malloc(depl);
+
+    memcpy(gen, board->box[pos_launcher.x][pos_launcher.y]->obj[index].donnee_suppl, sizeof(Generation));
+
+    depl->allure = gen->allure_proj;
+
+    depl->direction = direction;
+    switch(direction){
+        case HAUT:
+            coo_projectile.x = pos_launcher.x - 1;
+            coo_projectile.y = pos_launcher.y;
+            break;
+        case BAS:
+            coo_projectile.x = pos_launcher.x + 1;
+            coo_projectile.y = pos_launcher.y;
+            break;
+        case DROITE:
+            coo_projectile.x = pos_launcher.x;
+            coo_projectile.y = pos_launcher.y + 1;
+            break;
+        case GAUCHE:
+            coo_projectile.x = pos_launcher.x;
+            coo_projectile.y = pos_launcher.y - 1;
+            break;
+    }
+    projectile_created.type = PROJECTILE;
+    projectile_created.donnee_suppl = depl;
+
+    index_tmp = add_object_in_array(board->box[coo_projectile.x][coo_projectile.y], projectile_created);
+
+    ev_projectile.coo_obj = coo_projectile;
+    ev_projectile.index = index_tmp;
+    ev_projectile.moment = gen->intervalle + depl->allure;
+
+    ajoute_evenement(heap, ev_projectile);
+
+    if(est_coordonnee_equivalent(coo_projectile, board->player1.coo_player) || 
+    est_coordonnee_equivalent(coo_projectile,  board->player2.coo_player)){
+        board->est_niveau_termine = true;
+    }
+
+    free(gen);
+
+    return index_tmp;
+}
+
+
+static void update_heap_with_launcher(Evenement ev_launcher, Arbre heap, int index){
+
+    Generation *generation = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(generation);
+    Evenement new_launcher;
+    new_launcher.moment = ev_launcher.moment + generation->intervalle;
+    new_launcher.coo_obj = ev_launcher.coo_obj;
+    new_launcher.index = index;
+    ajoute_evenement(heap, new_launcher);
+
+    free(generation);
+
+}
+
+void trigger_launcher(Board board, Arbre heap, Coordonnees coo_launcher, Evenement old_launcher){
+    Generation *generation = (Generation*)malloc(sizeof(Generation));
+
+    verif_malloc(generation);
+    memcpy(generation, board->box[coo_launcher.x][coo_launcher.y]->obj[old_launcher.index].donnee_suppl, sizeof(Generation));
+    Direction direction;
+    Coordonnees coo_projectile;
+    Evenement ev_projectile;
+
+    for(direction = HAUT; direction <= DROITE; direction++){
+        if(is_object_moveable(coo_launcher, direction, board)){
+            create_projectile_by_direction(board, heap, direction, coo_launcher, old_launcher.index);
+        }
+    }
+    update_heap_with_launcher(old_launcher, heap, old_launcher.index);
+
 }

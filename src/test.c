@@ -551,6 +551,10 @@ static bool test_add_object_in_array(int *total_test){
     }
     index = add_object_in_array(obj_array, launcher);
 
+    if(index < 0){
+        return false;
+    }
+
     big_free_array(obj_array);
     return true;
 }
@@ -583,28 +587,18 @@ static bool test_extract_object_in_array(int *total_test){
 
     Objet tmp = extract_object_in_array(obj_array, 1);
 
-    if(obj_array->size != 2){
-        printf("Error, size not updated correctly\n");
-        big_free_array(obj_array);
+    if(obj_array->obj[1].type != VIDE){
+        printf("le type de l'objet devrait être vide\n");
         return false;
     }
 
     print_kind_object(obj_array->obj[1]);
 
-    if(obj_array->obj[1].type != PERSONNAGE){
-        printf("Erreur lors du remplacement : Le type de l'objet en index 1 devrait être ''personnage''\n");
-        big_free_array(obj_array);
-        return false;
-    }
     free(tmp.donnee_suppl);
 
     tmp = extract_object_in_array(obj_array, 0);
 
-    if(obj_array->obj[0].type != PERSONNAGE){
-        printf("Erreur lors de remplacement : Personnage devrait être en première position\n");
-        big_free_array(obj_array);
-        return false;
-    }
+
 
     print_kind_object(tmp);
     printf("index : %d\n", index);
@@ -629,12 +623,47 @@ static bool test_move_projectile(int *total_test){
     projectile.donnee_suppl = dep;
 
     projectile.type = PROJECTILE;
+    Coordonnees coo_projectile;
+    coo_projectile.x = 0;
+    coo_projectile.y = 1;
 
+    add_object_in_array(gameboard->box[0][1], projectile);
+    
+    
+    printf("before move\n");
+    move_projectile(gameboard, &coo_projectile, 0);
+    printf("after move\n");
+    if(!is_type_in_lst(gameboard->box[0][2], PROJECTILE)){
+        printf("Erreur, le projectile n'a pas été déplacé en (0, 2)\n");
+        return false;
+    }
 
-    free(dep);
+    if(is_type_in_lst(gameboard->box[0][1], PROJECTILE)){
+        printf("Erreur, le projectile est toujours en (0, 1)\n");
+        return false;
+    }
+
     free_board(gameboard);
+    return true;
+}
 
+static bool test_create_projectile_by_direction(int *total_test){
 
+    (*total_test)++;
+    Board board = board_level0();
+    Coordonnees coo_launch;
+    coo_launch.x = 0;
+    coo_launch.y = 0;
+    Arbre heap = NULL;  
+
+    heap = build_heap_by_board(board);
+        
+    create_projectile_by_direction(board, heap, DROITE, coo_launch, 0);
+    
+
+    free_Tas(heap);
+    free_board(board);
+    
     return true;
 }
 
@@ -678,6 +707,8 @@ void main_test(){
     qtest("test_extract_object_in_array", &compteur, &total_test, test_extract_object_in_array);
 
     qtest("test_move_projectile", &compteur, &total_test, test_move_projectile);
+
+    qtest("test_create_projectile_by_direction", &compteur, &total_test, test_create_projectile_by_direction);
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }

@@ -28,6 +28,6 @@ Objet extract_object_in_array(Array array, unsigned int index);
 
 bool is_type_in_lst(Array lst_obj, TypeObjet kindObject);
 
-
+bool is_wall_in_box(Array array);
 
 #endif
