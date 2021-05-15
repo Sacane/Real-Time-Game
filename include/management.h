@@ -14,8 +14,8 @@
 #include "niveau.h"
 #include "tas.h"
 #include <string.h>
-#include "array_obj.h"
-#include "board.h"
+
+
 
 Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
                                      * Evenements initiaux d'un 
