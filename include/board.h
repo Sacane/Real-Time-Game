@@ -12,6 +12,7 @@ typedef struct Player{
     bool depl_player_autorise;
     unsigned long moment_depl_perso;
     unsigned long allure_perso;
+    unsigned int index;
 
 }Player;
 
@@ -33,7 +34,14 @@ Board malloc_board(Coordonnees size);
 
 void free_board(Board board);
 
-void move_projectile(Board gameboard, Coordonnees *coo_proj,unsigned int index);
+int move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index);
+
 bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board);
+
+void check_movement_players(Board board);
+
+int move_player(Board board, Player *player);
+
+bool check_level_reached_b(Board board, Player player);
 
 #endif

@@ -32,8 +32,13 @@ void execute_evenement ( Evenement e, Arbre tas, Niveau* niveau);
 
 void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur);
 
-int create_projectile_by_direction(Board board, Arbre heap, Direction direction, Coordonnees pos_launcher, unsigned int index);
+/*int create_projectile_by_direction(Board board, Arbre heap, Direction direction, Coordonnees pos_launcher, unsigned int index, Evenement old_proj, Coordonnees *pos_projectile);
 
 Arbre build_heap_by_board(Board board);
+
+void trigger_launcher(Board board, Arbre heap, Coordonnees coo_launcher, Evenement old_launcher);
+
+void trigger_projectile(Board board, Arbre heap, Evenement ev_proj);
+void execute_event(Evenement e, Arbre heap, Board board);*/
 
 #endif

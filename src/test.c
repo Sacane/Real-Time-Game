@@ -465,7 +465,7 @@ static bool test_declenche_lanceur(int *total_test){
 	return true;
 }*/
 
-static bool test_equals_obj(int *total_test){
+/*static bool test_equals_obj(int *total_test){
     (*total_test)++;
     Objet obj1;
     Objet obj2;
@@ -579,8 +579,6 @@ static bool test_extract_object_in_array(int *total_test){
     launcher.donnee_suppl = gen_launcher;
     launcher.type = LANCEUR;
 
-
-    
     index = add_object_in_array(obj_array, wall);
     index = add_object_in_array(obj_array, launcher);
     index = add_object_in_array(obj_array, character);
@@ -628,11 +626,12 @@ static bool test_move_projectile(int *total_test){
     coo_projectile.y = 1;
 
     add_object_in_array(gameboard->box[0][1], projectile);
-    
-    
-    printf("before move\n");
+    if(gameboard->box[0][1]->obj[0].donnee_suppl == NULL){
+        return false;
+    }
+
     move_projectile(gameboard, &coo_projectile, 0);
-    printf("after move\n");
+
     if(!is_type_in_lst(gameboard->box[0][2], PROJECTILE)){
         printf("Erreur, le projectile n'a pas été déplacé en (0, 2)\n");
         return false;
@@ -654,12 +653,55 @@ static bool test_create_projectile_by_direction(int *total_test){
     Coordonnees coo_launch;
     coo_launch.x = 0;
     coo_launch.y = 0;
+    Arbre heap = NULL;
+
+    heap = build_heap_by_board(board);
+    
+    create_projectile_by_direction(board, heap, DROITE, coo_launch, 0);
+
+    if(!is_type_in_lst(board->box[0][1], PROJECTILE)){
+        printf("Erreur, projectile non crée dans le board\n");
+        return false;
+    }
+    if(heap->taille != 3){
+        printf("Erreur, projectile non crée dans le tas\n");
+        return false;
+    }
+    printf("Create test moment : %lu\n", heap->valeurs[2].moment);
+    free_Tas(heap);
+    free_board(board);
+    
+    return true;
+}
+
+static void print_coo(Coordonnees coo){
+    printf("(%u, %u)\n", coo.x, coo.y);
+}
+
+static bool test_trigger_launcher(int *total_test){
+    (*total_test)++;
+    Board board = board_level0();
+
     Arbre heap = NULL;  
 
     heap = build_heap_by_board(board);
-        
-    create_projectile_by_direction(board, heap, DROITE, coo_launch, 0);
     
+    Evenement ev = heap->valeurs[1];
+
+
+    trigger_launcher(board, heap, ev.coo_obj, ev);
+
+    if(!is_type_in_lst(board->box[3][6], PROJECTILE) || !is_type_in_lst(board->box[3][4], PROJECTILE) || 
+    !is_type_in_lst(board->box[4][5], PROJECTILE) || !is_type_in_lst(board->box[2][5], PROJECTILE)){
+        printf("Le projectile n'a pas été crée\n");
+        return false;
+    }
+    
+    if(heap->taille != 7){
+        printf("Erreur il n'y a pas d'évènement généré dans le tas, size : %d\n", heap->taille);
+        return false;
+    }
+
 
     free_Tas(heap);
     free_board(board);
@@ -667,13 +709,59 @@ static bool test_create_projectile_by_direction(int *total_test){
     return true;
 }
 
-static void qtest(const char* nom_func, int *counter, int *total_test, bool(*test_function)(int *total_test)){
+static bool test_trigger_projectile(int *total_test){
+    (*total_test)++;
+    Board board = board_level0();
+
+    Arbre heap = NULL;  
+
+    heap = build_heap_by_board(board);
+    
+    Evenement ev = heap->valeurs[1];
+
+    trigger_launcher(board, heap, ev.coo_obj, ev);
+
+    Evenement proj = heap->valeurs[3];
+
+ 
+
+    
+    trigger_projectile(board, heap, proj);
+    affiche_Tas(heap);
+    if(is_type_in_lst(board->box[3][4], PROJECTILE)){
+        printf("Le projectile ne devrait pas être ici (3, 4)\n");
+        return false;
+    }
+
+    if(!is_type_in_lst(board->box[3][3], PROJECTILE)){
+        printf("Le projectile n'est pas au bon endroit\n");
+        return false;
+    }
+    
+    if(heap->taille != 8){
+        printf("Erreur, nombre de projectile mauvais : %d\n", heap->taille);
+        return false;
+    }
+
+
+
+    affiche_Tas(heap);
+
+    free_Tas(heap);
+    free_board(board);
+    
+    return true;
+}*/
+
+
+
+static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test)){
     if(test_function(total_test)){
         (*counter)++;
-        printf("test function '%s' : success\n", nom_func);
+        printf("test function '%s' : success\n", name_fun);
     }
     else{
-        printf("test function '%s' : failure\n", nom_func);
+        printf("test function '%s' : failure\n", name_fun);
     }
 }
 
@@ -700,7 +788,7 @@ void main_test(){
 
     qtest("test_declenche_lanceur", &compteur, &total_test, test_declenche_lanceur);
 
-    qtest("test_equals_obj", &compteur, &total_test, test_equals_obj);
+    /*qtest("test_equals_obj", &compteur, &total_test, test_equals_obj);
 
     qtest("test_add_object_in_array", &compteur, &total_test, test_add_object_in_array);
 
@@ -708,7 +796,9 @@ void main_test(){
 
     qtest("test_move_projectile", &compteur, &total_test, test_move_projectile);
 
-    qtest("test_create_projectile_by_direction", &compteur, &total_test, test_create_projectile_by_direction);
+    qtest("test_trigger_launcher", &compteur, &total_test, test_trigger_launcher);
+
+    qtest("test_trigger_projectile", &compteur, &total_test, test_trigger_projectile);*/
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);
 }

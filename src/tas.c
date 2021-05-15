@@ -110,9 +110,14 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 
 static void enfiler(Arbre h, unsigned int i)
 {
+    assert(h->valeurs != NULL);
+    assert(h->taille > 0);
+
     unsigned int next_i;
     unsigned int max_i = h->taille - 1; 
     Evenement tmp;
+
+    
 
     if (h->taille - 1 == 0)
         return;
@@ -136,13 +141,13 @@ static void enfiler(Arbre h, unsigned int i)
 Evenement ote_minimum(Arbre tas){
 
 	assert(tas->valeurs != NULL);
-
 	Evenement min;
 
     min=(tas->valeurs)[0];
     tas->valeurs[0] = tas->valeurs[tas->taille-1];
     (tas->taille)--;
     enfiler(tas, 0);
+    
     
 	return min;
 }
@@ -157,10 +162,10 @@ void affiche_Tas(Arbre tas){
     for(i = 0; i < tas->taille; i++){
         
         if(i != tas->taille-1){
-            printf(": %lu, ", tas->valeurs[i].moment);
+            printf("(%u, %u): %lu, ", tas->valeurs[i].coo_obj.x,tas->valeurs[i].coo_obj.y, tas->valeurs[i].moment);
         }
         else{
-            printf(": %lu", tas->valeurs[i].moment);
+            printf("(%u, %u): %lu, ", tas->valeurs[i].coo_obj.x,tas->valeurs[i].coo_obj.y, tas->valeurs[i].moment);
         }
     }
     printf("]\n");

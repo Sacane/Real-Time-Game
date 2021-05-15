@@ -41,8 +41,20 @@ int add_object_in_array(Array array, Objet obj){
     array->obj[(array->size)].donnee_suppl = NULL;
 
     if(obj.donnee_suppl){
-        array->obj[(array->size)].donnee_suppl = malloc(sizeof(*(obj.donnee_suppl)));
-        memcpy(array->obj[(array->size)].donnee_suppl, obj.donnee_suppl, sizeof(*(obj.donnee_suppl)));
+        switch(obj.type){
+            case PROJECTILE:
+                array->obj[(array->size)].donnee_suppl = (Deplacement*)malloc(sizeof(Deplacement));
+                memcpy(array->obj[(array->size)].donnee_suppl, obj.donnee_suppl, sizeof(Deplacement));
+                break;
+            case LANCEUR:
+                array->obj[(array->size)].donnee_suppl = (Generation*)malloc(sizeof(Generation));
+                memcpy(array->obj[(array->size)].donnee_suppl, obj.donnee_suppl, sizeof(Generation));
+                break;
+            default:
+                break;
+        }
+        
+        
         free(obj.donnee_suppl);
     }
 
@@ -62,10 +74,20 @@ Objet extract_object_in_array(Array array, unsigned int index){
     tmp.type = array->obj[index].type;
     tmp.donnee_suppl = NULL;
     if(array->obj[index].donnee_suppl){
-        tmp.donnee_suppl = malloc(sizeof(*(array->obj[index].donnee_suppl)));
-        memcpy(tmp.donnee_suppl, array->obj[index].donnee_suppl, sizeof(*(array->obj[index].donnee_suppl)));
-        free(array->obj[index].donnee_suppl);
-        array->obj[index].donnee_suppl = NULL;
+        switch(tmp.type){
+            case PROJECTILE:
+                tmp.donnee_suppl = (Deplacement*)malloc(sizeof(Deplacement));
+                memcpy(tmp.donnee_suppl, array->obj[index].donnee_suppl, sizeof(Deplacement));
+                break;
+            case LANCEUR:
+                tmp.donnee_suppl = (Generation*)malloc(sizeof(Generation));
+                memcpy(tmp.donnee_suppl, array->obj[index].donnee_suppl, sizeof(Generation));
+                break;
+            default:
+                break;
+        }
+
+
     }
     else{
         tmp.donnee_suppl = NULL;

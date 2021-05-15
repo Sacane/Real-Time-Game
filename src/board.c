@@ -1,6 +1,6 @@
 #include "../include/board.h"
 
-/* a modifié en local*/
+
 
 Player init_player(Coordonnees coordonnee, Direction dir_player){
 
@@ -84,6 +84,7 @@ bool se_dirige_vers_obstacle(unsigned int x, unsigned int y, Direction direction
 }
 
 bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board){
+    printf("enter\n");
     if((coo_obj.x <= 0 && direction == HAUT) || (coo_obj.x >= board->size.x-1 && direction == BAS)||
     (coo_obj.y <= 0 && direction == GAUCHE) || (coo_obj.y >= board->size.y - 1 && direction == DROITE)){
         return false;
@@ -111,15 +112,15 @@ bool is_object_moveable(Coordonnees coo_obj, Direction direction, Board board){
             }
             break;
     }
-
+    printf("end objet_movable\n");
     return true;
 }
 
-void move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index){
+int move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index){
     assert(gameboard != NULL);
     assert(index <= gameboard->box[coo_proj->x][coo_proj->y]->size);
     assert(gameboard->box[coo_proj->x][coo_proj->y]->obj[index].type == PROJECTILE);
-    
+    int new_index;
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
 
@@ -129,41 +130,89 @@ void move_projectile(Board gameboard, Coordonnees *coo_proj, unsigned int index)
     
     if(!is_object_moveable(*coo_proj, deplacement->direction, gameboard)){
         free(deplacement);
-        return;
+        return -1;
     }
 
     switch((deplacement)->direction){
 
         case HAUT:
         
-            add_object_in_array(gameboard->box[coo_proj->x - 1][coo_proj->y], projectile);
+            new_index = add_object_in_array(gameboard->box[--coo_proj->x][coo_proj->y], projectile);
 
             break;
         case BAS:
         
-            add_object_in_array(gameboard->box[coo_proj->x + 1][coo_proj->y], projectile);
+            new_index = add_object_in_array(gameboard->box[++coo_proj->x][coo_proj->y], projectile);
             
             break;
         case DROITE:
 
-            add_object_in_array(gameboard->box[coo_proj->x][coo_proj->y + 1], projectile);
+            new_index = add_object_in_array(gameboard->box[coo_proj->x][++coo_proj->y], projectile);
 
             break;
         case GAUCHE:
             
-            add_object_in_array(gameboard->box[coo_proj->x][coo_proj->y - 1], projectile);
+            new_index = add_object_in_array(gameboard->box[coo_proj->x][--coo_proj->y], projectile);
 		
             break;
     }
     free(deplacement);
-    
+    return new_index;
+}
+
+void check_movement_players(Board board){
+
+	assert(NULL != board);
+
+	if(maintenant() >= board->player1.moment_depl_perso){
+		board->player1.depl_player_autorise = true;
+	}
 }
 
 
 
+/**
+ * \arg niveau : plateau concernant le déplacement du joueur
+ * Deplace le joueur selon une direction renseigné
+ * \return true si le personnage ne meurt pas après son déplacement, false sinon.
+ */
+int move_player(Board board, Player *player){
 
+    int index;
+    Objet obj_player;
+    if(!is_object_moveable(player->coo_player, player->dir_player, board)){
+        return -1;
+    }
+    obj_player = extract_object_in_array(board->box[player->coo_player.x][player->coo_player.y], player->index);
+    switch(player->dir_player){
+        case GAUCHE:
+            player->coo_player.y -= 1;
+            break;
+        case DROITE:
+            player->coo_player.y += 1;
+            break;
+        case BAS:
+            player->coo_player.x += 1;
+            break;
+        case HAUT:
+            player->coo_player.x -= 1;
+            break;
+    }
+    if(is_type_in_lst(board->box[player->coo_player.x][player->coo_player.y], PROJECTILE)){
+        printf("Vous avez marché sur un projectile, BOOM !\n");
+        return 0;
+    }
+    index = add_object_in_array(board->box[player->coo_player.x][player->coo_player.y], obj_player);
+    player->depl_player_autorise = false;
+    player->moment_depl_perso = maintenant() + player->allure_perso;
+    player->index = (unsigned int)index;
+    return 1;
+}
 
-
+bool check_level_reached_b(Board board, Player player){
+    
+    return est_coordonnee_equivalent(player.coo_player, board->coo_destination);
+}
 
 
 /*void verifie_mouvement_personnage(Player *player){

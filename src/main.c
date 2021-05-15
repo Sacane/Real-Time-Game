@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     if(niveau == NULL){
         niveau = niveau0();
     }
-    
+    Board board = board_level0();
     switch(mode){
         case DEBUG:
             main_test();
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
             launch_command(niveau, &is_level_reached);
             break;
         case GRAPHIC:
-            /*launch_gui_bis(niveau, &is_level_reached); */
+            launch_gui_bis(niveau, &is_level_reached); 
             break;
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
         (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
     }
     
-
+    free_board(board);
     free_Niveau(niveau);
     free(name_file);
     return EXIT_SUCCESS;

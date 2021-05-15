@@ -47,7 +47,7 @@ Plateau niveau0() {
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 50;
+    niveau->allure_perso = une_milliseconde * 100;
 
 
     return niveau;
@@ -165,9 +165,12 @@ Plateau niveau1(){
     niveau->objets[4][5].type = MUR;
     niveau->objets[4][6].type = MUR;
 
+    niveau->allure_perso = une_milliseconde * 50;
+
 	niveau->coo_perso.x = 0;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+
 
 	return niveau;
 }
@@ -249,7 +252,7 @@ Plateau niveau2(){
 	niveau->coo_perso.x = 7;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 50;
+    niveau->allure_perso = une_milliseconde * 100;
 
 	return niveau;
 
@@ -318,7 +321,7 @@ Plateau niveau3(){
 	niveau->coo_perso.x = 3;
     niveau->coo_perso.y = 4;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 50;
+    niveau->allure_perso = une_milliseconde * 100;
 
 	return niveau;
 }
@@ -329,6 +332,7 @@ Board board_level0(){
 
     Coordonnees size_board, coo_destination;
     Coordonnees coo_player;
+    unsigned int index;
     size_board.x = 5;
     size_board.y = 10;
     coo_destination.x = 4;
@@ -336,13 +340,14 @@ Board board_level0(){
     coo_player.x = 4;
     coo_player.y = 0;
 
+
     board = malloc_board(size_board);
 
     Direction dir_player = BAS;
 
     player = init_player(coo_player, dir_player);
     board->player1 = player;
-    
+    printf("player : (%u, %u)\n", player.coo_player.x, player.coo_player.y);
     board->coo_destination = coo_destination;
 
     Generation* gen;
@@ -361,8 +366,8 @@ Board board_level0(){
     character.donnee_suppl = NULL;
 
 
-    add_object_in_array(board->box[4][0], character);
-
+    index = add_object_in_array(board->box[4][0], character);
+    board->player1.index = index;
 
     Objet wall;
     wall.type = MUR;
@@ -398,6 +403,8 @@ Board board_level0(){
     add_object_in_array(board->box[4][9], destination);
     add_object_in_array(board->box[0][0], launcher1);
     add_object_in_array(board->box[3][5], launcher2);
+    
+
 
     return board;
 }
