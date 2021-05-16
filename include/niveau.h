@@ -13,7 +13,16 @@
 
 #include "objet.h"
 
+typedef struct player{
+    
+    Coordonnees coo_player;
+    Direction dir_player;
+    unsigned long moment_depl_player;
+    bool is_player_alive;
+    bool can_player_move;
+    unsigned long speed_player;
 
+}Player;
 
 typedef struct Niveau{
     
@@ -27,6 +36,7 @@ typedef struct Niveau{
     bool est_vivant;
     bool est_niveau_termine;
     Coordonnees coo_destination;
+    Player p1;
     
 } Niveau, *Plateau;
 
