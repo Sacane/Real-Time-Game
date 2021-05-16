@@ -195,6 +195,37 @@ int deplace_joueur(Plateau niveau){
     return 1;
 }
 
+int move_players(Plateau niveau, Player *player){
+    assert(niveau != NULL);
+
+    if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, niveau)){
+        return -1;
+    }
+    niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
+    switch(niveau->dir_perso){
+        case HAUT:
+            player->coo_player.x -= 1;
+            break;
+        case BAS:
+            player->coo_player.x += 1;
+            break; 
+        case DROITE:
+            player->coo_player.y += 1;
+            break;
+        case GAUCHE:
+            player->coo_player.y -= 1;
+            break;
+    }
+    if(niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type == PROJECTILE){
+        printf("You just walk into a projectile ! Game OVER.\n");
+        return 0;
+    }
+	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+    player->can_player_move = false;
+    player->moment_depl_player = maintenant() + niveau->allure_perso;
+    return 1;
+}
+
 void verifie_mouvement_personnage(Plateau niveau){
 
 	assert(NULL != niveau);

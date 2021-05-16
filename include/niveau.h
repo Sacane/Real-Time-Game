@@ -14,7 +14,7 @@
 #include "objet.h"
 
 typedef struct player{
-    
+
     Coordonnees coo_player;
     Direction dir_player;
     unsigned long moment_depl_player;
@@ -61,6 +61,8 @@ void init_niveaux(Plateau niveau, Coordonnees taille);
  * \return true si le personnage ne meurt pas après son déplacement, false sinon.
  */
 int deplace_joueur(Plateau niveau); 
+
+int move_players(Plateau board, Player* player);
 
 
 void verifie_mouvement_personnage(Plateau niveau);
