@@ -52,6 +52,8 @@ void launch_gui(Plateau niveau, bool *is_reached);
 
 void launch_gui_bis(Plateau niveau, bool *is_reached);
 
+void launch(Plateau niveau, bool *is_reached);
+
 /*void gui_launcher(Board gameboard, bool *is_reached);*/
 
 /*-----------------------------------*/

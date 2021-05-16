@@ -65,6 +65,9 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
     if(est_coordonnee_equivalent(*pos_projectile, plateau->coo_perso)){
         plateau->est_vivant = false;
     }
+    if(est_coordonnee_equivalent(*pos_projectile, plateau->p1.coo_player)){
+        plateau->p1.is_player_alive = false;
+    }
     free(generation);
 }
 

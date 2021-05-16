@@ -47,8 +47,8 @@ Plateau niveau0() {
     niveau->coo_perso.x = 4;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 100;
-    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
+    niveau->allure_perso = une_milliseconde * 10;
+    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 10, PERSONNAGE);
     
     return niveau;
 }
@@ -108,6 +108,7 @@ Plateau niveau1(){
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
 
+    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 10, PERSONNAGE);
 
 	return niveau;
 }
@@ -189,7 +190,8 @@ Plateau niveau2(){
 	niveau->coo_perso.x = 7;
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 100;
+    niveau->allure_perso = une_milliseconde * 10;
+    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
 
 	return niveau;
 
@@ -258,90 +260,8 @@ Plateau niveau3(){
 	niveau->coo_perso.x = 3;
     niveau->coo_perso.y = 4;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 100;
+    niveau->allure_perso = une_milliseconde * 10;
+    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
 
 	return niveau;
 }
-
-/*Board board_level0(){
-    Board board;
-    Player player;
-
-    Coordonnees size_board, coo_destination;
-    Coordonnees coo_player;
-    unsigned int index;
-    size_board.x = 5;
-    size_board.y = 10;
-    coo_destination.x = 4;
-    coo_destination.y = 9;
-    coo_player.x = 4;
-    coo_player.y = 0;
-
-
-    board = malloc_board(size_board);
-
-    Direction dir_player = BAS;
-
-    player = init_player(coo_player, dir_player);
-    board->player1 = player;
-    printf("player : (%u, %u)\n", player.coo_player.x, player.coo_player.y);
-    board->coo_destination = coo_destination;
-
-    Generation* gen;
-    Generation* gen2;
-    gen = (Generation*)malloc(sizeof(Generation));
-    gen2 = (Generation*)malloc(sizeof(Generation));
-
-
-    gen->allure_proj = une_milliseconde*300;
-    gen->intervalle = une_seconde;
-    gen2->allure_proj = une_milliseconde*300;
-    gen2->intervalle = une_seconde;
-
-    Objet character;
-    character.type = PERSONNAGE;
-    character.donnee_suppl = NULL;
-
-
-    index = add_object_in_array(board->box[4][0], character);
-    board->player1.index = index;
-
-    Objet wall;
-    wall.type = MUR;
-    wall.donnee_suppl = NULL;
-
-    Objet destination;
-    destination.type = DESTINATION;
-    destination.donnee_suppl = NULL;
-
-
-    Objet launcher1;
-    launcher1.type = LANCEUR;
-    launcher1.donnee_suppl = gen;
-
-    Objet launcher2;
-    launcher2.type = LANCEUR;
-    launcher2.donnee_suppl = gen2;
-
-
-
-    add_object_in_array(board->box[1][0], wall);
-    add_object_in_array(board->box[1][1], wall);
-    add_object_in_array(board->box[1][2], wall);
-    add_object_in_array(board->box[1][3], wall);
-    add_object_in_array(board->box[1][4], wall);
-    add_object_in_array(board->box[1][5], wall);
-    add_object_in_array(board->box[1][6], wall);
-    add_object_in_array(board->box[1][7], wall);
-    add_object_in_array(board->box[1][8], wall);
-    add_object_in_array(board->box[2][8], wall);
-    add_object_in_array(board->box[3][8], wall);
-    add_object_in_array(board->box[4][8], wall);
-    add_object_in_array(board->box[4][9], destination);
-    add_object_in_array(board->box[0][0], launcher1);
-    add_object_in_array(board->box[3][5], launcher2);
-    
-
-
-    return board;
-}*/

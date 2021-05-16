@@ -21,28 +21,28 @@ static void launch_command(Plateau niveau, bool *is_reached){
         if(niveau->est_vivant == false){
             break;
         }
-        verifie_mouvement_personnage(niveau);
+        check_player_move(niveau, &(niveau->p1));
         while((touche = getchar()) != EOF){
-            if(niveau->depl_perso_autorise == true){
+            if(niveau->p1.can_player_move == true){
                 switch (touche)
                 {
                 case 'z':
-                    niveau->dir_perso = HAUT;
+                    niveau->p1.dir_player = HAUT;
                     break;
                 case 's':
-                    niveau->dir_perso = BAS;
+                    niveau->p1.dir_player = BAS;
                     break;
                 case 'd':
-                    niveau->dir_perso = DROITE;
+                    niveau->p1.dir_player = DROITE;
                     break;
                 case 'q':
-                    niveau->dir_perso = GAUCHE;
+                    niveau->p1.dir_player = GAUCHE;
                     break;
                 default:
                     break;
                 }
-                if(niveau->depl_perso_autorise == true){
-                    success = deplace_joueur(niveau);
+                if(niveau->p1.can_player_move == true){
+                    success = move_players(niveau, &(niveau->p1));
                     if(!success){
                         break;
                     }
@@ -64,7 +64,7 @@ static void launch_command(Plateau niveau, bool *is_reached){
         }   
         else
             millisleep (10); 
-        if(check_level_reached(niveau)){
+        if(check_player_reached(niveau)){
             (*is_reached) = true;
             break;
         }
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
             launch_command(niveau, &is_level_reached);
             break;
         case GRAPHIC:
-            launch_gui_bis(niveau, &is_level_reached); 
+            launch(niveau, &is_level_reached); 
             break;
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");

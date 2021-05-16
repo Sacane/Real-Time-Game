@@ -168,7 +168,9 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     if(est_coordonnee_equivalent((*coordonnees), niveau->coo_perso)){
         niveau->est_vivant = false;
     }
-    
+    if(est_coordonnee_equivalent(*coordonnees, niveau->p1.coo_player)){
+        niveau->p1.is_player_alive = false;
+    }
 }
 
 /**
@@ -213,7 +215,7 @@ int move_players(Plateau niveau, Player *player){
         return -1;
     }
     niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
-    switch(niveau->dir_perso){
+    switch(player->dir_player){
         case HAUT:
             player->coo_player.x -= 1;
             break;
@@ -227,13 +229,13 @@ int move_players(Plateau niveau, Player *player){
             player->coo_player.y -= 1;
             break;
     }
-    if(niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type == PROJECTILE){
+    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == PROJECTILE){
         printf("You just walk into a projectile ! Game OVER.\n");
         return 0;
     }
-	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
+	niveau->objets[player->coo_player.x][player->coo_player.y].type = PERSONNAGE;
     player->can_player_move = false;
-    player->moment_depl_player = maintenant() + niveau->allure_perso;
+    player->moment_depl_player = maintenant() + player->speed_player;
     return 1;
 }
 
