@@ -62,9 +62,7 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
     }
     plateau->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
     plateau->objets[pos_projectile->x][pos_projectile->y].donnee_suppl = deplacement;
-    if(est_coordonnee_equivalent(*pos_projectile, plateau->coo_perso)){
-        plateau->est_vivant = false;
-    }
+
     if(est_coordonnee_equivalent(*pos_projectile, plateau->p1.coo_player)){
         plateau->p1.is_player_alive = false;
     }
@@ -72,7 +70,7 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
 }
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
-static void update_launcher(Evenement lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
+static void update_launcher_in_heap(Evenement lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
     printf("ON ENTRE\n");
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
@@ -112,7 +110,7 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evene
         }
     }
 
-    update_launcher(ancien_lanceur, tas, pos_lanceur, niveau);
+    update_launcher_in_heap(ancien_lanceur, tas, pos_lanceur, niveau);
 
     free(generation);
 }
@@ -153,7 +151,6 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
     coord_evenement.x = e.coo_obj.x;
     coord_evenement.y = e.coo_obj.y;
 
-    /* Lancer l'évènement e */
     switch(niveau->objets[coord_evenement.x][coord_evenement.y].type){
         case PROJECTILE:
             declenche_projectile(tas, niveau, coord_evenement, e);
@@ -164,4 +161,74 @@ void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
         default:
             break;
     }
+}
+
+void launch_command(Plateau niveau, bool *is_reached){
+    
+    init_stdin();
+    Arbre tas = construit_Tas(niveau);
+    Evenement e;
+	char touche;
+    int success = true;
+
+    printf("affichage du tas au début : \n");
+    affiche_Niveau(niveau);
+    printf("\n");
+    while (true) {
+        if(niveau->p1.is_player_alive == false){
+            break;
+        }
+        
+        check_player_move(&(niveau->p1));
+        while((touche = getchar()) != EOF){
+            if(niveau->p1.can_player_move == true){
+                switch (touche)
+                {
+                case 'z':
+                    niveau->p1.dir_player = HAUT;
+                    break;
+                case 's':
+                    niveau->p1.dir_player = BAS;
+                    break;
+                case 'd':
+                    niveau->p1.dir_player = DROITE;
+                    break;
+                case 'q':
+                    niveau->p1.dir_player = GAUCHE;
+                    break;
+                default:
+                    break;
+                }
+                if(niveau->p1.can_player_move == true){
+                    success = move_players(niveau, &(niveau->p1));
+                    if(!success){
+                        break;
+                    }
+                }
+            }
+        }
+        if(!success){
+            break;
+        }
+        if ( un_evenement_est_pret(tas)) {
+            e = ote_minimum(tas);
+            execute_evenement(e, tas, niveau);
+            while(e.moment == tas->valeurs[0].moment){
+                e = ote_minimum(tas);
+                execute_evenement(e, tas, niveau);
+            }
+            affiche_Niveau(niveau);
+    		printf("\n");
+        }   
+        else
+            millisleep (10); 
+        if(check_player_reached(niveau)){
+            (*is_reached) = true;
+            break;
+        }
+
+    }
+    free_Tas(tas);
+    restaure_stdin();
+
 }

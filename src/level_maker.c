@@ -43,13 +43,12 @@ Plateau niveau0() {
     niveau->objets[3][8].type = MUR;
     niveau->objets[4][8].type = MUR;
 
-
-    niveau->coo_perso.x = 4;
-    niveau->coo_perso.y = 0;
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 10;
-    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 10, PERSONNAGE);
-    
+    Coordonnees coo_p1;
+    coo_p1.x = 4;
+    coo_p1.y = 0;
+    niveau->objets[coo_p1.x][coo_p1.y].type = PERSONNAGE;
+    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PERSONNAGE);
+    niveau->mode = MODE_ONE_PLAYER;
     return niveau;
 }
 
@@ -80,7 +79,6 @@ Plateau niveau1(){
 	gen3->allure_proj = une_milliseconde*300;
     gen3->intervalle = une_seconde;
 
-    niveau->allure_perso = une_milliseconde * 50;
 
 	niveau->objets[4][0].type = LANCEUR;
     niveau->objets[4][0].donnee_suppl = gen;
@@ -102,13 +100,13 @@ Plateau niveau1(){
     niveau->objets[4][5].type = MUR;
     niveau->objets[4][6].type = MUR;
 
-    niveau->allure_perso = une_milliseconde * 50;
+    Coordonnees coo_p1;
+	coo_p1.x = 0;
+    coo_p1.y = 0;
+    niveau->objets[coo_p1.x][coo_p1.y].type = PERSONNAGE;
 
-	niveau->coo_perso.x = 0;
-    niveau->coo_perso.y = 0;
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-
-    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 10, PERSONNAGE);
+    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PERSONNAGE);
+    niveau->mode = MODE_ONE_PLAYER;
 
 	return niveau;
 }
@@ -187,11 +185,13 @@ Plateau niveau2(){
     niveau->objets[6][10].type = MUR;
     niveau->objets[6][11].type = MUR;
 
-	niveau->coo_perso.x = 7;
-    niveau->coo_perso.y = 0;
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 10;
-    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
+    Coordonnees coo_p;
+
+	coo_p.x = 7;
+    coo_p.y = 0;
+    niveau->objets[coo_p.x][coo_p.y].type = PERSONNAGE;
+    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PERSONNAGE);
+    niveau->mode = MODE_ONE_PLAYER;
 
 	return niveau;
 
@@ -257,11 +257,13 @@ Plateau niveau3(){
     niveau->objets[6][8].type = MUR;
     niveau->objets[6][9].type = MUR;
 
-	niveau->coo_perso.x = 3;
-    niveau->coo_perso.y = 4;
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->allure_perso = une_milliseconde * 10;
-    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
+    Coordonnees coo_p;
+
+	coo_p.x = 3;
+    coo_p.y = 4;
+    niveau->objets[coo_p.x][coo_p.y].type = PERSONNAGE;
+    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PERSONNAGE);
+    niveau->mode = MODE_ONE_PLAYER;
 
 	return niveau;
 }

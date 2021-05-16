@@ -19,7 +19,7 @@
 
 typedef enum {
 	VIDE = 0,          LANCEUR,           MUR,
-	PROJECTILE,        PERSONNAGE,        DESTINATION,
+	PROJECTILE,        PERSONNAGE,        DESTINATION, PIQUES, PLAYER1, PLAYER2,
 } TypeObjet;
 
 typedef struct object{
@@ -34,12 +34,7 @@ typedef struct object{
 } Objet, *Obj;
 
 
-typedef struct listObj{
 
-    Objet obj;
-    struct listObj *next;
-
-}List, *List_obj;
 
 
 typedef struct {
@@ -82,16 +77,7 @@ TypeObjet str_to_obj(char* type);
 /* Renvoi true si les deux objet sont égaux, false sinon */
 bool equals_obj(Objet obj1, Objet obj2);
 
-/* Alloue l'espace mémoire nécéssaire pour stocker une valeur dans la structure */
-List_obj malloc_list(Objet obj);
 
-/* Ajoute une valeur en fin de liste */
-void add_obj_in_lst(List_obj *list, Objet obj);
-
-List_obj delete_obj_in_list(List_obj list, Objet obj);
-
-/*Libère l'éspace mémoire de la liste*/
-void free_list(List_obj list);
 
 
 

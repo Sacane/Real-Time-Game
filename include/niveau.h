@@ -13,8 +13,13 @@
 
 #include "objet.h"
 
-typedef struct player{
+#define MODE_ONE_PLAYER 0;
+#define MODE_TWO_PLAYER 1;
 
+
+typedef struct player{
+    
+    
     TypeObjet typePlayer;
     Coordonnees coo_player;
     Direction dir_player;
@@ -29,15 +34,11 @@ typedef struct Niveau{
     
     Coordonnees taille; 
     Objet** objets; 
-    Coordonnees coo_perso; 
-    unsigned long allure_perso; 
-    bool depl_perso_autorise; 
-    Direction dir_perso; 
-    unsigned long moment_depl_perso;
-    bool est_vivant;
-    bool est_niveau_termine;
+
     Coordonnees coo_destination;
+    int mode;
     Player p1;
+    Player p2;
     
 } Niveau, *Plateau;
 
@@ -57,34 +58,11 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
 
 void init_niveaux(Plateau niveau, Coordonnees taille);
 
-
-/**
- * \arg niveau : plateau concernant le déplacement du joueur
- * Deplace le joueur selon une direction renseigné
- * \return true si le personnage ne meurt pas après son déplacement, false sinon.
- */
-int deplace_joueur(Plateau niveau); 
-
 int move_players(Plateau board, Player* player);
 
 
-void verifie_mouvement_personnage(Plateau niveau);
+void check_player_move(Player *p);
 
-void check_player_move(Plateau niveau, Player *p);
-
-/**
- * Renvoi true si l'objet est prêt à rentré en contact avec un mur, false sinon.
-*/
-bool mur_en_contact(Plateau plateau, Objet obj);
-
-/**
- * Renvoi true si l'objet est prêt à rentrer en contact avec le bord du terrain.
-*/
-bool bordure_en_contact(Plateau plateau, Objet obj);
-
-
-/*Vérifie et renvoi true si le personnage est s'apprête à rentrer en conflit avec un mur */
-bool perso_en_contact(Plateau plateau);
 
 bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
 
@@ -92,13 +70,11 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees);
 
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau);
 
-bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y);
-
-bool check_level_reached(Plateau niveau);
-
 bool check_player_reached(Plateau niveau);
 
 void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */
+
+
 
 #endif

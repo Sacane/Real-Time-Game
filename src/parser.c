@@ -6,8 +6,8 @@ Plateau read_file(char* name_file){
     Plateau res;
     unsigned x, y;
     unsigned long allure, intervalle;
-    Coordonnees size_level;
-    
+    Coordonnees size_level, coo_player;
+    unsigned long moment_player;
     FILE *in;
     char *typeObject;
     typeObject = (char*)malloc(sizeof(char) * BUFSIZ);
@@ -24,11 +24,12 @@ Plateau read_file(char* name_file){
     res = malloc_Niveau(size_level);
     printf("%d x %d\n", res->taille.x, res->taille.y);
     printf("Filling of the character... ");
-    fscanf(in, "PERSONNAGE %u x %u allure : %lu\n", &(res->coo_perso).x, &(res->coo_perso).y, &allure);
-    res->allure_perso = une_milliseconde * allure;
-    printf("OK || coordinates : (%u, %u) allure : %lu\n", (res->coo_perso).x, (res->coo_perso).y, res->allure_perso);
+    fscanf(in, "PERSONNAGE %u x %u allure : %lu\n", &coo_player.x, &coo_player.y, &allure);
+    moment_player = une_milliseconde * allure;
+    printf("OK || coordinates : (%u, %u) allure : %lu\n", coo_player.x, coo_player.y, allure);
     printf("Filling of objects...\n");
-    res->objets[res->coo_perso.x][res->coo_perso.y].type = PERSONNAGE;
+    res->objets[coo_player.x][coo_player.y].type = PERSONNAGE;
+    res->p1 = init_player(coo_player, BAS, allure, PERSONNAGE);
     while(fscanf(in, "%s", typeObject) != EOF){
         Generation *gen = (Generation*)malloc(sizeof(Generation));
         switch(str_to_obj(typeObject)){

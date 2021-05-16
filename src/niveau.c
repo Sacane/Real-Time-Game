@@ -8,8 +8,7 @@ Plateau malloc_Niveau (Coordonnees taille){
 
     tmp = (Plateau)malloc(sizeof(Niveau));
     tmp->taille = taille;
-    tmp->est_vivant = true;
-    tmp->est_niveau_termine = false;
+
     tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
     for(i = 0; i < taille.x; i++){
       tmp->objets[i] = (Objet*)malloc(sizeof(Objet) * taille.y);
@@ -57,18 +56,6 @@ void init_niveaux(Plateau niveau, Coordonnees taille){
     }
 }
 
-
-
-/**
- * Vérifie si un personnage est en contact avec le bord du terrain et si il se dirige vers celui-ci 
-*/
-bool perso_en_contact(Plateau plateau){
-	
-    return (plateau->coo_perso.x == plateau->taille.x - 1 && plateau->dir_perso == DROITE) || 
-            (plateau->coo_perso.x == plateau->taille.x + 1 && plateau->dir_perso == GAUCHE) || 
-            (plateau->coo_perso.y == plateau->taille.y -1 && plateau->dir_perso == HAUT) ||
-            (plateau->coo_perso.y == plateau->taille.y + 1 && plateau->dir_perso == BAS);
-}
 
 void affiche_coordonnee(Coordonnees coordonnee){
     printf("(%u, %u)", coordonnee.x, coordonnee.y);
@@ -165,47 +152,10 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 		
             break;
     }
-    if(est_coordonnee_equivalent((*coordonnees), niveau->coo_perso)){
-        niveau->est_vivant = false;
-    }
+
     if(est_coordonnee_equivalent(*coordonnees, niveau->p1.coo_player)){
         niveau->p1.is_player_alive = false;
     }
-}
-
-/**
- * Déplace le joueur selon une direction donnée
- */ 
-int deplace_joueur(Plateau niveau){
-
-    assert(niveau != NULL);
-    
-    if(se_dirige_vers_mur(niveau->coo_perso.x, niveau->coo_perso.y, niveau->dir_perso, niveau)){
-        return -1;
-    }
-    niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = VIDE;
-    switch(niveau->dir_perso){
-        case HAUT:
-            niveau->coo_perso.x -= 1;
-            break;
-        case BAS:
-            niveau->coo_perso.x += 1;
-            break; 
-        case DROITE:
-            niveau->coo_perso.y += 1;
-            break;
-        case GAUCHE:
-            niveau->coo_perso.y -= 1;
-            break;
-    }
-    if(niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type == PROJECTILE){
-        printf("Vous avez marché sur un projectile, Boom !\n");
-        return 0;
-    }
-	niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
-    niveau->depl_perso_autorise = false;
-    niveau->moment_depl_perso = maintenant() + niveau->allure_perso;
-    return 1;
 }
 
 int move_players(Plateau niveau, Player *player){
@@ -239,27 +189,14 @@ int move_players(Plateau niveau, Player *player){
     return 1;
 }
 
-void verifie_mouvement_personnage(Plateau niveau){
 
-	assert(NULL != niveau);
-
-	if(maintenant() >= niveau->moment_depl_perso){
-		niveau->depl_perso_autorise = true;
-	}
-}
-
-void check_player_move(Plateau niveau, Player *p){
+void check_player_move(Player *p){
     if(maintenant() >= p->moment_depl_player){
         p->can_player_move = true;
     }
 }
 
-bool check_level_reached(Plateau niveau){
-    /* To update with 2 */
-    assert(niveau != NULL);
-    
-    return est_coordonnee_equivalent(niveau->coo_perso, niveau->coo_destination);
-}
+
 
 bool check_player_reached(Plateau niveau){
     return est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination);
@@ -319,3 +256,4 @@ void affiche_Niveau (Plateau niveau) {
 		printf("\n");
 	}
 }
+

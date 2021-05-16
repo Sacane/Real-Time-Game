@@ -90,7 +90,7 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 			MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
 			break;
 		case PERSONNAGE:
-			switch(niveau->dir_perso){
+			switch(niveau->p1.dir_player){
 				case HAUT:
 					MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
 					break;
@@ -206,40 +206,7 @@ static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned i
 }
 
 
-static void refresh_character(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
-	printf("%u, %u\n", coo_player.x, coo_player.y);
-	switch(board->objets[coo_player.x][coo_player.y].type){
-		case PERSONNAGE:
-			switch(board->dir_perso){
-				case HAUT:
-					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, HAUT, board)){
-						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
-					}
-					break;
-				case DROITE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, DROITE, board)){
-						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
-					}
-					break;
-				case GAUCHE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, GAUCHE, board)){
-						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
-					}
-					break;
-				case BAS:
-					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, BAS, board)){
-						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
-					}
-					break;
-			}
-			break;
-		default:
-			return;
-		
-	}
-	draw_img(board, array_img, coo_player.x, coo_player.y, width, height);
-	MLV_actualise_window();
-}
+
 
 static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 	printf("%u, %u\n", coo_player.x, coo_player.y);
@@ -277,31 +244,6 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 }
 
 
-int action_listener(MLV_Keyboard_button button, Plateau board){
-
-	switch(button){
-		case MLV_KEYBOARD_z:
-			board->dir_perso = HAUT;
-			break;
-		case MLV_KEYBOARD_q:
-			board->dir_perso = GAUCHE;
-			break;
-		case MLV_KEYBOARD_s:
-			board->dir_perso = BAS;
-			break;
-		case MLV_KEYBOARD_d:
-			board->dir_perso = DROITE;
-			break;
-		case MLV_KEYBOARD_ESCAPE:
-			return 0;
-		default:
-			return -1;
-	}
-	if(board->depl_perso_autorise == true){
-		return deplace_joueur(board);
-	}
-	return -1;
-}
 
 int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	switch(button){
@@ -332,7 +274,7 @@ int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	return -1;
 }
 
-
+/*
 void launch_gui_bis(Plateau niveau, bool *is_reached){
     unsigned int x, y;
     int decalage_x, decalage_y;
@@ -467,7 +409,7 @@ void launch_gui_bis(Plateau niveau, bool *is_reached){
     free_Tas(tas);
     printf("end_free\n");
 }
-
+*/
 
 void launch(Plateau niveau, bool *is_reached){
     unsigned int x, y;
@@ -500,19 +442,17 @@ void launch(Plateau niveau, bool *is_reached){
 		exit(1);
 	}
     MLV_resize_image(font, width * niveau->taille.y, height * niveau->taille.x);
-	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->coo_perso.y, niveau->coo_perso.x);
+	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->p1.coo_player.y, niveau->p1.coo_player.x);
     
-	niveau->dir_perso = BAS;
+
 	update_plateau(niveau, array_img, font, width, height);
     while (true) {
-        if(niveau->est_vivant == false){
-            break;
-        }
+
 		if(niveau->p1.is_player_alive == false){
 			break;
 		}
 		
-        check_player_move(niveau, &(niveau->p1));
+        check_player_move(&(niveau->p1));
 		event = MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &state);
 		if(state == MLV_PRESSED){
 			switch(listener(touche, niveau, &(niveau->p1))){
