@@ -18,6 +18,7 @@ Plateau malloc_Niveau (Coordonnees taille){
 }
 
 
+
 void free_Niveau (Plateau niveau){
     
     unsigned int i, j;
@@ -34,7 +35,17 @@ void free_Niveau (Plateau niveau){
     free(niveau);
 }
 
- 
+Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type){
+    Player p;
+    p.coo_player = init_coo;
+    p.dir_player = init_dir;
+    p.speed_player = speed_player_init;
+    p.is_player_alive = true;
+    p.can_player_move = true;
+    p.typePlayer = type;
+    return p;
+}
+
 void init_niveaux(Plateau niveau, Coordonnees taille){
 
     unsigned int i, j;
@@ -235,11 +246,24 @@ void verifie_mouvement_personnage(Plateau niveau){
 	}
 }
 
+void check_player_move(Plateau niveau, Player *p){
+    if(maintenant() >= p->moment_depl_player){
+        p->can_player_move = true;
+    }
+}
+
 bool check_level_reached(Plateau niveau){
+    /* To update with 2 */
     assert(niveau != NULL);
     
     return est_coordonnee_equivalent(niveau->coo_perso, niveau->coo_destination);
 }
+
+bool check_player_reached(Plateau niveau){
+    return est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination);
+}
+
+
 
 void affiche_Niveau (Plateau niveau) {
 

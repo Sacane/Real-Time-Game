@@ -15,6 +15,7 @@
 
 typedef struct player{
 
+    TypeObjet typePlayer;
     Coordonnees coo_player;
     Direction dir_player;
     unsigned long moment_depl_player;
@@ -52,6 +53,8 @@ void free_Niveau (Plateau niveau); /* Libere la memoire prise par un
                                     * Niveau */
 
 
+Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type);
+
 void init_niveaux(Plateau niveau, Coordonnees taille);
 
 
@@ -67,6 +70,7 @@ int move_players(Plateau board, Player* player);
 
 void verifie_mouvement_personnage(Plateau niveau);
 
+void check_player_move(Plateau niveau, Player *p);
 
 /**
  * Renvoi true si l'objet est prêt à rentré en contact avec un mur, false sinon.
@@ -91,6 +95,8 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
 bool est_dans_plateau(Direction direction, Plateau plateau, unsigned int x, unsigned int y);
 
 bool check_level_reached(Plateau niveau);
+
+bool check_player_reached(Plateau niveau);
 
 void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */

@@ -48,8 +48,8 @@ Plateau niveau0() {
     niveau->coo_perso.y = 0;
     niveau->objets[niveau->coo_perso.x][niveau->coo_perso.y].type = PERSONNAGE;
     niveau->allure_perso = une_milliseconde * 100;
-
-
+    niveau->p1 = init_player(niveau->coo_perso, BAS, une_milliseconde * 100, PERSONNAGE);
+    
     return niveau;
 }
 

@@ -300,29 +300,29 @@ static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned i
 	MLV_actualise_window();
 }*/
 
-static void refresh_character(Coordonnees coo_obj, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
+static void refresh_character(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 	
-	switch(board->objets[coo_obj.x][coo_obj.y].type){
+	switch(board->objets[coo_player.x][coo_player.y].type){
 		case PERSONNAGE:
 			switch(board->dir_perso){
 				case HAUT:
-					if(!se_dirige_vers_mur(coo_obj.x + 1, coo_obj.y, HAUT, board)){
-						MLV_draw_partial_image(font, (coo_obj.y) * width, (coo_obj.x + 1) * height, width, height, (coo_obj.y) * width, (coo_obj.x + 1) * height);
+					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, HAUT, board)){
+						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
 					}
 					break;
 				case DROITE:
-					if(!se_dirige_vers_mur(coo_obj.x, coo_obj.y - 1, DROITE, board)){
-						MLV_draw_partial_image(font, (coo_obj.y - 1) * width, (coo_obj.x) * height, width, height, (coo_obj.y - 1) * width, (coo_obj.x) * height);
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, DROITE, board)){
+						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case GAUCHE:
-					if(!se_dirige_vers_mur(coo_obj.x, coo_obj.y + 1, GAUCHE, board)){
-						MLV_draw_partial_image(font, (coo_obj.y + 1) * width, (coo_obj.x) * height, width, height, (coo_obj.y + 1) * width, (coo_obj.x) * height);
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, GAUCHE, board)){
+						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case BAS:
-					if(!se_dirige_vers_mur(coo_obj.x - 1, coo_obj.y, BAS, board)){
-						MLV_draw_partial_image(font, (coo_obj.y) * width, (coo_obj.x - 1) * height, width, height, (coo_obj.y) * width, (coo_obj.x - 1) * height);
+					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, BAS, board)){
+						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
 					}
 					break;
 			}
@@ -331,7 +331,7 @@ static void refresh_character(Coordonnees coo_obj, Plateau board, unsigned int w
 			return;
 		
 	}
-	draw_img(board, array_img, coo_obj.x, coo_obj.y, width, height);
+	draw_img(board, array_img, coo_player.x, coo_player.y, width, height);
 	MLV_actualise_window();
 }
 
@@ -395,6 +395,31 @@ int action_listener(MLV_Keyboard_button button, Plateau board){
 	}
 	if(board->depl_perso_autorise == true){
 		return deplace_joueur(board);
+	}
+	return -1;
+}
+
+int listener(MLV_Keyboard_button button, Plateau board, Player *player){
+	switch(button){
+		case MLV_KEYBOARD_z:
+			player->dir_player = HAUT;
+			break;
+		case MLV_KEYBOARD_q:
+			player->dir_player = GAUCHE;
+			break;
+		case MLV_KEYBOARD_s:
+			player->dir_player = BAS;
+			break;
+		case MLV_KEYBOARD_d:
+			player->dir_player = DROITE;
+			break;
+		case MLV_KEYBOARD_ESCAPE:
+			return 0;
+		default:
+			return -1;
+	}
+	if(player->can_player_move == true){
+		return move_players(board, player);
 	}
 	return -1;
 }
@@ -611,6 +636,93 @@ void launch_gui_bis(Plateau niveau, bool *is_reached){
 				default:
 					break;
 			}
+		}
+        
+        if (un_evenement_est_pret(tas)){
+            e = ote_minimum(tas);
+			obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
+            execute_evenement(e, tas, niveau);
+			if(obj == PROJECTILE){
+				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+			}else if(obj == LANCEUR){
+				refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+			}
+            while(e.moment == tas->valeurs[0].moment){
+                e = ote_minimum(tas);
+				obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
+				execute_evenement(e, tas, niveau);
+				if(obj == PROJECTILE){
+					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+				}else if(obj == LANCEUR){
+					refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+				}
+			}
+			
+            MLV_actualise_window();
+            
+        }   
+        else
+            millisleep (10);
+		if(check_level_reached(niveau)){
+			(*is_reached) = true;
+			break;
+		}
+        
+    }
+    MLV_free_image(font);
+    free_array_img(array_img);
+    MLV_free_window();
+    printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
+    free_Tas(tas);
+    printf("end_free\n");
+}
+
+
+void launch(Plateau niveau, bool *is_reached){
+    unsigned int x, y;
+    int decalage_x, decalage_y;
+    MLV_Image *font;
+    MLV_Image *array_img[11];
+	unsigned int width, height;
+    MLV_Keyboard_button touche;
+	Arbre tas;
+	Evenement e;
+	TypeObjet obj;
+	MLV_Button_state state;
+	MLV_Event event;
+
+	MLV_get_desktop_size(&x, &y);
+    decalage_x = (niveau->taille.y < niveau->taille.x) ? 50 : 25;
+    decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
+	width = (x / (niveau->taille.y)) - decalage_y;
+	height = (y / niveau->taille.x) - decalage_x; 
+
+    tas = construit_Tas (niveau);
+
+    MLV_create_window("RealTimeGame", "Game", x, y);
+
+    init_array_img(array_img);
+    resize_all_img(array_img, width, height);
+    font = MLV_load_image("assets/font.jpeg");
+	if(NULL == font){
+		fprintf(stderr, "Image non-existente ou impossible à charger\n");
+		exit(1);
+	}
+    MLV_resize_image(font, width * niveau->taille.y, height * niveau->taille.x);
+	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->coo_perso.y, niveau->coo_perso.x);
+    
+	niveau->dir_perso = BAS;
+	update_plateau(niveau, array_img, font, width, height);
+    while (true) {
+        if(niveau->est_vivant == false){
+            break;
+        }
+		
+        check_player_move(niveau, &(niveau->p1));
+		event = MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &state);
+		if(state == MLV_PRESSED){
+
+			
 		}
         
         if (un_evenement_est_pret(tas)){
