@@ -184,7 +184,7 @@ static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned i
 }
 
 static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
-	printf("%u, %u\n", coo_player.x, coo_player.y);
+
 	switch(board->objets[coo_player.x][coo_player.y].type){
 		case PERSONNAGE:
 		case PLAYER1:
@@ -248,13 +248,14 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 			return;
 		
 	}
+
 	draw_img(board, array_img, coo_player.x, coo_player.y, width, height);
 	MLV_actualise_window();
 }
 
 
 
-int listener(MLV_Keyboard_button button, Plateau board, Player *player){
+static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	switch(button){
 		case MLV_KEYBOARD_z:
 			board->p1.dir_player = HAUT;
@@ -295,7 +296,6 @@ int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	}
 	
 	if(player->can_player_move == true){
-		printf("AH\n");
 		return move_players(board, player);
 	}
 	return -1;
@@ -317,6 +317,28 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 			break;
 	}
 	return -1;
+}
+
+static void refresh_switch(Plateau niveau, Coordonnees coo_obj, Player player, MLV_Image* font, unsigned int width, unsigned int height){
+	assert(niveau->objets[player.coo_player.x][player.coo_player.y].type == SWITCH);
+	Trigger *trigg;
+	trigg = (Trigger*)malloc(sizeof(Trigger));
+	switch(player.dir_player){
+		case HAUT:
+			memcpy(trigg, niveau->objets[coo_obj.x][coo_obj.y].donnee_suppl, sizeof(Trigger));
+			break;
+		case BAS:
+			break;
+		case DROITE:
+			break;
+		case GAUCHE:
+			break;
+	}
+	memcpy(trigg, niveau->objets[coo_obj.x][coo_obj.y].donnee_suppl, sizeof(Trigger));
+	MLV_draw_partial_image(font, (trigg->coo_door.y) * width, (trigg->coo_door.x) * height, width, height, (trigg->coo_door.y) * width, (trigg->coo_door.x) * height);
+
+
+	free(trigg);
 }
 
 void launch(Plateau niveau, bool *is_reached){
@@ -372,6 +394,7 @@ void launch(Plateau niveau, bool *is_reached){
 			}
 			switch(check_which_player_move(touche)){
 				case 1:
+
 					switch(listener(touche, niveau, &(niveau->p1))){
 						case -1:
 							break;
@@ -389,7 +412,6 @@ void launch(Plateau niveau, bool *is_reached){
 				case 0:
 					switch(listener(touche, niveau, &(niveau->p2))){
 						case -1:
-
 							break;
 						case 0:
 							niveau->is_game_over = true;
@@ -407,7 +429,6 @@ void launch(Plateau niveau, bool *is_reached){
 					break;
 			}
 			
-
 			state = MLV_RELEASED;
 		}
         

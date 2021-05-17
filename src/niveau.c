@@ -97,6 +97,19 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
     return false;
 }
 
+bool from_position_to_switch(Plateau board, Player player){
+    switch(player.dir_player){
+        case HAUT:
+            return board->objets[player.coo_player.x - 1][player.coo_player.y].type == SWITCH;
+        case BAS:
+            return board->objets[player.coo_player.x + 1][player.coo_player.y].type == SWITCH;
+        case DROITE:
+            return board->objets[player.coo_player.x][player.coo_player.y + 1].type == SWITCH;
+        case GAUCHE:
+            return board->objets[player.coo_player.x][player.coo_player.y - 1].type == SWITCH;
+    }
+}
+
 void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
     assert(niveau != NULL);
@@ -169,7 +182,7 @@ bool check_game_over(Plateau board){
 
 int move_players(Plateau niveau, Player *player){
     assert(niveau != NULL);
-
+    Trigger *trigger;
     if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, niveau)){
         return -1;
     }
@@ -195,9 +208,17 @@ int move_players(Plateau niveau, Player *player){
         printf("You just walk into a projectile ! Game OVER.\n");
         return 0;
     }
+    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
+        trigger = (Trigger*)malloc(sizeof(Trigger));
+        memcpy(trigger, niveau->objets[player->coo_player.x][player->coo_player.y].donnee_suppl, sizeof(Trigger));
+        niveau->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
+
+        free(trigger);
+    }
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type != DESTINATION){
         niveau->objets[player->coo_player.x][player->coo_player.y].type = player->typePlayer;
     }
+
     else{
         player->is_player_alive = false;
         return -1;
@@ -278,4 +299,5 @@ void affiche_Niveau (Plateau niveau) {
 		printf("\n");
 	}
 }
+
 

@@ -31,12 +31,11 @@ typedef struct object{
 						* - Generation* si type == LANCEUR
 						* - donnee\_suppl vaut NULL pour les 
 						*   autres types. */
-	int index;
+	
 } Objet;
 
 typedef struct {
 
-	bool is_switch_on;
 	Coordonnees coo_door;
 
 }Trigger;
@@ -81,8 +80,6 @@ TypeObjet str_to_obj(char* type);
 
 /* Renvoi true si les deux objet sont égaux, false sinon */
 bool equals_obj(Objet obj1, Objet obj2);
-
-
 
 
 

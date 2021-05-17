@@ -184,7 +184,9 @@ void launch_command(Plateau niveau, bool *is_reached){
         }
         
         check_player_move(&(niveau->p1));
-        check_player_move(&(niveau->p2));
+        if(niveau->mulptiplayer_mode)
+            check_player_move(&(niveau->p2));
+            
         while((touche = getchar()) != EOF){
             if(niveau->p1.can_player_move == true){
                 switch (touche)

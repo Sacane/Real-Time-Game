@@ -64,6 +64,8 @@ bool check_game_over(Plateau board);
 
 void check_player_move(Player *p);
 
+/*return true si le player va vers un interrupteur, false sinon*/
+bool from_position_to_switch(Plateau board, Player player);
 
 bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
 
