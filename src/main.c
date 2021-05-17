@@ -4,9 +4,6 @@
 #include "../include/opt.h"
 #include "../include/config_stdin.h"
 
-
-
-
 int main(int argc, char* argv[]) {
     
     Plateau niveau = NULL;
@@ -21,7 +18,7 @@ int main(int argc, char* argv[]) {
     if(niveau == NULL){
         niveau = niveau0();
     }
-
+    
     switch(mode){
         case DEBUG:
             main_test();
@@ -43,7 +40,6 @@ int main(int argc, char* argv[]) {
             break;
     }
 
-    
     if(mode == GRAPHIC || mode == COMMAND){
         (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
     }
@@ -53,92 +49,3 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-
-/* Main for replit (without graphic parts)
- * Don't forget to remove "gui.h"
-
-
-
-void command_launch(){
-    init_stdin();
-    Plateau niveau = niveau2();
-    Tas* tas = construit_Tas(niveau);
-    Evenement e;
-	char touche;
-
-    printf("affichage du tas au début : \n");
-    affiche_Niveau(niveau);
-    printf("\n");
-    while (true) {
-        verifie_mouvement_personnage(niveau);
-        while((touche = getchar()) != EOF){
-            if(niveau->depl_perso_autorise == true){
-                switch (touche)
-                {
-                case 'z':
-                    niveau->dir_perso = HAUT;
-                    break;
-                case 's':
-                    niveau->dir_perso = BAS;
-                    break;
-                case 'd':
-                    niveau->dir_perso = DROITE;
-                    break;
-                case 'q':
-                    niveau->dir_perso = GAUCHE;
-                    break;
-                default:
-                    break;
-                }
-                deplace_joueur(niveau);
-            }
-        }
-
-        if ( un_evenement_est_pret(tas)) {
-            e = ote_minimum(tas);
-            execute_evenement(e, tas, niveau);
-            while(e.moment == tas->valeurs[0].moment){
-                e = ote_minimum(tas);
-                execute_evenement(e, tas, niveau);
-            }
-            affiche_Niveau(niveau);
-    		printf("\n");
-        }   
-        else
-            millisleep (10); 
-        if(niveau->est_vivant == false){
-            break;
-        }
-    }
-    free_Tas(tas);
-    free_Niveau(niveau);
-    restaure_stdin();
-}
-
-
-int main(int argc, char* argv[]) {
-    
-    Plateau test;
-    int mode;
-    char* name_file = NULL;
-    mode = COMMAND;
-    name_file = (char*)malloc(sizeof(char) * BUFSIZ);
-    
-    if(argc >= 2){
-        parse_opt(argc, argv, &mode, name_file);
-    }
-    
-    switch(mode){
-        case DEBUG:
-            main_test();
-            break;
-        case COMMAND:
-            command_launch();
-            break;
-        default:
-            break;
-    }
-    
-    free(name_file);
-    return EXIT_SUCCESS;
-}*/

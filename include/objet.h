@@ -20,6 +20,7 @@
 typedef enum {
 	VIDE = 0,          LANCEUR,           MUR,
 	PROJECTILE,        PERSONNAGE,        DESTINATION, PIQUES, PLAYER1, PLAYER2,
+	SWITCH, DOOR,
 } TypeObjet;
 
 typedef struct object{
@@ -31,10 +32,14 @@ typedef struct object{
 						* - donnee\_suppl vaut NULL pour les 
 						*   autres types. */
 	int index;
-} Objet, *Obj;
+} Objet;
 
+typedef struct {
 
+	bool is_switch_on;
+	Coordonnees coo_door;
 
+}Trigger;
 
 
 typedef struct {

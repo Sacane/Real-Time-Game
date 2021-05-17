@@ -43,12 +43,17 @@ Plateau niveau0() {
     niveau->objets[3][8].type = MUR;
     niveau->objets[4][8].type = MUR;
 
-    Coordonnees coo_p1;
+    Coordonnees coo_p1, coo_p2;
     coo_p1.x = 4;
     coo_p1.y = 0;
-    niveau->objets[coo_p1.x][coo_p1.y].type = PERSONNAGE;
-    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PERSONNAGE);
-    niveau->mode = MODE_ONE_PLAYER;
+    coo_p2.x = 3;
+    coo_p2.y = 9;
+    niveau->p2 = init_player(coo_p2, BAS, une_milliseconde * 10, PLAYER2);
+    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
+    niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
+    niveau->mulptiplayer_mode = true;
+    
     return niveau;
 }
 
@@ -103,10 +108,9 @@ Plateau niveau1(){
     Coordonnees coo_p1;
 	coo_p1.x = 0;
     coo_p1.y = 0;
-    niveau->objets[coo_p1.x][coo_p1.y].type = PERSONNAGE;
-
-    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PERSONNAGE);
-    niveau->mode = MODE_ONE_PLAYER;
+    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->objets[coo_p1.x][coo_p1.y].type = niveau->p1.typePlayer;
+    
 
 	return niveau;
 }
@@ -120,7 +124,7 @@ Plateau niveau2(){
     taille_niveau.y = 12;
     niveau = malloc_Niveau(taille_niveau);
     init_niveaux(niveau, taille_niveau);
-
+    
     Generation* gen;
     Generation* gen2;
     Generation* gen3;
@@ -186,12 +190,11 @@ Plateau niveau2(){
     niveau->objets[6][11].type = MUR;
 
     Coordonnees coo_p;
-
 	coo_p.x = 7;
     coo_p.y = 0;
-    niveau->objets[coo_p.x][coo_p.y].type = PERSONNAGE;
-    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PERSONNAGE);
-    niveau->mode = MODE_ONE_PLAYER;
+    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
+
 
 	return niveau;
 
@@ -261,9 +264,9 @@ Plateau niveau3(){
 
 	coo_p.x = 3;
     coo_p.y = 4;
-    niveau->objets[coo_p.x][coo_p.y].type = PERSONNAGE;
-    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PERSONNAGE);
-    niveau->mode = MODE_ONE_PLAYER;
+    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
+    
 
 	return niveau;
 }

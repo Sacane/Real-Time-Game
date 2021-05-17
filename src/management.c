@@ -66,12 +66,17 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
     if(est_coordonnee_equivalent(*pos_projectile, plateau->p1.coo_player)){
         plateau->p1.is_player_alive = false;
     }
+    if(plateau->mulptiplayer_mode){
+        if(est_coordonnee_equivalent(*pos_projectile, plateau->p2.coo_player)){
+            plateau->p2.is_player_alive = false;
+        }
+    }
     free(generation);
 }
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
 static void update_launcher_in_heap(Evenement lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
-    printf("ON ENTRE\n");
+
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
@@ -79,7 +84,6 @@ static void update_launcher_in_heap(Evenement lanceur, Arbre tas, Coordonnees po
     memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
     update_moment = lanceur.moment + generation->intervalle;
     new_launcher.moment = update_moment;
-    printf("actual moment : %lu\n", update_moment);
     new_launcher.coo_obj = lanceur.coo_obj;
     ajoute_evenement(tas, new_launcher);
 
@@ -170,8 +174,8 @@ void launch_command(Plateau niveau, bool *is_reached){
     Evenement e;
 	char touche;
     int success = true;
+    bool moving;
 
-    printf("affichage du tas au début : \n");
     affiche_Niveau(niveau);
     printf("\n");
     while (true) {
@@ -180,29 +184,70 @@ void launch_command(Plateau niveau, bool *is_reached){
         }
         
         check_player_move(&(niveau->p1));
+        check_player_move(&(niveau->p2));
         while((touche = getchar()) != EOF){
             if(niveau->p1.can_player_move == true){
                 switch (touche)
                 {
-                case 'z':
-                    niveau->p1.dir_player = HAUT;
-                    break;
-                case 's':
-                    niveau->p1.dir_player = BAS;
-                    break;
-                case 'd':
-                    niveau->p1.dir_player = DROITE;
-                    break;
-                case 'q':
-                    niveau->p1.dir_player = GAUCHE;
-                    break;
-                default:
-                    break;
+                    case 'z':
+                        niveau->p1.dir_player = HAUT;
+                        moving = true;
+                        break;
+                    case 's':
+                        niveau->p1.dir_player = BAS;
+                        moving = true;
+                        break;
+                    case 'd':
+                        niveau->p1.dir_player = DROITE;
+                        moving = true;
+                        break;
+                    case 'q':
+                        niveau->p1.dir_player = GAUCHE;
+                        moving = true;
+                        break;
+                    default:
+                        moving = false;
+                        break;
                 }
-                if(niveau->p1.can_player_move == true){
+                if(niveau->p1.can_player_move == true && moving == true){
                     success = move_players(niveau, &(niveau->p1));
                     if(!success){
                         break;
+                    }
+                }
+            }
+            if(niveau->mulptiplayer_mode){
+                if(niveau->p2.can_player_move == true){
+                    switch(touche)
+                    {
+                        case 'o':
+                            niveau->p2.dir_player = HAUT;
+                            moving = true;
+                            break;
+                        case 'l':
+                            niveau->p2.dir_player = BAS;
+                            moving = true;
+                            break;
+                        case 'm':
+                            niveau->p2.dir_player = DROITE;
+                            moving = true;
+                            break;
+                        case 'k':
+                            niveau->p2.dir_player = GAUCHE;
+                            moving = true;
+                            break;
+                        default:
+                            moving = false;
+                            break;
+
+                    }
+                    if(niveau->p2.can_player_move && moving)
+                        success = move_players(niveau, &(niveau->p2));
+                    if(success == 0){
+                        break;
+                    }
+                    else if(success == -1){
+                        continue;
                     }
                 }
             }
@@ -226,7 +271,6 @@ void launch_command(Plateau niveau, bool *is_reached){
             (*is_reached) = true;
             break;
         }
-
     }
     free_Tas(tas);
     restaure_stdin();

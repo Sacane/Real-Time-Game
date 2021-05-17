@@ -34,9 +34,9 @@ typedef struct Niveau{
     
     Coordonnees taille; 
     Objet** objets; 
-
+    bool is_game_over;
     Coordonnees coo_destination;
-    int mode;
+    bool mulptiplayer_mode;
     Player p1;
     Player p2;
     
@@ -60,6 +60,7 @@ void init_niveaux(Plateau niveau, Coordonnees taille);
 
 int move_players(Plateau board, Player* player);
 
+bool check_game_over(Plateau board);
 
 void check_player_move(Player *p);
 

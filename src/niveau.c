@@ -8,7 +8,8 @@ Plateau malloc_Niveau (Coordonnees taille){
 
     tmp = (Plateau)malloc(sizeof(Niveau));
     tmp->taille = taille;
-
+    tmp->mulptiplayer_mode = false;
+    tmp->is_game_over = false;
     tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
     for(i = 0; i < taille.x; i++){
       tmp->objets[i] = (Objet*)malloc(sizeof(Objet) * taille.y);
@@ -117,7 +118,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     switch((deplacement)->direction){
 
         case HAUT:
-        
+
             niveau->objets[--coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
@@ -125,7 +126,6 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
             break;
         case BAS:
-            
             
             niveau->objets[++coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
@@ -144,7 +144,6 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
             break;
         case GAUCHE:
-            
             niveau->objets[coordonnees->x][--coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
@@ -156,12 +155,25 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     if(est_coordonnee_equivalent(*coordonnees, niveau->p1.coo_player)){
         niveau->p1.is_player_alive = false;
     }
+    if(niveau->mulptiplayer_mode){
+        if(est_coordonnee_equivalent(*coordonnees, niveau->p2.coo_player)){
+            niveau->p2.is_player_alive = false;
+        }
+    }
+
+}
+
+bool check_game_over(Plateau board){
+    return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive && !board->p2.is_player_alive) : (!board->p1.is_player_alive);
 }
 
 int move_players(Plateau niveau, Player *player){
     assert(niveau != NULL);
 
     if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, niveau)){
+        return -1;
+    }
+    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == DESTINATION){
         return -1;
     }
     niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
@@ -183,12 +195,17 @@ int move_players(Plateau niveau, Player *player){
         printf("You just walk into a projectile ! Game OVER.\n");
         return 0;
     }
-	niveau->objets[player->coo_player.x][player->coo_player.y].type = PERSONNAGE;
+    if(niveau->objets[player->coo_player.x][player->coo_player.y].type != DESTINATION){
+        niveau->objets[player->coo_player.x][player->coo_player.y].type = player->typePlayer;
+    }
+    else{
+        player->is_player_alive = false;
+        return -1;
+    }
     player->can_player_move = false;
     player->moment_depl_player = maintenant() + player->speed_player;
     return 1;
 }
-
 
 void check_player_move(Player *p){
     if(maintenant() >= p->moment_depl_player){
@@ -196,13 +213,9 @@ void check_player_move(Player *p){
     }
 }
 
-
-
 bool check_player_reached(Plateau niveau){
-    return est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination);
+    return (!niveau->mulptiplayer_mode) ? (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination)) : (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination) && (est_coordonnee_equivalent(niveau->p2.coo_player, niveau->coo_destination)));
 }
-
-
 
 void affiche_Niveau (Plateau niveau) {
 
@@ -243,15 +256,24 @@ void affiche_Niveau (Plateau niveau) {
 				break;
 
 			case PERSONNAGE:
+            case PLAYER1:
+            case PLAYER2:
 				printf("P");
 				break;
 			case DESTINATION:
 				printf("D");
 				break;
+            case SWITCH:
+                printf("I");
+                break;
+            case DOOR:
+                printf("§");
+                break;
 			default:
 				printf(".");
 				break;
 			}
+
 		}
 		printf("\n");
 	}

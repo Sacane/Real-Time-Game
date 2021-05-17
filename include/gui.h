@@ -27,7 +27,11 @@ typedef enum {
     PROJECTILE_WEST,
     WALL,
     LAUNCHER,
-    DEST
+    DEST,
+    PLAYER2_NORTH_IMG,
+    PLAYER2_SOUTH_IMG,
+    PLAYER2_EAST_IMG,
+    PLAYER2_WEST_IMG,
 }typeImage;
 
 void init_array_img(MLV_Image *array_img[]);
