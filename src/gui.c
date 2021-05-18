@@ -243,7 +243,6 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 				return;
 			}
 			break;
-
 		default:
 			return;
 		
@@ -296,10 +295,16 @@ static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	}
 	
 	if(player->can_player_move == true){
-		return move_players(board, player);
+		return 1;
 	}
+	if(player->is_player_alive == false){
+		return -1;
+	}
+
+
 	return -1;
 }		
+
 /*return 1 if the player who move is the player1, 0 if it's the player 2*/
 static int check_which_player_move(MLV_Keyboard_button touche){
 	switch(touche){
@@ -319,26 +324,41 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 	return -1;
 }
 
-static void refresh_switch(Plateau niveau, Coordonnees coo_obj, Player player, MLV_Image* font, unsigned int width, unsigned int height){
-	assert(niveau->objets[player.coo_player.x][player.coo_player.y].type == SWITCH);
+static void refresh_switch(Plateau niveau, Player player, MLV_Image* font, unsigned int width, unsigned int height){
+
 	Trigger *trigg;
 	trigg = (Trigger*)malloc(sizeof(Trigger));
 	switch(player.dir_player){
 		case HAUT:
-			memcpy(trigg, niveau->objets[coo_obj.x][coo_obj.y].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
 			break;
 		case BAS:
+			memcpy(trigg, niveau->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
 			break;
 		case DROITE:
+			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
 			break;
 		case GAUCHE:
+			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
 			break;
 	}
-	memcpy(trigg, niveau->objets[coo_obj.x][coo_obj.y].donnee_suppl, sizeof(Trigger));
+
+	
 	MLV_draw_partial_image(font, (trigg->coo_door.y) * width, (trigg->coo_door.x) * height, width, height, (trigg->coo_door.y) * width, (trigg->coo_door.x) * height);
 
-
 	free(trigg);
+}
+
+static void erase_player_after_reached(Plateau board, unsigned int width, unsigned int height, MLV_Image* font){
+	if(!board->p1.is_player_alive){
+		MLV_draw_partial_image(font, (board->p1.coo_player.y) * width, (board->p1.coo_player.x) * height, width, height, board->p1.coo_player.y * width, (board->p1.coo_player.x) * height);
+	}
+	if(board->mulptiplayer_mode){
+		if(!board->p2.is_player_alive){
+			MLV_draw_partial_image(font, (board->p2.coo_player.y) * width, (board->p2.coo_player.x) * height, width, height, board->p2.coo_player.y * width, (board->p2.coo_player.x) * height);
+		}
+	}
+	MLV_actualise_window();
 }
 
 void launch(Plateau niveau, bool *is_reached){
@@ -394,8 +414,14 @@ void launch(Plateau niveau, bool *is_reached){
 			}
 			switch(check_which_player_move(touche)){
 				case 1:
-
-					switch(listener(touche, niveau, &(niveau->p1))){
+					if(listener(touche, niveau, &(niveau->p1)) == -1){
+						break;
+					}
+					if(going_to_obj(niveau, niveau->p1, DESTINATION)){
+						niveau->p2.is_player_alive = false;
+						erase_player_after_reached(niveau, width, height, font);
+					}
+					switch(move_players(niveau, &(niveau->p1))){
 						case -1:
 							break;
 						case 0:
@@ -403,6 +429,7 @@ void launch(Plateau niveau, bool *is_reached){
 							break;
 						case 1:
 							refresh_player(niveau->p1.coo_player, niveau, width, height, array_img, font);
+							
 							break;
 						default:
 							break;
@@ -410,7 +437,14 @@ void launch(Plateau niveau, bool *is_reached){
 					break;
 
 				case 0:
-					switch(listener(touche, niveau, &(niveau->p2))){
+					if(listener(touche, niveau, &(niveau->p2))== -1){
+						break;
+					}
+					if(going_to_obj(niveau, niveau->p2, DESTINATION)){
+						niveau->p2.is_player_alive = false;
+						erase_player_after_reached(niveau, width, height, font);
+					}
+					switch(move_players(niveau, &(niveau->p2))){
 						case -1:
 							break;
 						case 0:
@@ -418,6 +452,7 @@ void launch(Plateau niveau, bool *is_reached){
 							break;
 						case 1:
 							refresh_player(niveau->p2.coo_player, niveau, width, height, array_img, font);
+							
 							break;
 						default:
 							break;

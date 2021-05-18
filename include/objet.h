@@ -64,11 +64,19 @@ typedef struct {
 } Deplacement;
 
 
-/*
- * modifie les propriété de l'objet obj en lui attribuant le déplacement en tant que projectile
-*/
+/**
+ * Function that modifies the properties of the object 'obj' by assigning it the displacement as a projectile
+ * @param argc : int, the number of the argument (of the chosen option)
+ * @param obj : Object*, object to modify
+ * @param deplacement : Deplacement*, additional data of the object
+ */
 void remplis_projectile(Objet* obj, Deplacement* deplacement);
 
+/**
+ * Function to print the type of the object
+ * @param object : Object, the type of the object
+ * function for @test
+ */
 void print_kind_object(Objet object);
 
 /*
@@ -76,9 +84,20 @@ void print_kind_object(Objet object);
 */
 void remplis_lanceur(Objet* lanceur, Generation* gen);
 
+
+/**
+ * Function to convert a string into an objects (type)
+ * @param type : char*, a string of characters 
+ * @return TypeObjet, the type of the object 
+ */
 TypeObjet str_to_obj(char* type);
 
-/* Renvoi true si les deux objet sont égaux, false sinon */
+/**
+ * Function to check if two objects are equal
+ * @param obj1 : Object, an object
+ * @param obj2 : Object, an object
+ * @return bool, true if both objects are equal, false otherwise
+ */
 bool equals_obj(Objet obj1, Objet obj2);
 
 

@@ -97,17 +97,57 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
     return false;
 }
 
-bool from_position_to_switch(Plateau board, Player player){
+bool going_to_switch(Plateau board, Player player){
+
     switch(player.dir_player){
         case HAUT:
-            return board->objets[player.coo_player.x - 1][player.coo_player.y].type == SWITCH;
+            if(board->objets[player.coo_player.x - 1][player.coo_player.y].type == SWITCH){
+                return true;
+            }
+            break;
         case BAS:
-            return board->objets[player.coo_player.x + 1][player.coo_player.y].type == SWITCH;
-        case DROITE:
-            return board->objets[player.coo_player.x][player.coo_player.y + 1].type == SWITCH;
+            if(board->objets[player.coo_player.x + 1][player.coo_player.y].type == SWITCH){
+                return true;
+            }
+            break;
         case GAUCHE:
-            return board->objets[player.coo_player.x][player.coo_player.y - 1].type == SWITCH;
+            if(board->objets[player.coo_player.x][player.coo_player.y - 1].type == SWITCH){
+                return true;
+            }
+            break;
+        case DROITE:
+            if(board->objets[player.coo_player.x][player.coo_player.y + 1].type == SWITCH){
+                return true;
+            }
+            break;
     }
+    return false;
+}
+
+bool going_to_obj(Plateau board, Player player, TypeObjet type){
+    switch(player.dir_player){
+        case HAUT:
+            if(board->objets[player.coo_player.x - 1][player.coo_player.y].type == type){
+                return true;
+            }
+            break;
+        case BAS:
+            if(board->objets[player.coo_player.x + 1][player.coo_player.y].type == type){
+                return true;
+            }
+            break;
+        case GAUCHE:
+            if(board->objets[player.coo_player.x][player.coo_player.y - 1].type == type){
+                return true;
+            }
+            break;
+        case DROITE:
+            if(board->objets[player.coo_player.x][player.coo_player.y + 1].type == type){
+                return true;
+            }
+            break;
+    }
+    return false;
 }
 
 void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
@@ -124,7 +164,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
         free(deplacement);
         niveau->objets[coordonnees->x][coordonnees->y].type = VIDE;
-        
+
         return;
     }
     
