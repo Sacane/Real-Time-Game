@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     
-    Plateau niveau = NULL;
+    Board niveau = NULL;
     int mode;
     char* name_file = NULL;
     mode = COMMAND;
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     bool is_level_reached = false;
     
     opt_management(argc, argv, &mode, name_file, &niveau);
-    
+
     if(niveau == NULL){
         niveau = niveau1test();
     }

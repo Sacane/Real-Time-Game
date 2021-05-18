@@ -1,9 +1,9 @@
 #include "../include/parser.h"
 
 
-Plateau read_file(char* name_file){
+Board read_file(char* name_file){
 
-    Plateau res;
+    Board res;
     unsigned x, y, x2, y2;
     unsigned long allure, intervalle;
     Coordonnees size_level, coo_player, coo_switch;
@@ -40,21 +40,21 @@ Plateau read_file(char* name_file){
             Trigger *trigger;
             Generation *gen;
             Coordonnees coo_door;
-            case LANCEUR:
+            case LAUNCHER:
                 gen = (Generation*)malloc(sizeof(Generation));
                 printf("Filling of launchers...\n");
                 fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
-                res->objets[x][y].type = LANCEUR;
+                res->objets[x][y].type = LAUNCHER;
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
                 res->objets[x][y].donnee_suppl = gen;
                 printf("... OK, datas check : interval %lu, allure : %lu\n", intervalle, allure);
                 break;
 
-            case MUR:
+            case WALL:
                 printf("Filling of walls...\n");
                 fscanf(in, " %u x %u", &x, &y);
-                res->objets[x][y].type = MUR;
+                res->objets[x][y].type = WALL;
                 res->objets[x][y].donnee_suppl = NULL;
                 printf("OK\n");
                 break;

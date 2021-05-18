@@ -51,7 +51,7 @@ void free_array_img(MLV_Image *array[]){
 	}
 }
 
-static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
+static void draw_img(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
 	int x_height, y_height;
 	x_height = y_source * width;
 	y_height = x_source * height;
@@ -76,7 +76,7 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 					break;
 			}
 			break;
-		case LANCEUR:
+		case LAUNCHER:
 			MLV_draw_image(array_img[LAUNCHER_IMG], x_height, y_height);
 			break;
 		case PLAYER1:
@@ -111,7 +111,7 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 					break;
 			}
 			break;
-		case MUR:
+		case WALL:
 		case DOOR:
 			MLV_draw_image(array_img[WALL_IMG], x_height, y_height);
 			break;
@@ -127,7 +127,7 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 	}
 }
 
-void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
+void update_plateau(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
 
 	unsigned int i, j;
 
@@ -140,7 +140,7 @@ void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, uns
 	MLV_actualise_window();
 }
 
-static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
+static void refresh_projectile(Coordonnees coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
 	
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
@@ -165,7 +165,7 @@ static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int
 	}
 }
 
-static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
+static void refresh_launcher(Coordonnees coo_launcher, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
 	Direction direction;
 
 	for(direction = NORTH; direction <= EAST; direction++){
@@ -188,7 +188,7 @@ static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned i
 	}
 }
 
-static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
+static void refresh_player(Coordonnees coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 
 	switch(board->objets[coo_player.x][coo_player.y].type){
 		case PLAYER1:
@@ -258,7 +258,7 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 
 
 
-static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
+static int listener(MLV_Keyboard_button button, Board board, Player *player){
 	printf("Listener\n");
 	switch(button){
 		case MLV_KEYBOARD_z:
@@ -333,7 +333,7 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 	return -1;
 }
 
-static void refresh_switch(Plateau niveau, Player player, MLV_Image* font, unsigned int width, unsigned int height){
+static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigned int width, unsigned int height){
 
 	Trigger *trigg;
 	trigg = (Trigger*)malloc(sizeof(Trigger));
@@ -358,7 +358,7 @@ static void refresh_switch(Plateau niveau, Player player, MLV_Image* font, unsig
 	free(trigg);
 }
 
-static void erase_player_after_reached(Plateau board, unsigned int width, unsigned int height, MLV_Image* font){
+static void erase_player_after_reached(Board board, unsigned int width, unsigned int height, MLV_Image* font){
 	if(!board->p1.is_player_alive){
 		MLV_draw_partial_image(font, (board->p1.coo_player.y) * width, (board->p1.coo_player.x) * height, width, height, board->p1.coo_player.y * width, (board->p1.coo_player.x) * height);
 	}
@@ -370,7 +370,7 @@ static void erase_player_after_reached(Plateau board, unsigned int width, unsign
 	MLV_actualise_window();
 }
 
-void launch(Plateau niveau, bool *is_reached){
+void launch(Board niveau, bool *is_reached){
     unsigned int x, y;
     int decalage_x, decalage_y;
     MLV_Image *font;
@@ -506,7 +506,7 @@ void launch(Plateau niveau, bool *is_reached){
             execute_event(e, tas, niveau);
 			if(obj == PROJECTILE){
 				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
-			}else if(obj == LANCEUR){
+			}else if(obj == LAUNCHER){
 				refresh_launcher(e.coo_obj, niveau, width, height, array_img);
 			}
             while(e.moment == tas->valeurs[0].moment){
@@ -515,7 +515,7 @@ void launch(Plateau niveau, bool *is_reached){
 				execute_event(e, tas, niveau);
 				if(obj == PROJECTILE){
 					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
-				}else if(obj == LANCEUR){
+				}else if(obj == LAUNCHER){
 					refresh_launcher(e.coo_obj, niveau, width, height, array_img);
 				}
 			}

@@ -1,7 +1,7 @@
 #include "../include/opt.h"
 
 
-void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau *niveau){
+void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *niveau){
     int c, level_number;
     int option_index = 0;
     if(argc < 2){

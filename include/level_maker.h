@@ -17,26 +17,26 @@
 /**
  * Function to initialize a game board (level 0)
  */
-Plateau niveau0();
+Board niveau0();
 
-Plateau niveau1test();
+Board niveau1test();
 
 /**
  * Function to initialize a game board (level 1)
  */
-Plateau niveau1();
+Board niveau1();
 
 
 /**
  * Function to initialize a game board (level 2)
  */
-Plateau niveau2();
+Board niveau2();
  
 
 /**
  * Function to initialize a game board (level 3)
  */
-Plateau niveau3();
+Board niveau3();
 
 
 

@@ -30,7 +30,7 @@ typedef struct player{
 
 }Player;
 
-typedef struct Niveau{
+typedef struct Level{
     
     Coordonnees taille; 
     Objet** objets; 
@@ -40,7 +40,7 @@ typedef struct Niveau{
     Player p1;
     Player p2;
     
-} Niveau, *Plateau;
+} Level, *Board;
 
 
 
@@ -56,7 +56,7 @@ void affiche_coordonnee(Coordonnees coordonnee);
  * @param size : Coordinates, size of the board
  * @return : Board, a game board  
  */
-Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
+Board malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
                                              * pour obtenir un 
                                              * Niveau* de la taille 
                                              * donnee */
@@ -65,7 +65,7 @@ Plateau malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
  * Function that frees the memory taken by a level
  * @param level : Board, level of the board
  */
-void free_Niveau (Plateau niveau); /* Libere la memoire prise par un
+void free_Niveau (Board niveau); /* Libere la memoire prise par un
                                     * Niveau */
 
 
@@ -76,13 +76,13 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
  * @param level : Board, a level of game
  * @param size : Coordinates, coordinates of the game board
  */
-void init_niveaux(Plateau niveau, Coordonnees taille);
+void init_niveaux(Board niveau, Coordonnees taille);
 
-int move_players(Plateau board, Player* player);
+int move_players(Board board, Player* player);
 
-bool check_game_over(Plateau board);
+bool check_game_over(Board board);
 
-bool check_victory(Plateau board);
+bool check_victory(Board board);
 
 /**
  * Function that verify the player's movement
@@ -91,9 +91,9 @@ bool check_victory(Plateau board);
 void check_player_move(Player *p);
 
 /*return true si le player va vers un interrupteur, false sinon*/
-bool going_to_obj(Plateau board, Player player, TypeObjet type);
+bool going_to_obj(Board board, Player player, TypeObjet type);
 
-void trigger_switch(Plateau board, Player player);
+void trigger_switch(Board board, Player player);
 
 /**
  * Function that verify if two coordinates are equals or not
@@ -109,7 +109,7 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
  * @param level : Board, a game board
  * @param coordinates : Coordinates*, coordinates of the projectile
  */
-void deplace_projectile(Plateau niveau, Coordonnees *coordonnees);
+void deplace_projectile(Board niveau, Coordonnees *coordonnees);
 
 /**
  * Function to check if an object is heading towards the wall 
@@ -118,21 +118,21 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees);
  * @param direction : Direction, the direction of the object 
  * @return bool, true if the object is heading towards the well, false otherwise
  */
-bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau);
+bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Board Board);
 
 /**
  * Function to check if a level has been passed / reached
  * @param level : Board, the game board
  * @return bool, true if the level has been reached, false otherwise
  */
-bool check_player_reached(Plateau niveau);
+bool check_player_reached(Board niveau);
 
 
 /**
  * Fonction that print in the terminal the level given in argument
  * @param level : Board, the game board
  */
-void affiche_Niveau (Plateau niveau); /* Affiche dans le terminal le
+void affiche_Niveau (Board niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */
 
 

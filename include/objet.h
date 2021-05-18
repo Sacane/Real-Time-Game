@@ -18,7 +18,7 @@
 /* ======== Definition du type `Objet` ====================================== */
 
 typedef enum {
-	VIDE = 0,          LANCEUR,           MUR,
+	VIDE = 0,          LAUNCHER,           WALL,
 	PROJECTILE,   DESTINATION, PIQUES, PLAYER1, PLAYER2,
 	SWITCH, DOOR,
 } TypeObjet;

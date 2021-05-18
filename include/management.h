@@ -22,7 +22,7 @@
  * @param coordinates : Coordinates, the coordinates of the player
  * @return Tree, a pointer to a heap
  */
-Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
+Arbre construit_Tas(Board niveau); /* Construit un Tas contenant les
                                      * Evenements initiaux d'un 
                                      * Niveau */
 
@@ -34,7 +34,7 @@ Arbre construit_Tas(Plateau niveau); /* Construit un Tas contenant les
  * @param pos_launcher : Coordinates, coordinates of laucher
  * @param previous_launcher : Event, the player event
  */
-void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Event ancien_lanceur);
+void declenche_lanceur(Board niveau, Arbre tas, Coordonnees pos_lanceur, Event ancien_lanceur);
 
 
 /**
@@ -44,15 +44,15 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Event
  * @param pos_projectile : Coordinates, coordinates of a projectile
  * @param projectile : Event, the projectile event
  */
-void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Event projectile); 
+void declenche_projectile(Arbre tas, Board niveau, Coordonnees pos_projectile, Event projectile); 
 
 /* Execute un Event , ce qui peut consister a deplacer un
 * objet dans le Niveau , verifier si la partie est terminee,
 * ajouter de nouveaux Events au Tas , etc. */
-void execute_event ( Event e, Arbre tas, Niveau* niveau);
+void execute_event ( Event e, Arbre tas, Board niveau);
 
-void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur);
+void creer_projectile_selon_direction(Board plateau, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur);
 
-void launch_command(Plateau niveau, bool *is_reached);
+void launch_command(Board niveau, bool *is_reached);
 
 #endif

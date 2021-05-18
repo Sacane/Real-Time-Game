@@ -9,12 +9,12 @@ void remplis_projectile(Objet* obj, Deplacement* deplacement){
     obj->donnee_suppl = deplacement;
 }
 
-void remplis_lanceur(Objet* lanceur, Generation* gen){
+void remplis_lanceur(Objet* launcher, Generation* gen){
 
     assert(gen != NULL);
 
-    lanceur->type = LANCEUR;
-    lanceur->donnee_suppl = gen;
+    launcher->type = LAUNCHER;
+    launcher->donnee_suppl = gen;
 }
 
 bool equals_obj(Objet obj1, Objet obj2){
@@ -52,10 +52,10 @@ TypeObjet str_to_obj(char* type){
         return PROJECTILE;
     }
     if(strcmp(type, "LANCEUR") == 0){
-        return LANCEUR;
+        return LAUNCHER;
     }
     if(strcmp(type, "MUR") == 0){
-        return MUR;
+        return WALL;
     }
     if(strcmp(type, "SWITCH") == 0){
         return SWITCH;

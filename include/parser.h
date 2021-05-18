@@ -18,9 +18,9 @@
 /**
  * Function to read a given file
  * @param name_file : char*, a string of characters
- * @return : Board, a game board  
+ * @return : Board, a game board
  */
-Plateau read_file(char* name_file);
+Board read_file(char* name_file);
 
 
 #endif

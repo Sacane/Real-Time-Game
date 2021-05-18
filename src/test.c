@@ -122,7 +122,7 @@ static bool test_ote_minimum(int *total_test){
 
 static bool test_contruit_tas(int *total_test){
     *total_test += 1;
-	Plateau niveau = niveau0();
+	Board niveau = niveau0();
     Arbre arbre;
     
     Coordonnees lanceur1;
@@ -168,12 +168,12 @@ static bool test_contruit_tas(int *total_test){
 /*
     - Tester si l'ancien coordonnée du projectile à bien comme type "VIDE"
     - Tester si la nouvelle coordonnée dans le niveau contient bien le projectile
-    - Tester si lorsqu'il y a un mur, le projectile est bien effacé du plateau
+    - Tester si lorsqu'il y a un mur, le projectile est bien effacé du Board
 */
 static bool test_deplace_projectile_NORTH(int *total_test){
 
     *total_test += 1;
-	Plateau niveau = niveau0();
+	Board niveau = niveau0();
 	Objet objet; 
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
@@ -204,7 +204,7 @@ static bool test_deplace_projectile_NORTH(int *total_test){
 
     deplace_projectile(niveau, &new_coord);
 
-    if(niveau->objets[1][2].type != MUR){
+    if(niveau->objets[1][2].type != WALL){
         printf("Le mur a été modifié par un projectile (NORTH) !\n");
         return false;
     }
@@ -233,7 +233,7 @@ static bool test_deplace_projectile_NORTH(int *total_test){
 static bool test_deplace_projectile_SOUTH(int *total_test){
 
 	*total_test += 1;
-    Plateau niveau = niveau0();
+    Board niveau = niveau0();
     Objet objet;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(dep);
@@ -276,7 +276,7 @@ static bool test_deplace_projectile_SOUTH(int *total_test){
 static bool test_deplace_projectile_EAST(int *total_test){
 
     *total_test += 1;
-	Plateau niveau = niveau0();
+	Board niveau = niveau0();
 	Objet objet;
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
@@ -323,7 +323,7 @@ static bool test_deplace_projectile_EAST(int *total_test){
 static bool test_deplace_projectile_WEST(int *total_test){
 
 	*total_test += 1;
-	Plateau niveau = niveau0();
+	Board niveau = niveau0();
 	Objet objet; 
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
@@ -382,7 +382,7 @@ static bool test_equals_heap(Arbre heap, Coordonnees remaining){
 
 static bool test_declenche_lanceur(int *total_test){
     *total_test += 1;
-    Plateau niveau = niveau0();
+    Board niveau = niveau0();
     Arbre tas;
     Coordonnees eval;
     tas = construit_Tas(niveau);
@@ -395,7 +395,7 @@ static bool test_declenche_lanceur(int *total_test){
 
         e = ote_minimum(tas);
 
-    }while(niveau->objets[e.coo_obj.x][e.coo_obj.y].type != LANCEUR);
+    }while(niveau->objets[e.coo_obj.x][e.coo_obj.y].type != LAUNCHER);
 
     declenche_lanceur(niveau, tas, e.coo_obj, e);
 
@@ -435,7 +435,7 @@ static bool test_declenche_lanceur(int *total_test){
 	
 	*total_test += 1;
 	Arbre tas;
-	Plateau niveau = niveau0();
+	Board niveau = niveau0();
 
     Evenement ev;
 

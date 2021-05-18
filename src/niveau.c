@@ -1,12 +1,12 @@
 #include "../include/niveau.h"
 #include <string.h>
 
-Plateau malloc_Niveau (Coordonnees taille){
+Board malloc_Niveau (Coordonnees taille){
 
-    Plateau tmp;
+    Board tmp;
     unsigned int i;
 
-    tmp = (Plateau)malloc(sizeof(Niveau));
+    tmp = (Board)malloc(sizeof(Level));
     tmp->taille = taille;
     tmp->mulptiplayer_mode = false;
     tmp->is_game_over = false;
@@ -19,7 +19,7 @@ Plateau malloc_Niveau (Coordonnees taille){
 
 
 
-void free_Niveau (Plateau niveau){
+void free_Niveau (Board niveau){
     
     unsigned int i, j;
 
@@ -47,7 +47,7 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
     return p;
 }
 
-void init_niveaux(Plateau niveau, Coordonnees taille){
+void init_niveaux(Board niveau, Coordonnees taille){
 
     unsigned int i, j;
     for(i = 0; i < taille.x; i++){
@@ -67,35 +67,35 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
     return (first.y == second.y) && (first.x == second.x);
 }
 
-bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau){
+bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Board board){
     
-    if((x <= 0 && direction == NORTH) || (x >= plateau->taille.x-1 && direction == SOUTH)||
-    (y <= 0 && direction == WEST) || (y >= plateau->taille.y - 1 && direction == EAST)){
+    if((x <= 0 && direction == NORTH) || (x >= board->taille.x-1 && direction == SOUTH)||
+    (y <= 0 && direction == WEST) || (y >= board->taille.y - 1 && direction == EAST)){
         
         return true;
     }
     switch(direction){
         case NORTH:
-            if(plateau->objets[x-1][y].type == MUR || 
-            plateau->objets[x-1][y].type == DOOR){
+            if(board->objets[x-1][y].type == WALL || 
+            board->objets[x-1][y].type == DOOR){
                 return true;
             }
             break;
         case SOUTH:
-            if(plateau->objets[x+1][y].type == MUR || 
-            plateau->objets[x+1][y].type == DOOR){
+            if(board->objets[x+1][y].type == WALL || 
+            board->objets[x+1][y].type == DOOR){
                 return true;
             }
             break;
         case WEST:
-            if(plateau->objets[x][y-1].type == MUR || 
-            plateau->objets[x][y-1].type == DOOR){
+            if(board->objets[x][y-1].type == WALL || 
+            board->objets[x][y-1].type == DOOR){
                 return true;
             }
             break;
         case EAST:
-            if(plateau->objets[x][y+1].type == MUR || 
-            plateau->objets[x][y+1].type == DOOR){
+            if(board->objets[x][y+1].type == WALL || 
+            board->objets[x][y+1].type == DOOR){
                 return true;
             }
             break;
@@ -104,7 +104,7 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
     return false;
 }
 
-bool going_to_switch(Plateau board, Player player){
+bool going_to_switch(Board board, Player player){
 
     switch(player.dir_player){
         case NORTH:
@@ -131,7 +131,7 @@ bool going_to_switch(Plateau board, Player player){
     return false;
 }
 
-bool going_to_obj(Plateau board, Player player, TypeObjet type){
+bool going_to_obj(Board board, Player player, TypeObjet type){
     switch(player.dir_player){
         case NORTH:
             if(board->objets[player.coo_player.x - 1][player.coo_player.y].type == type){
@@ -157,7 +157,7 @@ bool going_to_obj(Plateau board, Player player, TypeObjet type){
     return false;
 }
 
-void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
+void deplace_projectile(Board niveau, Coordonnees *coordonnees){
     
     assert(niveau != NULL);
     assert(niveau->objets[coordonnees->x][coordonnees->y].type == PROJECTILE);
@@ -225,7 +225,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
 }
 
-bool check_victory(Plateau board){
+bool check_victory(Board board){
     if(board->mulptiplayer_mode){
         if(board->p1.has_player_win && board->p2.has_player_win){
             return true;
@@ -239,11 +239,11 @@ bool check_victory(Plateau board){
     return false;
 }
 
-bool check_game_over(Plateau board){
+bool check_game_over(Board board){
     return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive || !board->p2.is_player_alive) : (!board->p1.is_player_alive);
 }
 
-int move_players(Plateau niveau, Player *player){
+int move_players(Board niveau, Player *player){
     assert(niveau != NULL);
 
     Trigger *trigger;
@@ -301,11 +301,11 @@ void check_player_move(Player *p){
     }
 }
 
-bool check_player_reached(Plateau niveau){
+bool check_player_reached(Board niveau){
     return (!niveau->mulptiplayer_mode) ? (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination)) : (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination) && (est_coordonnee_equivalent(niveau->p2.coo_player, niveau->coo_destination)));
 }
 
-void trigger_switch(Plateau board, Player player){
+void trigger_switch(Board board, Player player){
     Trigger *trigger;
     trigger = (Trigger*)malloc(sizeof(Trigger));
     switch(player.dir_player){
@@ -328,7 +328,7 @@ void trigger_switch(Plateau board, Player player){
     free(trigger);
 }
 
-void affiche_Niveau (Plateau niveau) {
+void affiche_Niveau (Board niveau) {
 
 	unsigned int i, j;
     Deplacement *dep;
@@ -340,10 +340,10 @@ void affiche_Niveau (Plateau niveau) {
 			case VIDE: 
 				printf(".");
 				break;
-			case LANCEUR: 
+			case LAUNCHER: 
 				printf("O");
 				break;
-			case MUR: 
+			case WALL: 
 				printf("#");
 				break;
 			

@@ -58,7 +58,7 @@ void free_array_img(MLV_Image *array[]);
  * @param height : int, the height of the game board
  * @param font : MLV_Image *
  */
-void init_plateau(Plateau niveau, int height, MLV_Image *font);
+void init_Board(Board niveau, int height, MLV_Image *font);
 
 
 /**
@@ -69,7 +69,7 @@ void init_plateau(Plateau niveau, int height, MLV_Image *font);
  * @param width : unsigned int, width of the game board
  * @param height : unsigned int, height of the game board
  */
-void update_plateau(Plateau niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height);
+void update_Board(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height);
 
 
 /**
@@ -94,14 +94,14 @@ void resize_all_img(MLV_Image* array_img[],  int width, int height);
  * @param board : Board, the game board
  * @return int, the action given
  */
-int action_listener(MLV_Keyboard_button button, Plateau board);
+int action_listener(MLV_Keyboard_button button, Board board);
 
 /**
  * DESCRIPTION
  * @param level : Board, the game board
  * @param is_reached : bool*,
  */
-void launch(Plateau niveau, bool *is_reached);
+void launch(Board niveau, bool *is_reached);
 
 /*void gui_launcher(Board gameboard, bool *is_reached);*/
 
