@@ -54,9 +54,6 @@ TypeObjet str_to_obj(char* type){
     if(strcmp(type, "LANCEUR") == 0){
         return LANCEUR;
     }
-    if(strcmp(type, "PERSONNAGE") == 0){
-        return PERSONNAGE;
-    }
     if(strcmp(type, "MUR") == 0){
         return MUR;
     }

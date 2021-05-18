@@ -19,7 +19,7 @@
 
 typedef enum {
 	VIDE = 0,          LANCEUR,           MUR,
-	PROJECTILE,        PERSONNAGE,        DESTINATION, PIQUES, PLAYER1, PLAYER2,
+	PROJECTILE,   DESTINATION, PIQUES, PLAYER1, PLAYER2,
 	SWITCH, DOOR,
 } TypeObjet;
 
@@ -49,10 +49,10 @@ typedef struct {
 
 
 typedef enum { 
-	HAUT,              
-	GAUCHE, 
-	BAS,               
-	DROITE
+	NORTH,              
+	WEST, 
+	SOUTH,               
+	EAST,
 } Direction;
 
 

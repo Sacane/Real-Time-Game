@@ -77,7 +77,7 @@ Plateau read_file(char* name_file){
                 coo_player.x = x;
                 coo_player.y = y;
                 printf(".");
-                res->p1 = init_player(coo_player, BAS, une_milliseconde * allure_player, PLAYER1);
+                res->p1 = init_player(coo_player, SOUTH, une_milliseconde * allure_player, PLAYER1);
                 printf(".");
                 res->objets[coo_player.x][coo_player.y].type = PLAYER1;
                 printf("OK\n");
@@ -90,7 +90,7 @@ Plateau read_file(char* name_file){
                 coo_player.x = x;
                 coo_player.y = y;
                 printf(".");
-                res->p2 = init_player(coo_player, BAS, une_milliseconde * allure_player, PLAYER2);
+                res->p2 = init_player(coo_player, SOUTH, une_milliseconde * allure_player, PLAYER2);
                 printf(".");
                 res->objets[coo_player.x][coo_player.y].type = PLAYER2;
                 printf("OK\n");

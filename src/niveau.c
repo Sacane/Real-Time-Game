@@ -69,31 +69,31 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
 
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau){
     
-    if((x <= 0 && direction == HAUT) || (x >= plateau->taille.x-1 && direction == BAS)||
-    (y <= 0 && direction == GAUCHE) || (y >= plateau->taille.y - 1 && direction == DROITE)){
+    if((x <= 0 && direction == NORTH) || (x >= plateau->taille.x-1 && direction == SOUTH)||
+    (y <= 0 && direction == WEST) || (y >= plateau->taille.y - 1 && direction == EAST)){
         
         return true;
     }
     switch(direction){
-        case HAUT:
+        case NORTH:
             if(plateau->objets[x-1][y].type == MUR || 
             plateau->objets[x-1][y].type == DOOR){
                 return true;
             }
             break;
-        case BAS:
+        case SOUTH:
             if(plateau->objets[x+1][y].type == MUR || 
             plateau->objets[x+1][y].type == DOOR){
                 return true;
             }
             break;
-        case GAUCHE:
+        case WEST:
             if(plateau->objets[x][y-1].type == MUR || 
             plateau->objets[x][y-1].type == DOOR){
                 return true;
             }
             break;
-        case DROITE:
+        case EAST:
             if(plateau->objets[x][y+1].type == MUR || 
             plateau->objets[x][y+1].type == DOOR){
                 return true;
@@ -107,22 +107,22 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Pla
 bool going_to_switch(Plateau board, Player player){
 
     switch(player.dir_player){
-        case HAUT:
+        case NORTH:
             if(board->objets[player.coo_player.x - 1][player.coo_player.y].type == SWITCH){
                 return true;
             }
             break;
-        case BAS:
+        case SOUTH:
             if(board->objets[player.coo_player.x + 1][player.coo_player.y].type == SWITCH){
                 return true;
             }
             break;
-        case GAUCHE:
+        case WEST:
             if(board->objets[player.coo_player.x][player.coo_player.y - 1].type == SWITCH){
                 return true;
             }
             break;
-        case DROITE:
+        case EAST:
             if(board->objets[player.coo_player.x][player.coo_player.y + 1].type == SWITCH){
                 return true;
             }
@@ -133,22 +133,22 @@ bool going_to_switch(Plateau board, Player player){
 
 bool going_to_obj(Plateau board, Player player, TypeObjet type){
     switch(player.dir_player){
-        case HAUT:
+        case NORTH:
             if(board->objets[player.coo_player.x - 1][player.coo_player.y].type == type){
                 return true;
             }
             break;
-        case BAS:
+        case SOUTH:
             if(board->objets[player.coo_player.x + 1][player.coo_player.y].type == type){
                 return true;
             }
             break;
-        case GAUCHE:
+        case WEST:
             if(board->objets[player.coo_player.x][player.coo_player.y - 1].type == type){
                 return true;
             }
             break;
-        case DROITE:
+        case EAST:
             if(board->objets[player.coo_player.x][player.coo_player.y + 1].type == type){
                 return true;
             }
@@ -177,7 +177,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
     
     switch((deplacement)->direction){
 
-        case HAUT:
+        case NORTH:
 
             niveau->objets[--coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
@@ -185,7 +185,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
             niveau->objets[coordonnees->x + 1][coordonnees->y].type = VIDE;
 
             break;
-        case BAS:
+        case SOUTH:
             
             niveau->objets[++coordonnees->x][coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
@@ -195,7 +195,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
             
             break;
-        case DROITE:
+        case EAST:
             
             niveau->objets[coordonnees->x][++coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
@@ -203,7 +203,7 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
             niveau->objets[coordonnees->x][coordonnees->y - 1].type = VIDE;
 
             break;
-        case GAUCHE:
+        case WEST:
             niveau->objets[coordonnees->x][--coordonnees->y].type = PROJECTILE;
             niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
             remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
@@ -257,16 +257,16 @@ int move_players(Plateau niveau, Player *player){
     
     niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
     switch(player->dir_player){
-        case HAUT:
+        case NORTH:
             player->coo_player.x -= 1;
             break;
-        case BAS:
+        case SOUTH:
             player->coo_player.x += 1;
             break; 
-        case DROITE:
+        case EAST:
             player->coo_player.y += 1;
             break;
-        case GAUCHE:
+        case WEST:
             player->coo_player.y -= 1;
             break;
     }
@@ -309,16 +309,16 @@ void trigger_switch(Plateau board, Player player){
     Trigger *trigger;
     trigger = (Trigger*)malloc(sizeof(Trigger));
     switch(player.dir_player){
-        case HAUT:
+        case NORTH:
             memcpy(trigger, board->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
             break;
-        case BAS:
+        case SOUTH:
             memcpy(trigger, board->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
             break;
-        case DROITE:
+        case EAST:
             memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
             break;
-        case GAUCHE:
+        case WEST:
             memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
             break;
     }
@@ -351,22 +351,21 @@ void affiche_Niveau (Plateau niveau) {
                 dep = niveau->objets[i][j].donnee_suppl;
 				switch (dep->direction)
 				{
-				case HAUT: 
+				case NORTH: 
 					printf("^");
 					break;
-				case GAUCHE:
+				case WEST:
 					printf("<");
 					break;
-				case BAS: 
+				case SOUTH: 
 					printf("v");
 					break;
-				case DROITE: 
+				case EAST: 
 					printf(">");
 					break;
 				}
 				break;
 
-			case PERSONNAGE:
             case PLAYER1:
             case PLAYER2:
 				printf("P");

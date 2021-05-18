@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     bool is_level_reached = false;
     
     opt_management(argc, argv, &mode, name_file, &niveau);
-
+    
     if(niveau == NULL){
         niveau = niveau1test();
     }
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");
             if(NULL != niveau){
-                free_Niveau(niveau);
+                free_Niveau(niveau);    
             }
             free(name_file);
             return EXIT_FAILURE;

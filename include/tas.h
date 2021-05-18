@@ -25,7 +25,7 @@ typedef struct {
 
     Coordonnees coo_obj; /* coordonnée de Objet affecte */
 	unsigned int index; /* index de l'objet affecté */
-} Evenement;
+} Event;
 
 
 typedef struct {
@@ -33,7 +33,7 @@ typedef struct {
 	unsigned taille;    /* Nombre d'Evenements contenus dans le tas */
 	unsigned capacite;  /* Nombre de cases allouees pour les 
 						* `valeurs` (i.e. taille maximale) */
-	Evenement* valeurs;/* Tableau d'Evenements de taille `capacite` et
+	Event* valeurs;/* Tableau d'Evenements de taille `capacite` et
 						* dont les `taille` premieres cases sont 
 						* utilisees. */
 	
@@ -51,8 +51,8 @@ void realloc_Tas(Arbre tas);
 
 bool un_evenement_est_pret(Arbre tas); 
 
-Evenement ote_minimum(Arbre tas); 
-void ajoute_evenement(Arbre tas, Evenement n); 
+Event ote_minimum(Arbre tas); 
+void ajoute_evenement(Arbre tas, Event n); 
                                             
 									 
 void affiche_Tas(Arbre tas);

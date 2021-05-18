@@ -5,7 +5,7 @@
 static bool test_ajoute_evenement(int *total_test) {
     *total_test += 1;
     Arbre test_arbre = malloc_Tas(INITIAL_SIZE);
-    Evenement event1, event2, event3, event4, event5, event6, event7, event8, event9;
+    Event event1, event2, event3, event4, event5, event6, event7, event8, event9;
     
     event1.moment = 300;
     event2.moment = 2050;
@@ -52,7 +52,7 @@ static bool test_ajoute_evenement(int *total_test) {
     return true;
 }
 
-static bool test_minimum_aux(Evenement min, Arbre Tas){
+static bool test_minimum_aux(Event min, Arbre Tas){
     unsigned int i;
     
     for(i = 0; i < Tas->taille; i++){
@@ -66,7 +66,7 @@ static bool test_minimum_aux(Evenement min, Arbre Tas){
 static bool test_ote_minimum(int *total_test){
     *total_test += 1;
 	Arbre arbre = malloc_Tas(INITIAL_SIZE);
-	Evenement event1, event2, event3, event4, event5, eventMin;
+	Event event1, event2, event3, event4, event5, eventMin;
     Coordonnees pos1, pos2, pos3, pos4, pos5;
     pos1.x = 0;
     pos1.y = 0;
@@ -170,7 +170,7 @@ static bool test_contruit_tas(int *total_test){
     - Tester si la nouvelle coordonnée dans le niveau contient bien le projectile
     - Tester si lorsqu'il y a un mur, le projectile est bien effacé du plateau
 */
-static bool test_deplace_projectile_haut(int *total_test){
+static bool test_deplace_projectile_NORTH(int *total_test){
 
     *total_test += 1;
 	Plateau niveau = niveau0();
@@ -180,7 +180,7 @@ static bool test_deplace_projectile_haut(int *total_test){
     verif_malloc(deplacement);
 	Coordonnees coordonnees;
 
-	deplacement->direction = HAUT;
+	deplacement->direction = NORTH;
 	coordonnees.x = 3;
     coordonnees.y = 2;
 	objet.type = PROJECTILE; 
@@ -189,12 +189,12 @@ static bool test_deplace_projectile_haut(int *total_test){
 	deplace_projectile(niveau, &coordonnees);
 
 	if(niveau->objets[3][2].type != VIDE){
-        printf("Projectile non-déplacé (haut) !");
+        printf("Projectile non-déplacé (NORTH) !");
 		return false;
 	}
 
 	if(niveau->objets[2][2].type != PROJECTILE){
-        printf("Projectile pas au bon endroit (haut) !\n");
+        printf("Projectile pas au bon endroit (NORTH) !\n");
 		return false;
 	}
     
@@ -205,14 +205,14 @@ static bool test_deplace_projectile_haut(int *total_test){
     deplace_projectile(niveau, &new_coord);
 
     if(niveau->objets[1][2].type != MUR){
-        printf("Le mur a été modifié par un projectile (haut) !\n");
+        printf("Le mur a été modifié par un projectile (NORTH) !\n");
         return false;
     }
 
 
     Deplacement* dep;
     dep = (Deplacement*)malloc(sizeof(Deplacement));
-    dep->direction = HAUT;
+    dep->direction = NORTH;
 	Coordonnees new1coord2;
 	new1coord2.x = 0;
 	new1coord2.y = 2;
@@ -222,7 +222,7 @@ static bool test_deplace_projectile_haut(int *total_test){
 
     deplace_projectile( niveau, &new1coord2);
 	if (niveau->objets[0][2].type != VIDE){
-        printf("Projectile toujours présent (haut) \n");
+        printf("Projectile toujours présent (NORTH) \n");
 		return false;
 	}
 
@@ -230,7 +230,7 @@ static bool test_deplace_projectile_haut(int *total_test){
 	return true; 
 }
 
-static bool test_deplace_projectile_bas(int *total_test){
+static bool test_deplace_projectile_SOUTH(int *total_test){
 
 	*total_test += 1;
     Plateau niveau = niveau0();
@@ -238,7 +238,7 @@ static bool test_deplace_projectile_bas(int *total_test){
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(dep);
 	Coordonnees coords;
-    dep->direction = BAS;
+    dep->direction = SOUTH;
     coords.x = 2;
     coords.y = 3;
     objet.type = PROJECTILE;
@@ -248,19 +248,19 @@ static bool test_deplace_projectile_bas(int *total_test){
 	deplace_projectile( niveau, &coords);
 
     if(niveau->objets[2][3].type != VIDE){
-        printf("Projectile non-déplacé (bas) !");
+        printf("Projectile non-déplacé (SOUTH) !");
 		return false;
 	}
 
 	if(niveau->objets[3][3].type != PROJECTILE){
-        printf("Projectile pas au bon endroit (bas) !\n");
+        printf("Projectile pas au bon endroit (SOUTH) !\n");
 		return false;
 	}
     deplace_projectile( niveau, &coords);
 
 
     if(niveau->objets[4][3].type != PROJECTILE){
-        printf("Projectile toujours présent (bas)\n");
+        printf("Projectile toujours présent (SOUTH)\n");
 		return false;
 	}
     Coordonnees coord;
@@ -273,7 +273,7 @@ static bool test_deplace_projectile_bas(int *total_test){
 }
 
 
-static bool test_deplace_projectile_droite(int *total_test){
+static bool test_deplace_projectile_EAST(int *total_test){
 
     *total_test += 1;
 	Plateau niveau = niveau0();
@@ -283,7 +283,7 @@ static bool test_deplace_projectile_droite(int *total_test){
     verif_malloc(deplacement);
     Coordonnees coord;
 	
-	deplacement->direction = DROITE;
+	deplacement->direction = EAST;
     coord.x = 0;
     coord.y = 7;
 	objet.type = PROJECTILE; 
@@ -295,19 +295,19 @@ static bool test_deplace_projectile_droite(int *total_test){
 
 
 	if(niveau->objets[0][7].type != VIDE){
-        printf("Projectile non-déplacé ! (droite)");
+        printf("Projectile non-déplacé ! (EAST)");
 		return false;
 	}
 
 	if(niveau->objets[0][8].type != PROJECTILE){
-        printf("Projectile pas au bon endroit (droite)!\n");
+        printf("Projectile pas au bon endroit (EAST)!\n");
 		return false;
 	}
 
     deplace_projectile(niveau, &coord); 
     
 	if (niveau->objets[0][9].type != PROJECTILE){
-        printf("Projectile toujours présent (droite) \n");
+        printf("Projectile toujours présent (EAST) \n");
 		return false;
 	}
 
@@ -320,7 +320,7 @@ static bool test_deplace_projectile_droite(int *total_test){
 	return true; 
 }
 
-static bool test_deplace_projectile_gauche(int *total_test){
+static bool test_deplace_projectile_WEST(int *total_test){
 
 	*total_test += 1;
 	Plateau niveau = niveau0();
@@ -330,7 +330,7 @@ static bool test_deplace_projectile_gauche(int *total_test){
     verif_malloc(deplacement);
 	Coordonnees coordonnees;
 
-	deplacement->direction = GAUCHE;
+	deplacement->direction = WEST;
 	coordonnees.x = 2;
     coordonnees.y = 2;
 	objet.type = PROJECTILE; 
@@ -340,19 +340,19 @@ static bool test_deplace_projectile_gauche(int *total_test){
 	deplace_projectile(niveau, &coordonnees);
 	
 	if(niveau->objets[2][2].type != VIDE){
-        printf("Projectile non-déplacé (gauche)!");
+        printf("Projectile non-déplacé (WEST)!");
 		return false;
 	}
 
 	if(niveau->objets[2][1].type != PROJECTILE){
-        printf("Projectile pas au bon endroit (gauche)!\n");
+        printf("Projectile pas au bon endroit (WEST)!\n");
 		return false;
 	}
     
     deplace_projectile(niveau, &coordonnees);
 
 	if (niveau->objets[2][0].type != PROJECTILE){
-        printf("Projectile toujours présent (gauche) \n");
+        printf("Projectile toujours présent (WEST) \n");
 		return false;
 	}
 
@@ -361,7 +361,7 @@ static bool test_deplace_projectile_gauche(int *total_test){
     coord.y = 0;
     deplace_projectile(niveau, &coord);
     if(niveau->objets[2][0].type != VIDE){
-        printf("Le projectile est toujours là ! (gauche)\n");
+        printf("Le projectile est toujours là ! (WEST)\n");
         return false;
     }
 
@@ -386,7 +386,7 @@ static bool test_declenche_lanceur(int *total_test){
     Arbre tas;
     Coordonnees eval;
     tas = construit_Tas(niveau);
-    Evenement e = ote_minimum(tas);
+    Event e = ote_minimum(tas);
     int i;
 
     declenche_lanceur(niveau, tas, e.coo_obj, e);
@@ -399,21 +399,21 @@ static bool test_declenche_lanceur(int *total_test){
 
     declenche_lanceur(niveau, tas, e.coo_obj, e);
 
-    for(i = HAUT; i <= DROITE; i++){
+    for(i = NORTH; i <= EAST; i++){
         switch(i){
-            case HAUT:
+            case NORTH:
                 eval.x = e.coo_obj.x - 1;
                 eval.y = e.coo_obj.y;
                 break;
-            case BAS:
+            case SOUTH:
                 eval.x = e.coo_obj.x + 1;
                 eval.y = e.coo_obj.y;
                 break;
-            case DROITE:
+            case EAST:
                 eval.x = e.coo_obj.x;
                 eval.y = e.coo_obj.y + 1;
                 break;
-            case GAUCHE:
+            case WEST:
                 eval.x = e.coo_obj.x;
                 eval.y = e.coo_obj.y - 1;
                 break;
@@ -482,10 +482,10 @@ static bool test_declenche_lanceur(int *total_test){
     dep3->allure = 3400;
     dep4->allure = 3000;
 
-    dep1->direction = BAS;
-    dep2->direction = BAS;
-    dep3->direction = HAUT;
-    dep4->direction = DROITE;
+    dep1->direction = SOUTH;
+    dep2->direction = SOUTH;
+    dep3->direction = NORTH;
+    dep4->direction = EAST;
 
     obj1.type = PROJECTILE;
     obj2.type = PROJECTILE;
@@ -616,7 +616,7 @@ static bool test_move_projectile(int *total_test){
     Objet projectile;
     Deplacement* dep = (Deplacement*)malloc(sizeof(Deplacement));
     dep->allure = 300;
-    dep->direction = DROITE;
+    dep->direction = EAST;
 
     projectile.donnee_suppl = dep;
 
@@ -657,7 +657,7 @@ static bool test_create_projectile_by_direction(int *total_test){
 
     heap = build_heap_by_board(board);
     
-    create_projectile_by_direction(board, heap, DROITE, coo_launch, 0);
+    create_projectile_by_direction(board, heap, EAST, coo_launch, 0);
 
     if(!is_type_in_lst(board->box[0][1], PROJECTILE)){
         printf("Erreur, projectile non crée dans le board\n");
@@ -778,13 +778,13 @@ void main_test(){
 
     qtest("test_contruit_tas", &compteur, &total_test, test_contruit_tas);
 
-    qtest("test_deplace_projectile_haut", &compteur, &total_test, test_deplace_projectile_haut);
+    qtest("test_deplace_projectile_NORTH", &compteur, &total_test, test_deplace_projectile_NORTH);
 
-	qtest("test_deplace_projectile_bas", &compteur, &total_test, test_deplace_projectile_bas);
+	qtest("test_deplace_projectile_SOUTH", &compteur, &total_test, test_deplace_projectile_SOUTH);
 
-	qtest("test_deplace_projectile_droite", &compteur, &total_test, test_deplace_projectile_droite);
+	qtest("test_deplace_projectile_EAST", &compteur, &total_test, test_deplace_projectile_EAST);
 
-    qtest("test_deplace_projectile_gauche", &compteur, &total_test, test_deplace_projectile_gauche);
+    qtest("test_deplace_projectile_WEST", &compteur, &total_test, test_deplace_projectile_WEST);
 
     qtest("test_declenche_lanceur", &compteur, &total_test, test_declenche_lanceur);
 

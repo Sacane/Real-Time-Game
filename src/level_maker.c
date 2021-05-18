@@ -48,8 +48,8 @@ Plateau niveau0() {
     coo_p1.y = 0;
     coo_p2.x = 3;
     coo_p2.y = 9;
-    niveau->p2 = init_player(coo_p2, BAS, une_milliseconde * 10, PLAYER2);
-    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
+    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
     niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
     niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
     niveau->mulptiplayer_mode = true;
@@ -95,8 +95,8 @@ Plateau niveau1test(){
     coo_p2.x = 2;
     coo_p2.y = 4;
 
-    niveau->p2 = init_player(coo_p2, BAS, une_milliseconde * 10, PLAYER2);
-    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
+    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
     niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
     niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
     niveau->mulptiplayer_mode = true;
@@ -153,7 +153,7 @@ Plateau niveau1(){
     Coordonnees coo_p1;
 	coo_p1.x = 0;
     coo_p1.y = 0;
-    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
     niveau->objets[coo_p1.x][coo_p1.y].type = niveau->p1.typePlayer;
     
 
@@ -237,7 +237,7 @@ Plateau niveau2(){
     Coordonnees coo_p;
 	coo_p.x = 7;
     coo_p.y = 0;
-    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
     niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
 
 
@@ -309,7 +309,7 @@ Plateau niveau3(){
 
 	coo_p.x = 3;
     coo_p.y = 4;
-    niveau->p1 = init_player(coo_p, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
     niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
     
 

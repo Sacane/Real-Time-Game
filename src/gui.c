@@ -11,8 +11,8 @@ void init_array_img(MLV_Image* array_img[]){
 	array_img[CHARACTER_NORTH] = MLV_load_image("assets/character/character_north.png");
 	array_img[CHARACTER_SOUTH] = MLV_load_image("assets/character/character_south.png");
 	array_img[CHARACTER_WEST] = MLV_load_image("assets/character/character_west.png");
-	array_img[WALL] = MLV_load_image("assets/Wall.png");
-	array_img[LAUNCHER] = MLV_load_image("assets/launcher.png");
+	array_img[WALL_IMG] = MLV_load_image("assets/Wall.png");
+	array_img[LAUNCHER_IMG] = MLV_load_image("assets/launcher.png");
 	array_img[DEST] = MLV_load_image("assets/dest.png");
 	array_img[PLAYER2_NORTH_IMG] = MLV_load_image("assets/character/player2_north.png");
 	if(!array_img[PLAYER2_NORTH_IMG]){
@@ -62,59 +62,58 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 		case PROJECTILE:
 			depl = niveau->objets[x_source][y_source].donnee_suppl;
 			switch(depl->direction){
-				case HAUT:
+				case NORTH:
 					MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
 					break;
-				case BAS:
+				case SOUTH:
 					MLV_draw_image(array_img[PROJECTILE_SOUTH], x_height, y_height);
 					break;
-				case DROITE:
+				case EAST:
 					MLV_draw_image(array_img[PROJECTILE_EAST], x_height, y_height);
 					break;
-				case GAUCHE:
+				case WEST:
 					MLV_draw_image(array_img[PROJECTILE_WEST], x_height, y_height);
 					break;
 			}
 			break;
 		case LANCEUR:
-			MLV_draw_image(array_img[LAUNCHER], x_height, y_height);
+			MLV_draw_image(array_img[LAUNCHER_IMG], x_height, y_height);
 			break;
-		case PERSONNAGE:
 		case PLAYER1:
 			switch(niveau->p1.dir_player){
-				case HAUT:
+				case NORTH:
 					MLV_draw_image(array_img[CHARACTER_NORTH], x_height, y_height);
 					break;
-				case BAS:
+				case SOUTH:
 					MLV_draw_image(array_img[CHARACTER_SOUTH], x_height, y_height);
 					break;
-				case DROITE:
+				case EAST:
 					MLV_draw_image(array_img[CHARACTER_EAST], x_height, y_height);
 					break;
-				case GAUCHE:
+				case WEST:
 					MLV_draw_image(array_img[CHARACTER_WEST], x_height, y_height);
 					break;
 			}
 			break;
 		case PLAYER2:
 			switch(niveau->p2.dir_player){
-				case HAUT:
+				case NORTH:
 					MLV_draw_image(array_img[PLAYER2_NORTH_IMG], x_height, y_height);
 					break;
-				case BAS:
+				case SOUTH:
 					MLV_draw_image(array_img[PLAYER2_SOUTH_IMG], x_height, y_height);
 					break;
-				case DROITE:
+				case EAST:
 					MLV_draw_image(array_img[PLAYER2_EAST_IMG], x_height, y_height);
 					break;
-				case GAUCHE:
+				case WEST:
 					MLV_draw_image(array_img[PLAYER2_WEST_IMG], x_height, y_height);
 					break;
 			}
 			break;
 		case MUR:
 		case DOOR:
-			MLV_draw_image(array_img[WALL], x_height, y_height);
+			MLV_draw_image(array_img[WALL_IMG], x_height, y_height);
 			break;
 		case DESTINATION:
 			MLV_draw_image(array_img[DEST], x_height, y_height);
@@ -151,16 +150,16 @@ static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int
 	}
 
 	switch(depl->direction){
-		case HAUT:
+		case NORTH:
 			draw_img(board, array_img, coo_proj.x - 1, coo_proj.y, width, height);
 			break;
-		case BAS:
+		case SOUTH:
 			draw_img(board, array_img, coo_proj.x + 1, coo_proj.y, width, height);
 			break;
-		case DROITE:
+		case EAST:
 			draw_img(board, array_img, coo_proj.x, coo_proj.y + 1, width, height);
 			break;
-		case GAUCHE:
+		case WEST:
 			draw_img(board, array_img, coo_proj.x, coo_proj.y - 1, width, height);
 			break;
 	}
@@ -169,19 +168,19 @@ static void refresh_projectile(Coordonnees coo_proj, Plateau board, unsigned int
 static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
 	Direction direction;
 
-	for(direction = HAUT; direction <= DROITE; direction++){
+	for(direction = NORTH; direction <= EAST; direction++){
 		if(!se_dirige_vers_mur(coo_launcher.x, coo_launcher.y, direction, board)){
 			switch(direction){
-				case HAUT:
+				case NORTH:
 					draw_img(board, array_img, coo_launcher.x - 1, coo_launcher.y, width, height);
 					break;
-				case DROITE:
+				case EAST:
 					draw_img(board, array_img, coo_launcher.x, coo_launcher.y + 1, width, height);
 					break;
-				case GAUCHE:
+				case WEST:
 					draw_img(board, array_img, coo_launcher.x, coo_launcher.y - 1, width, height);
 					break;
-				case BAS:
+				case SOUTH:
 					draw_img(board, array_img, coo_launcher.x + 1, coo_launcher.y, width, height);
 					break;
 			}
@@ -192,26 +191,25 @@ static void refresh_launcher(Coordonnees coo_launcher, Plateau board, unsigned i
 static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 
 	switch(board->objets[coo_player.x][coo_player.y].type){
-		case PERSONNAGE:
 		case PLAYER1:
 			switch(board->p1.dir_player){
-				case HAUT:
-					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, HAUT, board)){
+				case NORTH:
+					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, NORTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
 					}
 					break;
-				case DROITE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, DROITE, board)){
+				case EAST:
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, EAST, board)){
 						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
 					}
 					break;
-				case GAUCHE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, GAUCHE, board)){
+				case WEST:
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, WEST, board)){
 						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
 					}
 					break;
-				case BAS:
-					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, BAS, board)){
+				case SOUTH:
+					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, SOUTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
 					}
 					break;
@@ -223,23 +221,23 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 			break;
 		case PLAYER2:
 			switch(board->p2.dir_player){
-				case HAUT:
-					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, HAUT, board)){
+				case NORTH:
+					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, NORTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
 					}
 					break;
-				case DROITE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, DROITE, board)){
+				case EAST:
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, EAST, board)){
 						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
 					}
 					break;
-				case GAUCHE:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, GAUCHE, board)){
+				case WEST:
+					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, WEST, board)){
 						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
 					}
 					break;
-				case BAS:
-					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, BAS, board)){
+				case SOUTH:
+					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, SOUTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
 					}
 					break;
@@ -264,39 +262,39 @@ static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 	printf("Listener\n");
 	switch(button){
 		case MLV_KEYBOARD_z:
-			board->p1.dir_player = HAUT;
+			board->p1.dir_player = NORTH;
 			break;
 		case MLV_KEYBOARD_q:
-			printf("GAUCHE\n");
-			board->p1.dir_player = GAUCHE;
+			printf("WEST\n");
+			board->p1.dir_player = WEST;
 			break;
 		case MLV_KEYBOARD_s:
-			board->p1.dir_player = BAS;
+			board->p1.dir_player = SOUTH;
 			break;
 		case MLV_KEYBOARD_d:
-			board->p1.dir_player = DROITE;
+			board->p1.dir_player = EAST;
 			break;
 		case MLV_KEYBOARD_ESCAPE:
 			return 0;
 		case MLV_KEYBOARD_UP:
 			if(!board->mulptiplayer_mode)
 				break;
-			board->p2.dir_player = HAUT;
+			board->p2.dir_player = NORTH;
 			break;
 		case MLV_KEYBOARD_DOWN:
 			if(!board->mulptiplayer_mode)
 				break;
-			board->p2.dir_player = BAS;
+			board->p2.dir_player = SOUTH;
 			break;
 		case MLV_KEYBOARD_RIGHT:
 			if(!board->mulptiplayer_mode)
 				break;
-			board->p2.dir_player = DROITE;
+			board->p2.dir_player = EAST;
 			break;
 		case MLV_KEYBOARD_LEFT:
 			if(!board->mulptiplayer_mode)
 				break;
-			board->p2.dir_player = GAUCHE;
+			board->p2.dir_player = WEST;
 			break;
 		default:
 			return -1;
@@ -340,16 +338,16 @@ static void refresh_switch(Plateau niveau, Player player, MLV_Image* font, unsig
 	Trigger *trigg;
 	trigg = (Trigger*)malloc(sizeof(Trigger));
 	switch(player.dir_player){
-		case HAUT:
+		case NORTH:
 			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
 			break;
-		case BAS:
+		case SOUTH:
 			memcpy(trigg, niveau->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
 			break;
-		case DROITE:
+		case EAST:
 			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
 			break;
-		case GAUCHE:
+		case WEST:
 			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
 			break;
 	}
@@ -380,7 +378,7 @@ void launch(Plateau niveau, bool *is_reached){
 	unsigned int width, height;
     MLV_Keyboard_button touche;
 	Arbre tas;
-	Evenement e;
+	Event e;
 	TypeObjet obj;
 	MLV_Button_state state;
 
@@ -505,7 +503,7 @@ void launch(Plateau niveau, bool *is_reached){
         if (un_evenement_est_pret(tas)){
             e = ote_minimum(tas);
 			obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
-            execute_evenement(e, tas, niveau);
+            execute_event(e, tas, niveau);
 			if(obj == PROJECTILE){
 				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
 			}else if(obj == LANCEUR){
@@ -514,7 +512,7 @@ void launch(Plateau niveau, bool *is_reached){
             while(e.moment == tas->valeurs[0].moment){
                 e = ote_minimum(tas);
 				obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
-				execute_evenement(e, tas, niveau);
+				execute_event(e, tas, niveau);
 				if(obj == PROJECTILE){
 					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
 				}else if(obj == LANCEUR){

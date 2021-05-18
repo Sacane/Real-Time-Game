@@ -37,7 +37,7 @@ Arbre malloc_Tas(unsigned capacite_initiale) {
     verif_malloc(arbre);
 	arbre->taille = 0;
 	arbre->capacite = capacite_initiale;
-	arbre->valeurs = (Evenement*)malloc(capacite_initiale*sizeof(Evenement)); 
+	arbre->valeurs = (Event*)malloc(capacite_initiale*sizeof(Event)); 
     verif_malloc(arbre->valeurs);
     
 	return arbre; 
@@ -54,7 +54,7 @@ void realloc_Tas(Arbre tas){
     assert(tas->valeurs != NULL);
 
     tas->capacite *= 2; 
-    tas->valeurs = (Evenement*)realloc(tas->valeurs, sizeof(Evenement)*tas->capacite);
+    tas->valeurs = (Event*)realloc(tas->valeurs, sizeof(Event)*tas->capacite);
     
 }
 
@@ -74,7 +74,7 @@ static void defiler(Arbre tas, int i) {
     assert(i >= 0);
     
     int f = verif_pere(i);
-    Evenement tmp;
+    Event tmp;
 
     if (i == 0) return;
     while (tas->valeurs[f].moment > tas->valeurs[i].moment) { 
@@ -92,7 +92,7 @@ static void defiler(Arbre tas, int i) {
 }
 
 
-void ajoute_evenement(Arbre arbre, Evenement valeur){
+void ajoute_evenement(Arbre arbre, Event valeur){
     
 	assert(arbre->valeurs != NULL);
     assert(arbre != NULL);
@@ -115,7 +115,7 @@ static void enfiler(Arbre h, unsigned int i)
 
     unsigned int next_i;
     unsigned int max_i = h->taille - 1; 
-    Evenement tmp;
+    Event tmp;
 
     
     if(h->taille == 0){
@@ -140,10 +140,10 @@ static void enfiler(Arbre h, unsigned int i)
 
 
 
-Evenement ote_minimum(Arbre tas){
+Event ote_minimum(Arbre tas){
 
 	assert(tas->valeurs != NULL);
-	Evenement min;
+	Event min;
 
     min=(tas->valeurs)[0];
     tas->valeurs[0] = tas->valeurs[tas->taille-1];

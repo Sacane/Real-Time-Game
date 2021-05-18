@@ -28,8 +28,8 @@ typedef enum {
     PROJECTILE_NORTH,
     PROJECTILE_EAST,
     PROJECTILE_WEST,
-    WALL,
-    LAUNCHER,
+    WALL_IMG,
+    LAUNCHER_IMG,
     DEST,
     PLAYER2_NORTH_IMG,
     PLAYER2_SOUTH_IMG,
@@ -51,9 +51,6 @@ void init_array_img(MLV_Image *array_img[]);
  */
 void free_array_img(MLV_Image *array[]);
 
-void load_image();
-
-void free_image();
 
 /**
  * Function to initialize a board
@@ -104,15 +101,6 @@ int action_listener(MLV_Keyboard_button button, Plateau board);
  * @param level : Board, the game board
  * @param is_reached : bool*,
  */
-void launch_gui(Plateau niveau, bool *is_reached);
-
-/**
- * DESCRIPTION
- * @param level : Board, the game board
- * @param is_reached : bool*,
- */
-void launch_gui_bis(Plateau niveau, bool *is_reached);
-
 void launch(Plateau niveau, bool *is_reached);
 
 /*void gui_launcher(Board gameboard, bool *is_reached);*/

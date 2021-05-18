@@ -5,7 +5,7 @@ Arbre construit_Tas(Plateau niveau){
     
 	Arbre arbre;
     arbre = malloc_Tas(INITIAL_SIZE); 
-	Evenement evenement;
+	Event event;
 	unsigned int i, j;
     Generation *gen = (Generation*)malloc(sizeof(Generation));
     verif_malloc(gen);
@@ -14,10 +14,10 @@ Arbre construit_Tas(Plateau niveau){
 			if(niveau->objets[i][j].type == LANCEUR) {
                 memcpy(gen, niveau->objets[i][j].donnee_suppl, sizeof(Generation));
             
-				evenement.coo_obj.x = i;
-				evenement.coo_obj.y = j;
-				evenement.moment = gen->intervalle;
-				ajoute_evenement(arbre, evenement);
+				event.coo_obj.x = i;
+				event.coo_obj.y = j;
+				event.moment = gen->intervalle;
+				ajoute_evenement(arbre, event);
 			}
 		}
 	}
@@ -37,25 +37,25 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
     deplacement->allure = generation->allure_proj;
     
     switch(direction){
-        case HAUT:
+        case NORTH:
             pos_projectile->x = pos_lanceur.x - 1;
             pos_projectile->y = pos_lanceur.y;
-            deplacement->direction = HAUT;
+            deplacement->direction = NORTH;
             break;
-        case BAS:
+        case SOUTH:
             pos_projectile->x = pos_lanceur.x + 1;
             pos_projectile->y = pos_lanceur.y;
-            deplacement->direction = BAS;
+            deplacement->direction = SOUTH;
             break;
-        case DROITE:
+        case EAST:
             pos_projectile->x = pos_lanceur.x;
             pos_projectile->y = pos_lanceur.y + 1;
-            deplacement->direction = DROITE;
+            deplacement->direction = EAST;
             break;
-        case GAUCHE:
+        case WEST:
             pos_projectile->x = pos_lanceur.x;
             pos_projectile->y = pos_lanceur.y - 1;
-            deplacement->direction = GAUCHE;
+            deplacement->direction = WEST;
             break;
         default:
             printf("Erreur de direction\n");
@@ -75,12 +75,12 @@ void creer_projectile_selon_direction(Plateau plateau, Direction direction, Coor
 }
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
-static void update_launcher_in_heap(Evenement lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
+static void update_launcher_in_heap(Event lanceur, Arbre tas, Coordonnees pos_lanceur, Plateau niveau){
 
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
-    Evenement new_launcher;
+    Event new_launcher;
     memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
     update_moment = lanceur.moment + generation->intervalle;
     new_launcher.moment = update_moment;
@@ -90,7 +90,7 @@ static void update_launcher_in_heap(Evenement lanceur, Arbre tas, Coordonnees po
     free(generation);
 }
 
-void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evenement ancien_lanceur){
+void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Event ancien_lanceur){
 	
     assert(niveau != NULL);
     assert(tas != NULL);
@@ -103,14 +103,14 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evene
     memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
     Direction direction;
     Coordonnees pos_projectile;
-    Evenement evenement_projectile;
+    Event event_proj;
 
-    for(direction = HAUT; direction <= DROITE; direction++){
+    for(direction = NORTH; direction <= EAST; direction++){
         if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
             creer_projectile_selon_direction(niveau, direction, &pos_projectile, pos_lanceur);
-            evenement_projectile.moment = ancien_lanceur.moment + generation->allure_proj;
-            evenement_projectile.coo_obj = pos_projectile;
-            ajoute_evenement(tas, evenement_projectile);
+            event_proj.moment = ancien_lanceur.moment + generation->allure_proj;
+            event_proj.coo_obj = pos_projectile;
+            ajoute_evenement(tas, event_proj);
         }
     }
 
@@ -123,7 +123,7 @@ void declenche_lanceur(Plateau niveau, Arbre tas, Coordonnees pos_lanceur, Evene
  (1) - Déplace le projectile : en fonction de la direction
  (2) - si le projectile n'a pas disparu (mur / hors plateau), rajoute dans le tas l'évènement du projectile à la position mis à jour
 */
-void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Evenement projectile){
+void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile, Event projectile){
 
 	assert(tas != NULL);
 	assert(niveau != NULL);
@@ -131,7 +131,7 @@ void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile,
 	assert(pos_projectile.y <= niveau->taille.y);
     assert(niveau->objets[pos_projectile.x][pos_projectile.y].type == PROJECTILE);
 
-    Evenement evenement_projectile;
+    Event evenement_projectile;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
     dep = niveau->objets[pos_projectile.x][pos_projectile.y].donnee_suppl;
     deplace_projectile(niveau, &pos_projectile);
@@ -144,23 +144,23 @@ void declenche_projectile(Arbre tas, Plateau niveau, Coordonnees pos_projectile,
     }
 }
 
-void execute_evenement(Evenement e, Arbre tas, Plateau niveau) {
+void execute_event(Event e, Arbre tas, Plateau niveau) {
 
     assert(tas != NULL);
 	assert(tas->valeurs != NULL);
     assert(niveau != NULL);
 	assert(e.coo_obj.x <= niveau->taille.x);
     assert(e.coo_obj.y <= niveau->taille.y);
-    Coordonnees coord_evenement;
-    coord_evenement.x = e.coo_obj.x;
-    coord_evenement.y = e.coo_obj.y;
+    Coordonnees coo_event;
+    coo_event.x = e.coo_obj.x;
+    coo_event.y = e.coo_obj.y;
 
-    switch(niveau->objets[coord_evenement.x][coord_evenement.y].type){
+    switch(niveau->objets[coo_event.x][coo_event.y].type){
         case PROJECTILE:
-            declenche_projectile(tas, niveau, coord_evenement, e);
+            declenche_projectile(tas, niveau, coo_event, e);
             break;
         case LANCEUR:
-            declenche_lanceur(niveau, tas, coord_evenement, e);
+            declenche_lanceur(niveau, tas, coo_event, e);
             break;
         default:
             break;
@@ -171,7 +171,7 @@ void launch_command(Plateau niveau, bool *is_reached){
     
     init_stdin();
     Arbre tas = construit_Tas(niveau);
-    Evenement e;
+    Event e;
 	char touche;
     int success = true;
     bool moving = false;
@@ -197,19 +197,19 @@ void launch_command(Plateau niveau, bool *is_reached){
                 switch (touche)
                 {
                     case 'z':
-                        niveau->p1.dir_player = HAUT;
+                        niveau->p1.dir_player = NORTH;
                         moving = true;
                         break;
                     case 's':
-                        niveau->p1.dir_player = BAS;
+                        niveau->p1.dir_player = SOUTH;
                         moving = true;
                         break;
                     case 'd':
-                        niveau->p1.dir_player = DROITE;
+                        niveau->p1.dir_player = EAST;
                         moving = true;
                         break;
                     case 'q':
-                        niveau->p1.dir_player = GAUCHE;
+                        niveau->p1.dir_player = WEST;
                         moving = true;
                         break;
                     default:
@@ -228,19 +228,19 @@ void launch_command(Plateau niveau, bool *is_reached){
                     switch(touche)
                     {
                         case 'o':
-                            niveau->p2.dir_player = HAUT;
+                            niveau->p2.dir_player = NORTH;
                             moving = true;
                             break;
                         case 'l':
-                            niveau->p2.dir_player = BAS;
+                            niveau->p2.dir_player = SOUTH;
                             moving = true;
                             break;
                         case 'm':
-                            niveau->p2.dir_player = DROITE;
+                            niveau->p2.dir_player = EAST;
                             moving = true;
                             break;
                         case 'k':
-                            niveau->p2.dir_player = GAUCHE;
+                            niveau->p2.dir_player = WEST;
                             moving = true;
                             break;
                         default:
@@ -266,10 +266,10 @@ void launch_command(Plateau niveau, bool *is_reached){
 
             e = ote_minimum(tas);
             
-            execute_evenement(e, tas, niveau);
+            execute_event(e, tas, niveau);
             while(e.moment == tas->valeurs[0].moment){
                 e = ote_minimum(tas);
-                execute_evenement(e, tas, niveau);
+                execute_event(e, tas, niveau);
             }
             affiche_Niveau(niveau);
     		printf("\n");
