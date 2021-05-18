@@ -27,6 +27,7 @@ void free_board (Board gameboard){
         for(j = 0; j < gameboard->taille.y; j++){
             if(gameboard->objets[i][j].donnee_suppl)
                 free(gameboard->objets[i][j].donnee_suppl);
+                
         }
         free(gameboard->objets[i]);
     }

@@ -370,26 +370,30 @@ static void erase_player_after_reached(Board board, unsigned int width, unsigned
 }
 
 void launch(Board gameboard, bool *is_reached){
+	assert(gameboard != NULL);
+	printf("launch\n");
     unsigned int x, y;
     int decalage_x, decalage_y;
     MLV_Image *font;
     MLV_Image *array_img[SIZE_ARR_IMG];
 	unsigned int width, height;
     MLV_Keyboard_button touche;
-	Heap tas;
+	Heap tas = construit_Tas(gameboard);
 	Event e;
 	TypeObjet obj;
 	MLV_Button_state state;
 
 	MLV_get_desktop_size(&x, &y);
+	
     decalage_x = (gameboard->taille.y < gameboard->taille.x) ? 50 : 25;
     decalage_y = (gameboard->taille.y > gameboard->taille.x) ? 50 : 25;
 	width = (x / (gameboard->taille.y)) - decalage_y;
 	height = (y / gameboard->taille.x) - decalage_x; 
 	width = 50;
 	height = 45;
-    tas = construit_Tas (gameboard);
-
+	printf("heap\n");
+ 
+	printf("heap builded\n");
     MLV_create_window("RealTimeGame", "Game", x, y);
     init_array_img(array_img);
     resize_all_img(array_img, width, height);
@@ -400,7 +404,7 @@ void launch(Board gameboard, bool *is_reached){
 	}
     MLV_resize_image(font, width * gameboard->taille.y, height * gameboard->taille.x);
 	MLV_draw_image(array_img[CHARACTER_SOUTH], gameboard->p1.coo_player.y, gameboard->p1.coo_player.x);
-	
+	printf("update platea\n");
 	update_plateau(gameboard, array_img, font, width, height);
     while (true) {
 		if(gameboard->is_game_over){
@@ -523,10 +527,10 @@ void launch(Board gameboard, bool *is_reached){
             
         }   
         else
-            millisleep (10);
+            millisleep (50);
 		if(check_player_reached(gameboard)){
 			(*is_reached) = true;
-			printf("C'EST ICI\n");
+
 			break;
 		}
         
@@ -534,7 +538,8 @@ void launch(Board gameboard, bool *is_reached){
     MLV_free_image(font);
     free_array_img(array_img);
     MLV_free_window();
-    printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
+    printf("program ended in : %lu seconds\n", clock() / ((10000) * une_milliseconde));
     free_heap(tas);
+	
     printf("end_free\n");
 }

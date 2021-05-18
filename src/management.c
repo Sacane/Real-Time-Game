@@ -2,7 +2,8 @@
 
 /* On suppose que le tas n'est pas encore alloué, on le construit en fonction des éléments du niveau */
 Heap construit_Tas(Board niveau){
-    
+    printf("%u x %u\n", niveau->taille.x, niveau->taille.y);
+    printf("Construct\n");
 	Heap heap;
     heap = malloc_heap(INITIAL_SIZE); 
 	Event event;
@@ -12,8 +13,10 @@ Heap construit_Tas(Board niveau){
 	for(i = 0; i < niveau->taille.x ; i++){
 		for(j = 0; j < niveau->taille.y; j++){
 			if(niveau->objets[i][j].type == LAUNCHER) {
+                printf("agter\n");
+                assert(niveau->objets[i][j].donnee_suppl != NULL);
                 memcpy(gen, niveau->objets[i][j].donnee_suppl, sizeof(Generation));
-            
+                printf("ad\n");
 				event.coo_obj.x = i;
 				event.coo_obj.y = j;
 				event.moment = gen->intervalle;

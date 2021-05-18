@@ -24,7 +24,8 @@ typedef enum{
   COMMAND,
   GRAPHIC,
   DEBUG,
-  ERROR
+  ERROR,
+  FOLDER,
 }Mode;
 
 typedef struct{

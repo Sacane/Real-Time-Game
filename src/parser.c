@@ -114,8 +114,65 @@ Board read_file(char* name_file){
                 break;
         }
     }
-    printf("OK\n");
+    printf("Reading file terminated\n");
     free(typeObject);
     fclose(in);
     return res;
+}
+
+static char *build_path_level(const char* name_folder, int level_state, char* suffix){
+
+    char *name_folder_cpy, *suffix_cpy, *res;
+    char num_char[2];
+    size_t sum_len = strlen(suffix) + strlen(name_folder);
+    name_folder_cpy = (char*)malloc(sizeof(char)* strlen(name_folder));
+    suffix_cpy = (char *)malloc(sizeof(char) * strlen(suffix));
+
+    strcpy(name_folder_cpy, name_folder);   
+    strcpy(suffix_cpy, suffix);
+    sprintf(num_char, "%d", level_state);
+
+    res = (char*)malloc(sizeof(res) * sum_len + 10);
+    strcat( name_folder_cpy, "/level");
+    strcat(name_folder_cpy, num_char);
+    strcat(name_folder_cpy, suffix);
+    strcpy(res, name_folder_cpy);
+
+    free(name_folder_cpy);
+    free(suffix_cpy);
+
+    return res;
+
+}
+
+void read_folder(char* name_folder, int level_start, int mode){
+    int i;
+    char num_char[2];
+    char*get;
+    
+    bool is_reached = false;
+    for(i = level_start; i <= MAX_LEVEL; i++){
+        sprintf(num_char, "%d", i);
+        printf("ah\n");
+        get = build_path_level(name_folder, i, ".txt");
+        printf("%s\n", get);
+        Board gameboard = read_file(get);
+        switch(mode){
+            case COMMAND:
+                launch_command(gameboard, &is_reached);
+                break;
+            case GRAPHIC:
+                launch(gameboard, &is_reached);
+                break;
+            default:
+                break;
+        }
+
+        
+        
+        free(get);
+        get = NULL;
+        
+    }
+   
 }

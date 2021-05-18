@@ -8,13 +8,13 @@ int main(int argc, char* argv[]) {
     
     Board level = NULL;
     int mode;
-    char* name_file = NULL;
+    char* name_file = NULL, *name_folder = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
     bool is_level_reached = false;
-    
+    name_folder = (char*)malloc(sizeof(char) * BUFSIZ);
     opt_management(argc, argv, &mode, name_file, &level);
-
+    strcpy(name_folder, "levels/");
     if(level == NULL){
         level = level0();
     }
@@ -36,16 +36,19 @@ int main(int argc, char* argv[]) {
             }
             free(name_file);
             return EXIT_FAILURE;
+        case FOLDER:
+            break;
         default:
             break;
     }
-
+    
     if(mode == GRAPHIC || mode == COMMAND){
         (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
     }
-
-    free_board(level);
+    if(level != NULL)
+        free_board(level);
     free(name_file);
+    free(name_folder);
     return EXIT_SUCCESS;
 }
 

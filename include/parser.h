@@ -14,6 +14,9 @@
 #include <string.h>
 #include "niveau.h"
 #include "temps.h"
+#include "gui.h"
+#include "management.h"
+#define MAX_LEVEL 6
 
 /**
  * Function to read a given file
@@ -22,5 +25,6 @@
  */
 Board read_file(char* name_file);
 
+void read_folder(char* name_folder, int level_start, int mode);
 
 #endif

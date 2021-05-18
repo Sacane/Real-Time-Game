@@ -15,6 +15,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
             {"file",     required_argument,       0, 'f'},
             {"test",  required_argument,       0, 't'},
             {"mode",  required_argument, 0, 'm'},
+            {"folder", required_argument, 0, 's'},
             {0, 0, 0, 0}
             };
         c = getopt_long (argc, argv, "f:t:m:", long_options, &option_index);
@@ -23,6 +24,13 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
 
         switch(c){
             case -1:
+                break;
+            case 's':
+                printf("enter folder : \n");
+                strcpy(name_file, "levels");
+                level_number = strtol(optarg, NULL, 10);
+                read_folder(name_file, level_number, GRAPHIC);
+                *mode = FOLDER;
                 break;
             case 'f':
                 printf("Enter filemode\n");
