@@ -1,7 +1,7 @@
 size = 15 x 25
 multijoueur : y
-PLAYER1 1 x 8 allure : 300
-PLAYER2 14 x 12 allure : 300
+PLAYER1 1 x 8 allure : 10
+PLAYER2 14 x 12 allure : 10
 LANCEUR 1 x 18 allure : 300 intervalle : 1000
 LANCEUR 1 x 24 allure : 300 intervalle : 1000
 LANCEUR 2 x 0 allure : 300 intervalle : 1000
@@ -10,7 +10,8 @@ LANCEUR 4 x 2 allure : 300 intervalle : 1000
 LANCEUR 6 x 20 allure : 300 intervalle : 1000
 LANCEUR 7 x 6 allure : 300 intervalle : 1000
 LANCEUR 7 x 13 allure : 300 intervalle : 1000
-LANCEUR 10 x 2 allure : 300 intervalle : 1000
+MUR 10 x 2 
+LANCEUR 10 x 1 allure : 300 intervalle : 1000
 LANCEUR 10 x 8 allure : 300 intervalle : 1000
 LANCEUR 10 x 17 allure : 300 intervalle : 1000
 LANCEUR 12 x 14 allure : 300 intervalle : 1000
@@ -78,7 +79,7 @@ MUR 7 x 21
 MUR 7 x 24
 MUR 9 x 10
 MUR 10 x 0
-MUR 10 x 1
+
 MUR 10 x 3
 MUR 10 x 4
 MUR 10 x 5

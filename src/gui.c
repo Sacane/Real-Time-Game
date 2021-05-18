@@ -390,7 +390,7 @@ void launch(Plateau niveau, bool *is_reached){
 	width = (x / (niveau->taille.y)) - decalage_y;
 	height = (y / niveau->taille.x) - decalage_x; 
 	width = 50;
-	height = 50;
+	height = 45;
     tas = construit_Tas (niveau);
 
     MLV_create_window("RealTimeGame", "Game", x, y);
