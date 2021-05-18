@@ -90,7 +90,7 @@ void check_player_move(Player *p);
 /*return true si le player va vers un interrupteur, false sinon*/
 bool going_to_obj(Plateau board, Player player, TypeObjet type);
 
-
+void trigger_switch(Plateau board, Player player);
 
 /**
  * Function that verify if two coordinates are equals or not

@@ -60,6 +60,15 @@ TypeObjet str_to_obj(char* type){
     if(strcmp(type, "MUR") == 0){
         return MUR;
     }
+    if(strcmp(type, "SWITCH") == 0){
+        return SWITCH;
+    }
+    if(strcmp(type, "PLAYER1") == 0){
+        return PLAYER1;
+    }
+    if(strcmp(type, "PLAYER2") == 0){
+        return PLAYER2;
+    }
     return 0;
 }
 

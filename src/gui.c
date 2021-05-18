@@ -34,18 +34,19 @@ void init_array_img(MLV_Image* array_img[]){
 		fprintf(stderr, "null player_west\n");
 		exit(EXIT_FAILURE);
 	}
+	array_img[SWITCH_IMG] = MLV_load_image("assets/switch.png");
 }
 
 void resize_all_img(MLV_Image* array_img[],  int width, int height){
 	int i;
-	for(i = CHARACTER_SOUTH; i <= PLAYER2_WEST_IMG; i++){
+	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
 		MLV_resize_image(array_img[i], width, height);
 	}
 }
 
 void free_array_img(MLV_Image *array[]){
 	int i;
-	for(i = CHARACTER_SOUTH; i <= PLAYER2_WEST_IMG; i++){
+	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
 		MLV_free_image(array[i]);
 	}
 }
@@ -112,13 +113,18 @@ static void draw_img(Plateau niveau, MLV_Image *array_img[], int x_source, int y
 			}
 			break;
 		case MUR:
+		case DOOR:
 			MLV_draw_image(array_img[WALL], x_height, y_height);
 			break;
 		case DESTINATION:
 			MLV_draw_image(array_img[DEST], x_height, y_height);
 			break;
+		case SWITCH:
+			MLV_draw_image(array_img[SWITCH_IMG], x_height, y_height);
+			break;
 		default:
 			break;
+
 	}
 }
 
@@ -255,11 +261,13 @@ static void refresh_player(Coordonnees coo_player, Plateau board, unsigned int w
 
 
 static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
+	printf("Listener\n");
 	switch(button){
 		case MLV_KEYBOARD_z:
 			board->p1.dir_player = HAUT;
 			break;
 		case MLV_KEYBOARD_q:
+			printf("GAUCHE\n");
 			board->p1.dir_player = GAUCHE;
 			break;
 		case MLV_KEYBOARD_s:
@@ -294,14 +302,17 @@ static int listener(MLV_Keyboard_button button, Plateau board, Player *player){
 			return -1;
 	}
 	
-	if(player->can_player_move == true){
+
+	if(player->can_player_move == true && !se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
+		
 		return 1;
 	}
+	
 	if(player->is_player_alive == false){
 		return -1;
 	}
 
-
+	printf("end_listener (-1)\n");
 	return -1;
 }		
 
@@ -312,12 +323,12 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 		case MLV_KEYBOARD_s:
 		case MLV_KEYBOARD_q:
 		case MLV_KEYBOARD_d:
-			return 1;
+			return PLAYER1;
 		case MLV_KEYBOARD_UP:
 		case MLV_KEYBOARD_DOWN:
 		case MLV_KEYBOARD_LEFT:
 		case MLV_KEYBOARD_RIGHT:
-			return 0;
+			return PLAYER2;
 		default:
 			break;
 	}
@@ -339,7 +350,7 @@ static void refresh_switch(Plateau niveau, Player player, MLV_Image* font, unsig
 			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
 			break;
 		case GAUCHE:
-			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
 			break;
 	}
 
@@ -365,7 +376,7 @@ void launch(Plateau niveau, bool *is_reached){
     unsigned int x, y;
     int decalage_x, decalage_y;
     MLV_Image *font;
-    MLV_Image *array_img[15];
+    MLV_Image *array_img[SIZE_ARR_IMG];
 	unsigned int width, height;
     MLV_Keyboard_button touche;
 	Arbre tas;
@@ -382,11 +393,8 @@ void launch(Plateau niveau, bool *is_reached){
     tas = construit_Tas (niveau);
 
     MLV_create_window("RealTimeGame", "Game", x, y);
-	printf("before init image\n");
     init_array_img(array_img);
-	printf("after init image\n");
     resize_all_img(array_img, width, height);
-	printf("after resize\n");
     font = MLV_load_image("assets/font.jpeg");
 	if(NULL == font){
 		fprintf(stderr, "Image non-existente ou impossible à charger\n");
@@ -397,8 +405,8 @@ void launch(Plateau niveau, bool *is_reached){
 	
 	update_plateau(niveau, array_img, font, width, height);
     while (true) {
-		check_game_over(niveau);
-		if(niveau->is_game_over == true){
+		
+		if(check_game_over(niveau)){
 			break;
 		}
 
@@ -413,30 +421,45 @@ void launch(Plateau niveau, bool *is_reached){
 				niveau->is_game_over = true;
 			}
 			switch(check_which_player_move(touche)){
-				case 1:
+				case PLAYER1:
 					if(listener(touche, niveau, &(niveau->p1)) == -1){
 						break;
 					}
+					
 					if(going_to_obj(niveau, niveau->p1, DESTINATION)){
 						niveau->p2.is_player_alive = false;
 						erase_player_after_reached(niveau, width, height, font);
 					}
-					switch(move_players(niveau, &(niveau->p1))){
-						case -1:
-							break;
-						case 0:
-							niveau->is_game_over = true;
-							break;
-						case 1:
-							refresh_player(niveau->p1.coo_player, niveau, width, height, array_img, font);
+					if(going_to_obj(niveau, niveau->p1, SWITCH)){
+						printf("Ici\n");
+						trigger_switch(niveau, niveau->p1);
+						printf("end trigger\n");
+						refresh_switch(niveau, niveau->p1, font, width, height);
+						printf("end refresh\n");
+					}
+
+					if(!se_dirige_vers_mur(niveau->p1.coo_player.x, niveau->p1.coo_player.y, niveau->p1.dir_player, niveau)){
+						printf("move\n");
+						switch(move_players(niveau, &(niveau->p1))){
 							
-							break;
-						default:
-							break;
+							case -1:
+								printf("-1\n");
+								break;
+							case 0:
+								printf("0\n");
+								niveau->p1.is_player_alive = false;
+								break;
+							case 1:
+								printf("1");
+								refresh_player(niveau->p1.coo_player, niveau, width, height, array_img, font);
+								break;
+							default:
+								break;
+						}
 					}
 					break;
 
-				case 0:
+				case PLAYER2:
 					if(listener(touche, niveau, &(niveau->p2))== -1){
 						break;
 					}
@@ -444,11 +467,15 @@ void launch(Plateau niveau, bool *is_reached){
 						niveau->p2.is_player_alive = false;
 						erase_player_after_reached(niveau, width, height, font);
 					}
+					if(going_to_obj(niveau, niveau->p2, SWITCH)){
+						trigger_switch(niveau, niveau->p2);
+						refresh_switch(niveau, niveau->p2, font, width, height);
+					}
 					switch(move_players(niveau, &(niveau->p2))){
 						case -1:
 							break;
 						case 0:
-							niveau->is_game_over = true;
+							niveau->p2.is_player_alive = false;
 							break;
 						case 1:
 							refresh_player(niveau->p2.coo_player, niveau, width, height, array_img, font);

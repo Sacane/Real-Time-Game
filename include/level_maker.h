@@ -19,6 +19,8 @@
  */
 Plateau niveau0();
 
+Plateau niveau1test();
+
 /**
  * Function to initialize a game board (level 1)
  */

@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     opt_management(argc, argv, &mode, name_file, &niveau);
 
     if(niveau == NULL){
-        niveau = niveau0();
+        niveau = niveau1test();
     }
     
     switch(mode){

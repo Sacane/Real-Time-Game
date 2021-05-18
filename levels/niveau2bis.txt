@@ -1,0 +1,53 @@
+size = 11 x 13
+multijoueur : y
+PLAYER1 1 x 12 allure : 10
+PLAYER2 3 x 5 allure : 10
+LANCEUR 2 x 2 allure : 300 intervalle : 1000
+LANCEUR 2 x 8 allure : 300 intervalle : 1000
+LANCEUR 2 x 10 allure : 300 intervalle : 1000
+LANCEUR 6 x 2 allure : 300 intervalle : 1000
+LANCEUR 9 x 0 allure : 300 intervalle : 1000
+LANCEUR 9 x 10 allure : 300 intervalle : 1000
+MUR 0 x 2
+MUR 0 x 6
+MUR 1 x 1
+MUR 1 x 2
+MUR 1 x 6
+MUR 2 x 4
+MUR 2 x 6
+MUR 2 x 9
+MUR 2 x 11
+MUR 2 x 12
+MUR 3 x 4
+MUR 3 x 6
+MUR 4 x 2
+MUR 4 x 3
+MUR 4 x 4
+MUR 4 x 5
+MUR 4 x 6
+MUR 4 x 7
+MUR 4 x 8
+MUR 4 x 10
+MUR 5 x 3
+MUR 5 x 7
+MUR 6 x 0
+MUR 6 x 3
+MUR 6 x 7
+MUR 6 x 8
+MUR 6 x 10
+MUR 6 x 11
+MUR 6 x 12
+MUR 7 x 2
+MUR 7 x 6
+MUR 7 x 7
+MUR 8 x 2
+MUR 8 x 7
+MUR 9 x 2
+MUR 9 x 7
+MUR 9 x 8
+MUR 9 x 9
+SWITCH 0 x 1 DOOR 1 x 5 
+SWITCH 0 x 7 DOOR 7 x 4
+SWITCH 6 x 6 DOOR 7 x 9
+SWITCH 8 x 8 DOOR 8 x 5
+DESTINATION 5 x 6

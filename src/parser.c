@@ -4,37 +4,45 @@
 Plateau read_file(char* name_file){
 
     Plateau res;
-    unsigned x, y;
+    unsigned x, y, x2, y2;
     unsigned long allure, intervalle;
-    Coordonnees size_level, coo_player;
-    unsigned long moment_player;
+    Coordonnees size_level, coo_player, coo_switch;
+    unsigned long allure_player;
     FILE *in;
     char *typeObject;
     typeObject = (char*)malloc(sizeof(char) * BUFSIZ);
-    
-    /*On rentre dans le fichier en vérifiant bien qu'il existe ou non*/
+    char multijoueur;
+
     in = fopen(name_file, "r");
     if(!in){
         fprintf(stderr, "File doesn't exist !\n");
         exit(1);
     }
 
-    /* On récupère la taille du niveau*/
     fscanf(in, "size = %u x %u\n", &size_level.x, &size_level.y);
     res = malloc_Niveau(size_level);
     printf("%d x %d\n", res->taille.x, res->taille.y);
-    printf("Filling of the character... ");
-    fscanf(in, "PERSONNAGE %u x %u allure : %lu\n", &coo_player.x, &coo_player.y, &allure);
-    moment_player = une_milliseconde * allure;
-    printf("OK || coordinates : (%u, %u) allure : %lu\n", coo_player.x, coo_player.y, allure);
+    printf("check multijoueurs\n");
+    fscanf(in, "multijoueur : %c\n", &multijoueur);
+    if(multijoueur == 'y'){
+        printf("Mode multiplayer activated\n");
+        res->mulptiplayer_mode = true;
+    }
+    if(multijoueur == 'n'){
+        printf("Mode multiplayer disable\n");
+        res->mulptiplayer_mode = false;
+    }
     printf("Filling of objects...\n");
-    res->objets[coo_player.x][coo_player.y].type = PERSONNAGE;
-    res->p1 = init_player(coo_player, BAS, allure, PERSONNAGE);
     while(fscanf(in, "%s", typeObject) != EOF){
-        Generation *gen = (Generation*)malloc(sizeof(Generation));
+        printf("%s\n", typeObject);
         switch(str_to_obj(typeObject)){
             
+            Trigger *trigger;
+            Generation *gen;
+            Coordonnees coo_door;
             case LANCEUR:
+                
+                gen = (Generation*)malloc(sizeof(Generation));
                 printf("Filling of launchers...\n");
                 fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
                 res->objets[x][y].type = LANCEUR;
@@ -49,7 +57,7 @@ Plateau read_file(char* name_file){
                 fscanf(in, " %u x %u", &x, &y);
                 res->objets[x][y].type = MUR;
                 res->objets[x][y].donnee_suppl = NULL;
-                free(gen);
+                
                 break;
 
             case DESTINATION:
@@ -58,8 +66,48 @@ Plateau read_file(char* name_file){
                 res->objets[x][y].type = DESTINATION;
                 res->coo_destination.x = x;
                 res->coo_destination.y = y;
+                
                 printf("OK\n");
                 free(gen);
+                break;
+            case PLAYER1:
+                printf("Filling player1 : ");
+                fscanf(in, " %u x %u allure : %lu\n", &x, &y, &allure_player);
+                printf("%u, %u\n", x, y);
+                coo_player.x = x;
+                coo_player.y = y;
+                printf(".");
+                res->p1 = init_player(coo_player, BAS, une_milliseconde * allure_player, PLAYER1);
+                printf(".");
+                res->objets[coo_player.x][coo_player.y].type = PLAYER1;
+                printf("OK\n");
+                
+                break;
+            case PLAYER2:
+                printf("Filling player2 : ");
+                fscanf(in, " %u x %u allure : %lu", &x, &y, &allure_player);
+                printf("%u, %u\n", x, y);
+                coo_player.x = x;
+                coo_player.y = y;
+                printf(".");
+                res->p2 = init_player(coo_player, BAS, une_milliseconde * allure_player, PLAYER2);
+                printf(".");
+                res->objets[coo_player.x][coo_player.y].type = PLAYER2;
+                printf("OK\n");
+                break;
+            case SWITCH:
+                trigger = (Trigger*)malloc(sizeof(Trigger));
+                
+                printf("Filling switch : ");
+                fscanf(in, " %u x %u DOOR %u x %u", &x, &y, &x2, &y2);
+                coo_switch.x = x;
+                coo_switch.y = y;
+                coo_door.x = x2;
+                coo_door.y = y2;
+                trigger->coo_door = coo_door;
+                res->objets[x][y].type = SWITCH;
+                res->objets[x2][y2].type = DOOR;
+                res->objets[x][y].donnee_suppl = trigger;
                 break;
             default:
                 break;

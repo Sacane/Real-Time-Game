@@ -111,14 +111,16 @@ void ajoute_evenement(Arbre arbre, Evenement valeur){
 static void enfiler(Arbre h, unsigned int i)
 {
     assert(h->valeurs != NULL);
-    assert(h->taille > 0);
+    
 
     unsigned int next_i;
     unsigned int max_i = h->taille - 1; 
     Evenement tmp;
 
     
-
+    if(h->taille == 0){
+        return;
+    }
     if (h->taille - 1 == 0)
         return;
     while ((i * 2) + 1 <= max_i || (i * 2) + 2 <= max_i) {
@@ -146,8 +148,9 @@ Evenement ote_minimum(Arbre tas){
     min=(tas->valeurs)[0];
     tas->valeurs[0] = tas->valeurs[tas->taille-1];
     (tas->taille)--;
+
     enfiler(tas, 0);
-    
+
     
 	return min;
 }

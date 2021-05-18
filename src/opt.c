@@ -5,7 +5,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Plateau 
     int c, level_number;
     int option_index = 0;
     if(argc < 2){
-        *niveau = niveau0();
+        *niveau = niveau1test();
         printf("Ah\n");
     }
     while(1){

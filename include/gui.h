@@ -16,6 +16,9 @@
 
 #include <MLV/MLV_all.h>
 
+#define SIZE_ARR_IMG 20 /* We can store max 20 img in the array of img, */
+                        /* If you attend to add more than 20 images, you have to increment this value */
+
 typedef enum {
     CHARACTER_SOUTH,
     CHARACTER_NORTH,
@@ -32,6 +35,7 @@ typedef enum {
     PLAYER2_SOUTH_IMG,
     PLAYER2_EAST_IMG,
     PLAYER2_WEST_IMG,
+    SWITCH_IMG,
 }typeImage;
 
 

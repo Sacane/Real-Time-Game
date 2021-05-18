@@ -1,0 +1,129 @@
+size = 15 x 25
+multijoueur : y
+PLAYER1 1 x 8 allure : 300
+PLAYER2 14 x 11 allure : 300
+LANCEUR 1 x 18 allure : 300 intervalle : 1000
+LANCEUR 1 x 24 allure : 300 intervalle : 1000
+LANCEUR 2 x 0 allure : 300 intervalle : 1000
+LANCEUR 2 x 6 allure : 300 intervalle : 1000
+LANCEUR 4 x 2 allure : 300 intervalle : 1000
+LANCEUR 6 x 20 allure : 300 intervalle : 1000
+LANCEUR 7 x 6 allure : 300 intervalle : 1000
+LANCEUR 7 x 13 allure : 300 intervalle : 1000
+LANCEUR 10 x 2 allure : 300 intervalle : 1000
+LANCEUR 10 x 8 allure : 300 intervalle : 1000
+LANCEUR 10 x 17 allure : 300 intervalle : 1000
+LANCEUR 12 x 14 allure : 300 intervalle : 1000
+LANCEUR 12 x 20 allure : 300 intervalle : 1000
+LANCEUR 12 x 24 allure : 300 intervalle : 1000
+LANCEUR 13 x 4 allure : 300 intervalle : 1000
+MUR 0 x 4
+MUR 0 x 9
+MUR 0 x 13
+MUR 1 x 9
+MUR 1 x 13
+MUR 1 x 14
+MUR 1 x 15
+MUR 1 x 14
+MUR 1 x 17
+MUR 1 x 19
+MUR 2 x 2
+MUR 2 x 4
+MUR 2 x 5
+MUR 2 x 7
+MUR 2 x 8
+MUR 2 x 9
+MUR 2 x 11
+MUR 2 x 12
+MUR 2 x 13
+MUR 3 x 9
+MUR 3 x 13
+MUR 4 x 0
+MUR 4 x 1
+MUR 4 x 3
+MUR 4 x 4
+MUR 4 x 5
+MUR 4 x 6
+MUR 4 x 10
+MUR 4 x 13
+MUR 4 x 14
+MUR 4 x 16
+MUR 4 x 19
+MUR 4 x 20
+MUR 4 x 21
+MUR 4 x 24
+MUR 5 x 9
+MUR 5 x 12
+MUR 5 x 16
+MUR 5 x 19
+MUR 6 x 9
+MUR 6 x 13
+MUR 6 x 19
+MUR 7 x 0
+MUR 7 x 1
+MUR 7 x 3
+MUR 7 x 4
+MUR 7 x 5
+MUR 7 x 7
+MUR 7 x 8
+MUR 7 x 9
+MUR 7 x 14
+MUR 7 x 15
+MUR 7 x 16
+MUR 7 x 17
+MUR 7 x 18
+MUR 7 x 19
+MUR 7 x 20
+MUR 7 x 21
+MUR 7 x 24
+MUR 9 x 10
+MUR 10 x 0
+MUR 10 x 1
+MUR 10 x 3
+MUR 10 x 4
+MUR 10 x 5
+MUR 10 x 9
+MUR 10 x 11
+MUR 10 x 12
+MUR 10 x 13
+MUR 10 x 14
+MUR 10 x 15
+MUR 10 x 16
+MUR 10 x 18
+MUR 10 x 19
+MUR 10 x 20
+MUR 10 x 21
+MUR 10 x 22
+MUR 10 x 23
+MUR 10 x 24
+MUR 11 x 8
+MUR 12 x 8
+MUR 12 x 11
+MUR 12 x 12
+MUR 12 x 13
+MUR 12 x 15
+MUR 12 x 16
+MUR 12 x 17
+MUR 12 x 18
+MUR 12 x 19
+MUR 12 x 21
+MUR 13 x 0
+MUR 13 x 3
+MUR 13 x 5
+MUR 13 x 6
+MUR 13 x 8
+MUR 13 x 11
+MUR 14 x 11
+MUR 14 x 15
+MUR 14 x 17
+
+SWITCH 0 x 3 DOOR 1 x 3
+SWITCH 0 x 12 DOOR 3 x 15
+SWITCH 0 x 14 DOOR 6 x 17
+SWITCH 5 x 0 DOOR 8 x 2
+SWITCH 5 x 13 DOOR 8 x 22
+SWITCH 5 x 24 DOOR 8 x 23
+SWITCH 13 x 15 DOOR 13 x 18
+SWITCH 14 x 0 DOOR 14 x 7
+
+DESTINATION 6 x 14

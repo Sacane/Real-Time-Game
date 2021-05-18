@@ -67,28 +67,34 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
 }
 
 bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Plateau plateau){
+    
     if((x <= 0 && direction == HAUT) || (x >= plateau->taille.x-1 && direction == BAS)||
     (y <= 0 && direction == GAUCHE) || (y >= plateau->taille.y - 1 && direction == DROITE)){
+        
         return true;
     }
     switch(direction){
         case HAUT:
-            if(plateau->objets[x-1][y].type == MUR){
+            if(plateau->objets[x-1][y].type == MUR || 
+            plateau->objets[x-1][y].type == DOOR){
                 return true;
             }
             break;
         case BAS:
-            if(plateau->objets[x+1][y].type == MUR){
+            if(plateau->objets[x+1][y].type == MUR || 
+            plateau->objets[x+1][y].type == DOOR){
                 return true;
             }
             break;
         case GAUCHE:
-            if(plateau->objets[x][y-1].type == MUR){
+            if(plateau->objets[x][y-1].type == MUR || 
+            plateau->objets[x][y-1].type == DOOR){
                 return true;
             }
             break;
         case DROITE:
-            if(plateau->objets[x][y+1].type == MUR){
+            if(plateau->objets[x][y+1].type == MUR || 
+            plateau->objets[x][y+1].type == DOOR){
                 return true;
             }
             break;
@@ -209,7 +215,9 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
         niveau->p1.is_player_alive = false;
     }
     if(niveau->mulptiplayer_mode){
+        
         if(est_coordonnee_equivalent(*coordonnees, niveau->p2.coo_player)){
+            printf("EQUALS multiplayer\n");
             niveau->p2.is_player_alive = false;
         }
     }
@@ -217,18 +225,21 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 }
 
 bool check_game_over(Plateau board){
-    return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive && !board->p2.is_player_alive) : (!board->p1.is_player_alive);
+    return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive || !board->p2.is_player_alive) : (!board->p1.is_player_alive);
 }
 
 int move_players(Plateau niveau, Player *player){
     assert(niveau != NULL);
+
     Trigger *trigger;
+    
     if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, niveau)){
         return -1;
     }
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type == DESTINATION){
         return -1;
     }
+    
     niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
     switch(player->dir_player){
         case HAUT:
@@ -244,6 +255,7 @@ int move_players(Plateau niveau, Player *player){
             player->coo_player.y -= 1;
             break;
     }
+    
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type == PROJECTILE){
         printf("You just walk into a projectile ! Game OVER.\n");
         return 0;
@@ -276,6 +288,29 @@ void check_player_move(Player *p){
 
 bool check_player_reached(Plateau niveau){
     return (!niveau->mulptiplayer_mode) ? (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination)) : (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination) && (est_coordonnee_equivalent(niveau->p2.coo_player, niveau->coo_destination)));
+}
+
+void trigger_switch(Plateau board, Player player){
+    Trigger *trigger;
+    trigger = (Trigger*)malloc(sizeof(Trigger));
+    switch(player.dir_player){
+        case HAUT:
+            memcpy(trigger, board->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+            break;
+        case BAS:
+            memcpy(trigger, board->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+            break;
+        case DROITE:
+            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
+            break;
+        case GAUCHE:
+            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
+            break;
+    }
+    board->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
+
+    board->objets[trigger->coo_door.x][trigger->coo_door.y].donnee_suppl = NULL;
+    free(trigger);
 }
 
 void affiche_Niveau (Plateau niveau) {

@@ -174,15 +174,20 @@ void launch_command(Plateau niveau, bool *is_reached){
     Evenement e;
 	char touche;
     int success = true;
-    bool moving;
+    bool moving = false;
 
     affiche_Niveau(niveau);
-    printf("\n");
+
     while (true) {
+        
         if(niveau->p1.is_player_alive == false){
             break;
         }
-        
+        if(niveau->mulptiplayer_mode){
+            if(niveau->p2.is_player_alive == false){
+                break;
+            }
+        }
         check_player_move(&(niveau->p1));
         if(niveau->mulptiplayer_mode)
             check_player_move(&(niveau->p2));
@@ -258,7 +263,9 @@ void launch_command(Plateau niveau, bool *is_reached){
             break;
         }
         if ( un_evenement_est_pret(tas)) {
+
             e = ote_minimum(tas);
+            
             execute_evenement(e, tas, niveau);
             while(e.moment == tas->valeurs[0].moment){
                 e = ote_minimum(tas);

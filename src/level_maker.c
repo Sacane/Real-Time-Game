@@ -59,6 +59,51 @@ Plateau niveau0() {
 
 
 
+Plateau niveau1test(){
+
+    Plateau niveau;
+    Generation* gen;
+    Coordonnees taille_niveau, coo_door, coo_door2;
+    taille_niveau.x = 5;
+    taille_niveau.y = 10;
+    coo_door.x = 3;
+    coo_door.y = 2;
+    niveau = malloc_Niveau(taille_niveau);
+    init_niveaux(niveau, taille_niveau);
+    coo_door2.x = 1;
+    coo_door2.y = 8;
+    Trigger *trigg, *trigg2;
+    trigg = (Trigger*)malloc(sizeof(Trigger));
+    trigg2 = (Trigger*)malloc(sizeof(Trigger));
+    trigg->coo_door = coo_door; 
+    trigg2->coo_door = coo_door2;
+    
+    gen = (Generation*)malloc(sizeof(Generation));
+    gen->allure_proj = une_milliseconde*300;
+    gen->intervalle = une_seconde;
+    niveau->objets[4][2].type = LANCEUR;
+    niveau->objets[4][2].donnee_suppl = gen;
+    niveau->objets[3][2].type = DOOR;
+    niveau->objets[1][8].type = DOOR;
+    niveau->objets[3][9].type = SWITCH;
+    niveau->objets[2][8].type = SWITCH;
+    niveau->objets[3][9].donnee_suppl = trigg;
+    niveau->objets[2][8].donnee_suppl = trigg2;
+    Coordonnees coo_p1, coo_p2;
+    coo_p1.x = 0;
+    coo_p1.y = 0;
+    coo_p2.x = 2;
+    coo_p2.y = 4;
+
+    niveau->p2 = init_player(coo_p2, BAS, une_milliseconde * 10, PLAYER2);
+    niveau->p1 = init_player(coo_p1, BAS, une_milliseconde * 10, PLAYER1);
+    niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
+    niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
+    niveau->mulptiplayer_mode = true;
+
+    return niveau;
+
+}
 
 
 Plateau niveau1(){
