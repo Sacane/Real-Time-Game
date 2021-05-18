@@ -43,6 +43,7 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
     p.is_player_alive = true;
     p.can_player_move = true;
     p.typePlayer = type;
+    p.has_player_win = false;
     return p;
 }
 
@@ -224,6 +225,20 @@ void deplace_projectile(Plateau niveau, Coordonnees *coordonnees){
 
 }
 
+bool check_victory(Plateau board){
+    if(board->mulptiplayer_mode){
+        if(board->p1.has_player_win && board->p2.has_player_win){
+            return true;
+        }
+    }
+    else{
+        if(board->p1.has_player_win){
+            return true;
+        }
+    }
+    return false;
+}
+
 bool check_game_over(Plateau board){
     return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive || !board->p2.is_player_alive) : (!board->p1.is_player_alive);
 }
@@ -258,6 +273,7 @@ int move_players(Plateau niveau, Player *player){
     
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type == PROJECTILE){
         printf("You just walk into a projectile ! Game OVER.\n");
+        player->is_player_alive = false;
         return 0;
     }
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
@@ -270,9 +286,8 @@ int move_players(Plateau niveau, Player *player){
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type != DESTINATION){
         niveau->objets[player->coo_player.x][player->coo_player.y].type = player->typePlayer;
     }
-
     else{
-        player->is_player_alive = false;
+        
         return -1;
     }
     player->can_player_move = false;

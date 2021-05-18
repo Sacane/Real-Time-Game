@@ -1,0 +1,11 @@
+size = 11 x 13
+multijoueur : y
+PLAYER1 0 x 1 allure : 10
+PLAYER2 10 x 10 allure : 10
+LANCEUR 1 x 6 allure : 300 intervalle : 1000
+
+SWITCH 0 x 2 DOOR 2 x 0
+SWITCH 10 x 0 DOOR 3 x 2
+SWITCH 8 x 9 DOOR 8 x 12
+
+DESTINATION 0 x 12

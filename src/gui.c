@@ -389,7 +389,8 @@ void launch(Plateau niveau, bool *is_reached){
     decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
 	width = (x / (niveau->taille.y)) - decalage_y;
 	height = (y / niveau->taille.x) - decalage_x; 
-
+	width = 50;
+	height = 50;
     tas = construit_Tas (niveau);
 
     MLV_create_window("RealTimeGame", "Game", x, y);
@@ -405,7 +406,13 @@ void launch(Plateau niveau, bool *is_reached){
 	
 	update_plateau(niveau, array_img, font, width, height);
     while (true) {
-		
+		if(niveau->is_game_over){
+			break;
+		}
+		if(check_victory(niveau)){
+			(*is_reached) = true;
+			break;
+		}
 		if(check_game_over(niveau)){
 			break;
 		}
@@ -419,6 +426,7 @@ void launch(Plateau niveau, bool *is_reached){
 		if(state == MLV_PRESSED){
 			if(touche == MLV_KEYBOARD_ESCAPE){
 				niveau->is_game_over = true;
+				break;
 			}
 			switch(check_which_player_move(touche)){
 				case PLAYER1:
@@ -427,7 +435,7 @@ void launch(Plateau niveau, bool *is_reached){
 					}
 					
 					if(going_to_obj(niveau, niveau->p1, DESTINATION)){
-						niveau->p2.is_player_alive = false;
+						niveau->p1.has_player_win = true;
 						erase_player_after_reached(niveau, width, height, font);
 					}
 					if(going_to_obj(niveau, niveau->p1, SWITCH)){
@@ -443,14 +451,13 @@ void launch(Plateau niveau, bool *is_reached){
 						switch(move_players(niveau, &(niveau->p1))){
 							
 							case -1:
-								printf("-1\n");
+								
 								break;
 							case 0:
 								printf("0\n");
 								niveau->p1.is_player_alive = false;
 								break;
 							case 1:
-								printf("1");
 								refresh_player(niveau->p1.coo_player, niveau, width, height, array_img, font);
 								break;
 							default:
@@ -464,7 +471,7 @@ void launch(Plateau niveau, bool *is_reached){
 						break;
 					}
 					if(going_to_obj(niveau, niveau->p2, DESTINATION)){
-						niveau->p2.is_player_alive = false;
+						niveau->p2.has_player_win = true;
 						erase_player_after_reached(niveau, width, height, font);
 					}
 					if(going_to_obj(niveau, niveau->p2, SWITCH)){
@@ -473,9 +480,10 @@ void launch(Plateau niveau, bool *is_reached){
 					}
 					switch(move_players(niveau, &(niveau->p2))){
 						case -1:
+							printf("destination\n");
 							break;
 						case 0:
-							niveau->p2.is_player_alive = false;
+							niveau->p2.has_player_win = true;
 							break;
 						case 1:
 							refresh_player(niveau->p2.coo_player, niveau, width, height, array_img, font);
@@ -521,6 +529,7 @@ void launch(Plateau niveau, bool *is_reached){
             millisleep (10);
 		if(check_player_reached(niveau)){
 			(*is_reached) = true;
+			printf("C'EST ICI\n");
 			break;
 		}
         

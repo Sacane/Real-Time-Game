@@ -69,6 +69,9 @@ TypeObjet str_to_obj(char* type){
     if(strcmp(type, "PLAYER2") == 0){
         return PLAYER2;
     }
+    if(strcmp(type, "DESTINATION") == 0){
+        return DESTINATION;
+    }
     return 0;
 }
 

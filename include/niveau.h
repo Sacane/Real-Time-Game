@@ -25,6 +25,7 @@ typedef struct player{
     unsigned long moment_depl_player;
     bool is_player_alive;
     bool can_player_move;
+    bool has_player_win;
     unsigned long speed_player;
 
 }Player;
@@ -80,6 +81,8 @@ void init_niveaux(Plateau niveau, Coordonnees taille);
 int move_players(Plateau board, Player* player);
 
 bool check_game_over(Plateau board);
+
+bool check_victory(Plateau board);
 
 /**
  * Function that verify the player's movement

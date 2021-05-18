@@ -8,6 +8,7 @@ LANCEUR 2 x 10 allure : 300 intervalle : 1000
 LANCEUR 6 x 2 allure : 300 intervalle : 1000
 LANCEUR 9 x 0 allure : 300 intervalle : 1000
 LANCEUR 9 x 10 allure : 300 intervalle : 1000
+DESTINATION 5 x 6
 MUR 0 x 2
 MUR 0 x 6
 MUR 1 x 1
@@ -46,8 +47,7 @@ MUR 9 x 2
 MUR 9 x 7
 MUR 9 x 8
 MUR 9 x 9
-SWITCH 0 x 1 DOOR 1 x 5 
-SWITCH 0 x 7 DOOR 7 x 4
-SWITCH 6 x 6 DOOR 7 x 9
-SWITCH 8 x 8 DOOR 8 x 5
-DESTINATION 5 x 6
+SWITCH 0 x 1 DOOR 7 x 9
+SWITCH 0 x 7 DOOR 1 x 5
+SWITCH 6 x 6 DOOR 8 x 5
+SWITCH 8 x 8 DOOR 7 x 4

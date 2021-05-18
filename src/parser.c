@@ -34,14 +34,13 @@ Plateau read_file(char* name_file){
     }
     printf("Filling of objects...\n");
     while(fscanf(in, "%s", typeObject) != EOF){
-        printf("%s\n", typeObject);
+        
         switch(str_to_obj(typeObject)){
             
             Trigger *trigger;
             Generation *gen;
             Coordonnees coo_door;
             case LANCEUR:
-                
                 gen = (Generation*)malloc(sizeof(Generation));
                 printf("Filling of launchers...\n");
                 fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
@@ -57,18 +56,19 @@ Plateau read_file(char* name_file){
                 fscanf(in, " %u x %u", &x, &y);
                 res->objets[x][y].type = MUR;
                 res->objets[x][y].donnee_suppl = NULL;
-                
+                printf("OK\n");
                 break;
 
             case DESTINATION:
                 printf("Filling destination...");
                 fscanf(in, " %u x %u", &x, &y);
                 res->objets[x][y].type = DESTINATION;
-                res->coo_destination.x = x;
-                res->coo_destination.y = y;
+                coo_switch.x = x;
+                coo_switch.y = y;
+                res->coo_destination = coo_switch;
                 
                 printf("OK\n");
-                free(gen);
+               
                 break;
             case PLAYER1:
                 printf("Filling player1 : ");
@@ -108,6 +108,7 @@ Plateau read_file(char* name_file){
                 res->objets[x][y].type = SWITCH;
                 res->objets[x2][y2].type = DOOR;
                 res->objets[x][y].donnee_suppl = trigger;
+                printf("OK\n");
                 break;
             default:
                 break;
