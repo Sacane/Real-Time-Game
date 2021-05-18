@@ -499,7 +499,7 @@ void launch(Board gameboard, bool *is_reached){
 			state = MLV_RELEASED;
 		}
         
-        if (event_is_ready(tas)){
+        if (is_event_ready(tas)){
             e = heap_pop(tas);
 			obj = gameboard->objets[e.coo_obj.x][e.coo_obj.y].type;
             execute_event(e, tas, gameboard);

@@ -18,14 +18,14 @@
 
 
 /**
- * Function to manage the different usage options 
- * @param argc : int, the number of the argument (of the chosen option)
- * @param argv[] : char*, string of characters
+ * Function to manage the different usage options
+ * @param argc : int, the number of arguments
+ * @param argv[] : char* [], array of arguments
  * @param mode : int*, a pointer to an int (the chosen mode)
  * @param name_file : char*, string of characters of the name of the given file 
- * @param game : Board, a game board
+ * @param game : Board *, pointer to a board, 
  */
-void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *niveau);
+void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard);
 
 
 

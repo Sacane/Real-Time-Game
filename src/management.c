@@ -262,7 +262,7 @@ void launch_command(Board board, bool *is_reached){
         if(!success){
             break;
         }
-        if ( event_is_ready(tas)) {
+        if ( is_event_ready(tas)) {
 
             e = heap_pop(tas);
             

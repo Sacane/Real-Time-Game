@@ -1,53 +1,127 @@
-size = 11 x 13
-multijoueur : y
-PLAYER1 1 x 12 allure : 10
-PLAYER2 3 x 5 allure : 10
-LANCEUR 2 x 2 allure : 300 intervalle : 1000
-LANCEUR 2 x 8 allure : 300 intervalle : 1000
-LANCEUR 2 x 10 allure : 300 intervalle : 1000
-LANCEUR 6 x 2 allure : 300 intervalle : 1000
-LANCEUR 9 x 0 allure : 300 intervalle : 1000
-LANCEUR 9 x 10 allure : 300 intervalle : 1000
-DESTINATION 5 x 6
-MUR 0 x 2
-MUR 0 x 6
-MUR 1 x 1
-MUR 1 x 2
-MUR 1 x 6
-MUR 2 x 4
-MUR 2 x 6
-MUR 2 x 9
-MUR 2 x 11
-MUR 2 x 12
-MUR 3 x 4
-MUR 3 x 6
-MUR 4 x 2
-MUR 4 x 3
-MUR 4 x 4
-MUR 4 x 5
-MUR 4 x 6
-MUR 4 x 7
-MUR 4 x 8
-MUR 4 x 10
-MUR 5 x 3
-MUR 5 x 7
-MUR 6 x 0
-MUR 6 x 3
-MUR 6 x 7
-MUR 6 x 8
-MUR 6 x 10
-MUR 6 x 11
-MUR 6 x 12
-MUR 7 x 2
-MUR 7 x 6
-MUR 7 x 7
-MUR 8 x 2
-MUR 8 x 7
-MUR 9 x 2
-MUR 9 x 7
-MUR 9 x 8
-MUR 9 x 9
-SWITCH 0 x 1 DOOR 7 x 9
-SWITCH 0 x 7 DOOR 1 x 5
-SWITCH 6 x 6 DOOR 8 x 5
-SWITCH 8 x 8 DOOR 7 x 4
+size = 15 x 25
+multiplayer : y
+PLAYER1 1 x 8 allure : 10
+PLAYER2 14 x 12 allure : 10
+LAUNCHER 1 x 18 allure : 300 interval : 1000
+LAUNCHER 1 x 24 allure : 300 interval : 1000
+LAUNCHER 2 x 0 allure : 300 interval : 1000
+LAUNCHER 2 x 6 allure : 300 interval : 1000
+LAUNCHER 4 x 2 allure : 300 interval : 1000
+LAUNCHER 6 x 20 allure : 300 interval : 1000
+LAUNCHER 7 x 6 allure : 300 interval : 1000
+LAUNCHER 7 x 13 allure : 300 interval : 1000
+LAUNCHER 10 x 1 allure : 300 interval : 1000
+LAUNCHER 10 x 8 allure : 300 interval : 1000
+LAUNCHER 10 x 17 allure : 300 interval : 1000
+LAUNCHER 12 x 14 allure : 300 interval : 1000
+LAUNCHER 12 x 20 allure : 300 interval : 1000
+LAUNCHER 12 x 24 allure : 300 interval : 1000
+LAUNCHER 13 x 4 allure : 300 interval : 1000
+WALL 0 x 4
+WALL 0 x 9
+WALL 0 x 13
+WALL 1 x 9
+WALL 1 x 13
+WALL 1 x 14
+WALL 1 x 15
+WALL 1 x 14
+WALL 1 x 17
+WALL 1 x 19
+WALL 2 x 2
+WALL 2 x 4
+WALL 2 x 5
+WALL 2 x 7
+WALL 2 x 8
+WALL 2 x 9
+WALL 2 x 11
+WALL 2 x 12
+WALL 2 x 13
+WALL 3 x 9
+WALL 3 x 13
+WALL 4 x 0
+WALL 4 x 1
+WALL 4 x 3
+WALL 4 x 4
+WALL 4 x 5
+WALL 4 x 6
+WALL 4 x 10
+WALL 4 x 13
+WALL 4 x 14
+WALL 4 x 16
+WALL 4 x 19
+WALL 4 x 20
+WALL 4 x 21
+WALL 4 x 24
+WALL 5 x 9
+WALL 5 x 12
+WALL 5 x 16
+WALL 5 x 19
+WALL 6 x 9
+WALL 6 x 13
+WALL 6 x 19
+WALL 7 x 0
+WALL 7 x 1
+WALL 7 x 3
+WALL 7 x 4
+WALL 7 x 5
+WALL 7 x 7
+WALL 7 x 8
+WALL 7 x 9
+WALL 7 x 14
+WALL 7 x 15
+WALL 7 x 16
+WALL 7 x 17
+WALL 7 x 18
+WALL 7 x 19
+WALL 7 x 20
+WALL 7 x 21
+WALL 7 x 24
+WALL 9 x 10
+WALL 10 x 0
+WALL 10 x 2 
+WALL 10 x 3
+WALL 10 x 4
+WALL 10 x 5
+WALL 10 x 9
+WALL 10 x 11
+WALL 10 x 12
+WALL 10 x 13
+WALL 10 x 14
+WALL 10 x 15
+WALL 10 x 16
+WALL 10 x 18
+WALL 10 x 19
+WALL 10 x 20
+WALL 10 x 21
+WALL 10 x 22
+WALL 10 x 23
+WALL 10 x 24
+WALL 11 x 8
+WALL 12 x 8
+WALL 12 x 11
+WALL 12 x 12
+WALL 12 x 13
+WALL 12 x 15
+WALL 12 x 16
+WALL 12 x 17
+WALL 12 x 18
+WALL 12 x 19
+WALL 12 x 21
+WALL 13 x 0
+WALL 13 x 3
+WALL 13 x 5
+WALL 13 x 6
+WALL 13 x 8
+WALL 13 x 11
+WALL 14 x 11
+WALL 14 x 15
+WALL 14 x 17
+SWITCH 0 x 3 DOOR 13 x 18
+SWITCH 0 x 12 DOOR 8 x 23
+SWITCH 0 x 14 DOOR 3 x 15
+SWITCH 5 x 0 DOOR 14 x 7
+SWITCH 5 x 13 DOOR 6 x 17
+SWITCH 5 x 24 DOOR 8 x 22
+SWITCH 13 x 15 DOOR 1 x 3
+SWITCH 14 x 0 DOOR 8 x 2
+DESTINATION 6 x 14

@@ -1,0 +1,28 @@
+size = 8 x 12
+multiplayer : n
+PLAYER1 3 x 4 allure : 10
+LAUNCHER 0 x 9 allure : 300 interval : 1000
+LAUNCHER 4 x 11 allure : 300 interval : 1000
+LAUNCHER 5 x 2 allure : 300 interval : 1000
+DESTINATION 0 x 6
+WALL 1 x 0
+WALL 1 x 1
+WALL 3 x 0
+WALL 0 x 7
+WALL 1 x 7
+WALL 2 x 7
+WALL 2 x 6
+WALL 2 x 5
+WALL 2 x 4
+WALL 2 x 3
+WALL 3 x 3
+WALL 4 x 3
+WALL 5 x 3
+WALL 6 x 3
+WALL 5 x 4
+WALL 5 x 5
+WALL 5 x 6
+WALL 6 x 6
+WALL 6 x 7
+WALL 6 x 8
+WALL 6 x 9

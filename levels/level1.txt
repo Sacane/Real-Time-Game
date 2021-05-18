@@ -1,0 +1,15 @@
+size = 5 x 10
+multiplayer : n
+PLAYER1 0 x 0 allure : 10
+LAUNCHER 4 x 0 allure : 300 interval : 1000
+LAUNCHER 1 x 6 allure : 300 interval : 1000
+LAUNCHER 3 x 9 allure : 300 interval : 1000
+DESTINATION 0 x 3
+WALL 0 x 2
+WALL 1 x 2
+WALL 1 x 3
+WALL 1 x 4
+WALL 1 x 5
+WALL 2 x 3
+WALL 4 x 5
+WALL 4 x 6

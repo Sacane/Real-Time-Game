@@ -380,7 +380,7 @@ static bool test_equals_heap(Heap heap, Coordonnees remaining){
     return false;
 }
 
-static bool test_declenche_lanceur(int *total_test){
+static bool test_trigger_launcher(int *total_test){
     *total_test += 1;
     Board level = level0();
     Heap tas;
@@ -465,7 +465,7 @@ void main_test(){
 
     qtest("test_move_projectile_WEST", &compteur, &total_test, test_move_projectile_WEST);
 
-    qtest("test_declenche_lanceur", &compteur, &total_test, test_declenche_lanceur);
+    qtest("test_trigger_launcher", &compteur, &total_test, test_trigger_launcher);
 
 
     printf("Résultat totaux des tests : %d / %d\n", compteur, total_test);

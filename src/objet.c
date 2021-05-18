@@ -51,10 +51,10 @@ TypeObjet str_to_obj(char* type){
     if(strcmp(type, "PROJECTILE") == 0){
         return PROJECTILE;
     }
-    if(strcmp(type, "LANCEUR") == 0){
+    if(strcmp(type, "LAUNCHER") == 0){
         return LAUNCHER;
     }
-    if(strcmp(type, "MUR") == 0){
+    if(strcmp(type, "WALL") == 0){
         return WALL;
     }
     if(strcmp(type, "SWITCH") == 0){

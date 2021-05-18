@@ -46,7 +46,7 @@ void free_heap(Heap heap);
 
 void realloc_heap(Heap heap);
 
-bool event_is_ready(Heap heap); 
+bool is_event_ready(Heap heap); 
 
 Event heap_pop(Heap heap); 
 

@@ -1,11 +1,11 @@
 #include "../include/opt.h"
 
 
-void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *level){
+void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard){
     int c, level_number;
     int option_index = 0;
     if(argc < 2){
-        *level = level1test();
+        *gameboard = level1test();
         printf("Ah\n");
     }
     while(1){
@@ -28,23 +28,23 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *l
                 printf("Enter filemode\n");
                 strcpy(name_file, optarg);
                 printf("program launch with the file : %s %s\n", optarg, name_file);
-                *level = read_file(name_file);
+                *gameboard = read_file(name_file);
                 break;
             case 't':
                 printf("launch test level %ld\n", strtol(optarg, NULL, 10));
                 level_number = strtol(optarg, NULL, 10);
                 switch(level_number){
                     case 0:
-                        *level = level0();
+                        *gameboard = level0();
                         break;
                     case 1:
-                        *level = level1();
+                        *gameboard = level1();
                         break;
                     case 2: 
-                        *level = level2();
+                        *gameboard = level2();
                         break;
                     case 3:
-                        *level = level3();
+                        *gameboard = level3();
                         break;
                     default:
                         printf("Le niveau selectionner n'existe pas\n");

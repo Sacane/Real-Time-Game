@@ -59,7 +59,7 @@ void realloc_heap(Heap tas){
 }
 
 
-bool event_is_ready(Heap tas){
+bool is_event_ready(Heap tas){
 
     assert(tas->valeurs != NULL);
 

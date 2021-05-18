@@ -23,7 +23,7 @@ Board read_file(char* name_file){
     res = malloc_board(size_level);
     printf("%d x %d\n", res->taille.x, res->taille.y);
     printf("check multiplayers\n");
-    fscanf(in, "multijoueur : %c\n", &multiplayer);
+    fscanf(in, "multiplayer : %c\n", &multiplayer);
     if(multiplayer == 'y'){
         printf("Mode multiplayer activated\n");
         res->mulptiplayer_mode = true;
@@ -43,7 +43,7 @@ Board read_file(char* name_file){
             case LAUNCHER:
                 gen = (Generation*)malloc(sizeof(Generation));
                 printf("Filling of launchers...\n");
-                fscanf(in, " %u x %u allure : %lu intervalle : %lu", &x, &y, &allure, &intervalle);
+                fscanf(in, " %u x %u allure : %lu interval : %lu", &x, &y, &allure, &intervalle);
                 res->objets[x][y].type = LAUNCHER;
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
