@@ -6,17 +6,17 @@
 
 int main(int argc, char* argv[]) {
     
-    Board niveau = NULL;
+    Board level = NULL;
     int mode;
     char* name_file = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
     bool is_level_reached = false;
     
-    opt_management(argc, argv, &mode, name_file, &niveau);
+    opt_management(argc, argv, &mode, name_file, &level);
 
-    if(niveau == NULL){
-        niveau = niveau1test();
+    if(level == NULL){
+        level = level0();
     }
     
     switch(mode){
@@ -24,15 +24,15 @@ int main(int argc, char* argv[]) {
             main_test();
             break;
         case COMMAND:
-            launch_command(niveau, &is_level_reached);
+            launch_command(level, &is_level_reached);
             break;
         case GRAPHIC:
-            launch(niveau, &is_level_reached); 
+            launch(level, &is_level_reached); 
             break;
         case ERROR:
             printf("Une erreur est apparue, sortie du programme\n");
-            if(NULL != niveau){
-                free_Niveau(niveau);    
+            if(NULL != level){
+                free_board(level);    
             }
             free(name_file);
             return EXIT_FAILURE;
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
         (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
     }
 
-    free_Niveau(niveau);
+    free_board(level);
     free(name_file);
     return EXIT_SUCCESS;
 }

@@ -1,10 +1,10 @@
 #include "../include/management.h"
 
 /* On suppose que le tas n'est pas encore alloué, on le construit en fonction des éléments du niveau */
-Arbre construit_Tas(Board niveau){
+Heap construit_Tas(Board niveau){
     
-	Arbre arbre;
-    arbre = malloc_Tas(INITIAL_SIZE); 
+	Heap heap;
+    heap = malloc_heap(INITIAL_SIZE); 
 	Event event;
 	unsigned int i, j;
     Generation *gen = (Generation*)malloc(sizeof(Generation));
@@ -17,12 +17,12 @@ Arbre construit_Tas(Board niveau){
 				event.coo_obj.x = i;
 				event.coo_obj.y = j;
 				event.moment = gen->intervalle;
-				ajoute_evenement(arbre, event);
+				add_event(heap, event);
 			}
 		}
 	}
     free(gen);
-	return arbre;
+	return heap;
 }
 
 
@@ -75,7 +75,7 @@ void creer_projectile_selon_direction(Board board, Direction direction, Coordonn
 }
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
-static void update_launcher_in_heap(Event lanceur, Arbre tas, Coordonnees pos_lanceur, Board niveau){
+static void update_launcher_in_heap(Event lanceur, Heap tas, Coordonnees pos_lanceur, Board niveau){
 
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
@@ -85,12 +85,12 @@ static void update_launcher_in_heap(Event lanceur, Arbre tas, Coordonnees pos_la
     update_moment = lanceur.moment + generation->intervalle;
     new_launcher.moment = update_moment;
     new_launcher.coo_obj = lanceur.coo_obj;
-    ajoute_evenement(tas, new_launcher);
+    add_event(tas, new_launcher);
 
     free(generation);
 }
 
-void declenche_lanceur(Board niveau, Arbre tas, Coordonnees pos_lanceur, Event ancien_lanceur){
+void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur){
 	
     assert(niveau != NULL);
     assert(tas != NULL);
@@ -110,7 +110,7 @@ void declenche_lanceur(Board niveau, Arbre tas, Coordonnees pos_lanceur, Event a
             creer_projectile_selon_direction(niveau, direction, &pos_projectile, pos_lanceur);
             event_proj.moment = ancien_lanceur.moment + generation->allure_proj;
             event_proj.coo_obj = pos_projectile;
-            ajoute_evenement(tas, event_proj);
+            add_event(tas, event_proj);
         }
     }
 
@@ -123,7 +123,7 @@ void declenche_lanceur(Board niveau, Arbre tas, Coordonnees pos_lanceur, Event a
  (1) - Déplace le projectile : en fonction de la direction
  (2) - si le projectile n'a pas disparu (mur / hors plateau), rajoute dans le tas l'évènement du projectile à la position mis à jour
 */
-void declenche_projectile(Arbre tas, Board niveau, Coordonnees pos_projectile, Event projectile){
+void declenche_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile){
 
 	assert(tas != NULL);
 	assert(niveau != NULL);
@@ -140,11 +140,11 @@ void declenche_projectile(Arbre tas, Board niveau, Coordonnees pos_projectile, E
 	if(pos_projectile.x <= niveau->taille.x && pos_projectile.y <= niveau->taille.y){
 		evenement_projectile.moment = moment;
 		evenement_projectile.coo_obj = pos_projectile;
-		ajoute_evenement(tas, evenement_projectile);
+		add_event(tas, evenement_projectile);
     }
 }
 
-void execute_event(Event e, Arbre tas, Board niveau) {
+void execute_event(Event e, Heap tas, Board niveau) {
 
     assert(tas != NULL);
 	assert(tas->valeurs != NULL);
@@ -167,80 +167,80 @@ void execute_event(Event e, Arbre tas, Board niveau) {
     }
 }
 
-void launch_command(Board niveau, bool *is_reached){
+void launch_command(Board board, bool *is_reached){
     
     init_stdin();
-    Arbre tas = construit_Tas(niveau);
+    Heap tas = construit_Tas(board);
     Event e;
 	char touche;
     int success = true;
     bool moving = false;
 
-    affiche_Niveau(niveau);
+    print_board(board);
 
     while (true) {
         
-        if(niveau->p1.is_player_alive == false){
+        if(board->p1.is_player_alive == false){
             break;
         }
-        if(niveau->mulptiplayer_mode){
-            if(niveau->p2.is_player_alive == false){
+        if(board->mulptiplayer_mode){
+            if(board->p2.is_player_alive == false){
                 break;
             }
         }
-        check_player_move(&(niveau->p1));
-        if(niveau->mulptiplayer_mode)
-            check_player_move(&(niveau->p2));
+        check_player_move(&(board->p1));
+        if(board->mulptiplayer_mode)
+            check_player_move(&(board->p2));
             
         while((touche = getchar()) != EOF){
-            if(niveau->p1.can_player_move == true){
+            if(board->p1.can_player_move == true){
                 switch (touche)
                 {
                     case 'z':
-                        niveau->p1.dir_player = NORTH;
+                        board->p1.dir_player = NORTH;
                         moving = true;
                         break;
                     case 's':
-                        niveau->p1.dir_player = SOUTH;
+                        board->p1.dir_player = SOUTH;
                         moving = true;
                         break;
                     case 'd':
-                        niveau->p1.dir_player = EAST;
+                        board->p1.dir_player = EAST;
                         moving = true;
                         break;
                     case 'q':
-                        niveau->p1.dir_player = WEST;
+                        board->p1.dir_player = WEST;
                         moving = true;
                         break;
                     default:
                         moving = false;
                         break;
                 }
-                if(niveau->p1.can_player_move == true && moving == true){
-                    success = move_players(niveau, &(niveau->p1));
+                if(board->p1.can_player_move == true && moving == true){
+                    success = move_players(board, &(board->p1));
                     if(!success){
                         break;
                     }
                 }
             }
-            if(niveau->mulptiplayer_mode){
-                if(niveau->p2.can_player_move == true){
+            if(board->mulptiplayer_mode){
+                if(board->p2.can_player_move == true){
                     switch(touche)
                     {
                         case 'o':
-                            niveau->p2.dir_player = NORTH;
+                            board->p2.dir_player = NORTH;
                             moving = true;
                             break;
                         case 'l':
-                            niveau->p2.dir_player = SOUTH;
+                            board->p2.dir_player = SOUTH;
                             moving = true;
                             break;
                         case 'm':
-                            niveau->p2.dir_player = EAST;
+                            board->p2.dir_player = EAST;
                             moving = true;
                             break;
                         case 'k':
-                            niveau->p2.dir_player = WEST;
+                            board->p2.dir_player = WEST;
                             moving = true;
                             break;
                         default:
@@ -248,8 +248,8 @@ void launch_command(Board niveau, bool *is_reached){
                             break;
 
                     }
-                    if(niveau->p2.can_player_move && moving)
-                        success = move_players(niveau, &(niveau->p2));
+                    if(board->p2.can_player_move && moving)
+                        success = move_players(board, &(board->p2));
                     if(success == 0){
                         break;
                     }
@@ -262,26 +262,26 @@ void launch_command(Board niveau, bool *is_reached){
         if(!success){
             break;
         }
-        if ( un_evenement_est_pret(tas)) {
+        if ( event_is_ready(tas)) {
 
-            e = ote_minimum(tas);
+            e = heap_pop(tas);
             
-            execute_event(e, tas, niveau);
+            execute_event(e, tas, board);
             while(e.moment == tas->valeurs[0].moment){
-                e = ote_minimum(tas);
-                execute_event(e, tas, niveau);
+                e = heap_pop(tas);
+                execute_event(e, tas, board);
             }
-            affiche_Niveau(niveau);
+            print_board(board);
     		printf("\n");
         }   
         else
             millisleep (10); 
-        if(check_player_reached(niveau)){
+        if(check_player_reached(board)){
             (*is_reached) = true;
             break;
         }
     }
-    free_Tas(tas);
+    free_heap(tas);
     restaure_stdin();
 
 }

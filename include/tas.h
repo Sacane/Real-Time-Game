@@ -30,32 +30,29 @@ typedef struct {
 
 typedef struct {
   
-	unsigned taille;    /* Nombre d'Evenements contenus dans le tas */
-	unsigned capacite;  /* Nombre de cases allouees pour les 
-						* `valeurs` (i.e. taille maximale) */
-	Event* valeurs;/* Tableau d'Evenements de taille `capacite` et
-						* dont les `taille` premieres cases sont 
-						* utilisees. */
+	unsigned taille;    
+	unsigned capacite;  
+	Event* valeurs;
 	
-} Tas, *Arbre;
+} Tree, *Heap;
 
-bool estTas(Arbre arbre);
+bool is_heap(Heap Heap);
 
-Arbre malloc_Tas(unsigned capacite_initiale);
+Heap malloc_heap(unsigned capacite_initiale);
 
 
-void free_Tas(Arbre tas);
-bool est_Tas(Arbre tas);
+void free_heap(Heap heap);
 
-void realloc_Tas(Arbre tas);
 
-bool un_evenement_est_pret(Arbre tas); 
+void realloc_heap(Heap heap);
 
-Event ote_minimum(Arbre tas); 
-void ajoute_evenement(Arbre tas, Event n); 
-                                            
-									 
-void affiche_Tas(Arbre tas);
+bool event_is_ready(Heap heap); 
+
+Event heap_pop(Heap heap); 
+
+void add_event(Heap heap, Event n); 
+                                            			 
+void print_heap(Heap heap);
 
 
 

@@ -3,14 +3,14 @@
 
 /* a modifié en local*/
 
-Board niveau0() {
+Board level0() {
 
-    Board niveau;
-    Coordonnees taille_niveau, coo_destination;
-    taille_niveau.x = 5;
-    taille_niveau.y = 10;
-    niveau = malloc_Niveau(taille_niveau);
-    init_niveaux(niveau, taille_niveau);
+    Board board;
+    Coordonnees taille_board, coo_destination;
+    taille_board.x = 5;
+    taille_board.y = 10;
+    board = malloc_board(taille_board);
+    init_board(board, taille_board);
     
     Generation* gen;
     Generation* gen2;
@@ -22,54 +22,51 @@ Board niveau0() {
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
 
-    niveau->objets[0][0].type = LAUNCHER;
-    niveau->objets[0][0].donnee_suppl = gen;
-    niveau->objets[3][5].type = LAUNCHER;
-    niveau->objets[3][5].donnee_suppl = gen2;
-    niveau->objets[4][9].type = DESTINATION;
+    board->objets[0][0].type = LAUNCHER;
+    board->objets[0][0].donnee_suppl = gen;
+    board->objets[3][5].type = LAUNCHER;
+    board->objets[3][5].donnee_suppl = gen2;
+    board->objets[4][9].type = DESTINATION;
 	coo_destination.x = 4;
     coo_destination.y = 9;
-    niveau->coo_destination = coo_destination;
+    board->coo_destination = coo_destination;
     /* init WALL */
-    niveau->objets[1][0].type = WALL;
-    niveau->objets[1][1].type = WALL;
-    niveau->objets[1][2].type = WALL;
-    niveau->objets[1][3].type = WALL;
-    niveau->objets[1][4].type = WALL;
-    niveau->objets[1][5].type = WALL;
-    niveau->objets[1][6].type = WALL;
-    niveau->objets[1][8].type = WALL;
-    niveau->objets[2][8].type = WALL;
-    niveau->objets[3][8].type = WALL;
-    niveau->objets[4][8].type = WALL;
+    board->objets[1][0].type = WALL;
+    board->objets[1][1].type = WALL;
+    board->objets[1][2].type = WALL;
+    board->objets[1][3].type = WALL;
+    board->objets[1][4].type = WALL;
+    board->objets[1][5].type = WALL;
+    board->objets[1][6].type = WALL;
+    board->objets[1][8].type = WALL;
+    board->objets[2][8].type = WALL;
+    board->objets[3][8].type = WALL;
+    board->objets[4][8].type = WALL;
 
-    Coordonnees coo_p1, coo_p2;
+    Coordonnees coo_p1;
     coo_p1.x = 4;
     coo_p1.y = 0;
-    coo_p2.x = 3;
-    coo_p2.y = 9;
-    niveau->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
-    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
-    niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
-    niveau->mulptiplayer_mode = true;
+
+    board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
+    board->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
+    board->mulptiplayer_mode = false;
     
-    return niveau;
+    return board;
 }
 
 
 
-Board niveau1test(){
+Board level1test(){
 
-    Board niveau;
+    Board board;
     Generation* gen;
-    Coordonnees taille_niveau, coo_door, coo_door2;
-    taille_niveau.x = 5;
-    taille_niveau.y = 10;
+    Coordonnees taille_board, coo_door, coo_door2;
+    taille_board.x = 5;
+    taille_board.y = 10;
     coo_door.x = 3;
     coo_door.y = 2;
-    niveau = malloc_Niveau(taille_niveau);
-    init_niveaux(niveau, taille_niveau);
+    board = malloc_board(taille_board);
+    init_board(board, taille_board);
     coo_door2.x = 1;
     coo_door2.y = 8;
     Trigger *trigg, *trigg2;
@@ -81,39 +78,39 @@ Board niveau1test(){
     gen = (Generation*)malloc(sizeof(Generation));
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
-    niveau->objets[4][2].type = LAUNCHER;
-    niveau->objets[4][2].donnee_suppl = gen;
-    niveau->objets[3][2].type = DOOR;
-    niveau->objets[1][8].type = DOOR;
-    niveau->objets[3][9].type = SWITCH;
-    niveau->objets[2][8].type = SWITCH;
-    niveau->objets[3][9].donnee_suppl = trigg;
-    niveau->objets[2][8].donnee_suppl = trigg2;
+    board->objets[4][2].type = LAUNCHER;
+    board->objets[4][2].donnee_suppl = gen;
+    board->objets[3][2].type = DOOR;
+    board->objets[1][8].type = DOOR;
+    board->objets[3][9].type = SWITCH;
+    board->objets[2][8].type = SWITCH;
+    board->objets[3][9].donnee_suppl = trigg;
+    board->objets[2][8].donnee_suppl = trigg2;
     Coordonnees coo_p1, coo_p2;
     coo_p1.x = 0;
     coo_p1.y = 0;
     coo_p2.x = 2;
     coo_p2.y = 4;
 
-    niveau->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
-    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    niveau->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
-    niveau->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
-    niveau->mulptiplayer_mode = true;
+    board->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
+    board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
+    board->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
+    board->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
+    board->mulptiplayer_mode = true;
 
-    return niveau;
+    return board;
 
 }
 
 
-Board niveau1(){
+Board level1(){
 
-    Board niveau;
-    Coordonnees taille_niveau, coo_destination;
-    taille_niveau.x = 5;
-    taille_niveau.y = 10;
-    niveau = malloc_Niveau(taille_niveau);
-    init_niveaux(niveau, taille_niveau);
+    Board board;
+    Coordonnees taille_board, coo_destination;
+    taille_board.x = 5;
+    taille_board.y = 10;
+    board = malloc_board(taille_board);
+    init_board(board, taille_board);
 
     Generation* gen;
     Generation* gen2;
@@ -130,45 +127,45 @@ Board niveau1(){
     gen3->intervalle = une_seconde;
 
 
-	niveau->objets[4][0].type = LAUNCHER;
-    niveau->objets[4][0].donnee_suppl = gen;
-    niveau->objets[1][6].type = LAUNCHER;
-    niveau->objets[1][6].donnee_suppl = gen2;
-	niveau->objets[3][9].type = LAUNCHER;
-    niveau->objets[3][9].donnee_suppl = gen3;
-    niveau->objets[0][3].type = DESTINATION;
+	board->objets[4][0].type = LAUNCHER;
+    board->objets[4][0].donnee_suppl = gen;
+    board->objets[1][6].type = LAUNCHER;
+    board->objets[1][6].donnee_suppl = gen2;
+	board->objets[3][9].type = LAUNCHER;
+    board->objets[3][9].donnee_suppl = gen3;
+    board->objets[0][3].type = DESTINATION;
     coo_destination.x = 0; 
     coo_destination.y = 3;
-    niveau->coo_destination = coo_destination;
+    board->coo_destination = coo_destination;
     /* init WALL */
-    niveau->objets[0][2].type = WALL;
-    niveau->objets[1][2].type = WALL;
-    niveau->objets[1][3].type = WALL;
-    niveau->objets[1][4].type = WALL;
-    niveau->objets[1][5].type = WALL;
-    niveau->objets[2][3].type = WALL;
-    niveau->objets[4][5].type = WALL;
-    niveau->objets[4][6].type = WALL;
+    board->objets[0][2].type = WALL;
+    board->objets[1][2].type = WALL;
+    board->objets[1][3].type = WALL;
+    board->objets[1][4].type = WALL;
+    board->objets[1][5].type = WALL;
+    board->objets[2][3].type = WALL;
+    board->objets[4][5].type = WALL;
+    board->objets[4][6].type = WALL;
 
     Coordonnees coo_p1;
 	coo_p1.x = 0;
     coo_p1.y = 0;
-    niveau->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    niveau->objets[coo_p1.x][coo_p1.y].type = niveau->p1.typePlayer;
+    board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
+    board->objets[coo_p1.x][coo_p1.y].type = board->p1.typePlayer;
     
 
-	return niveau;
+	return board;
 }
 
 
-Board niveau2(){
+Board level2(){
 
-	Board niveau;
-    Coordonnees taille_niveau, coo_destination;
-    taille_niveau.x = 8;
-    taille_niveau.y = 12;
-    niveau = malloc_Niveau(taille_niveau);
-    init_niveaux(niveau, taille_niveau);
+	Board board;
+    Coordonnees taille_board, coo_destination;
+    taille_board.x = 8;
+    taille_board.y = 12;
+    board = malloc_board(taille_board);
+    init_board(board, taille_board);
     
     Generation* gen;
     Generation* gen2;
@@ -188,72 +185,72 @@ Board niveau2(){
 	gen4->allure_proj = une_milliseconde * 300;
     gen4->intervalle = une_seconde;
 
-	niveau->objets[1][2].type = LAUNCHER;
-    niveau->objets[1][2].donnee_suppl = gen;
-    niveau->objets[2][10].type = LAUNCHER;
-    niveau->objets[2][10].donnee_suppl = gen2;
-	niveau->objets[6][4].type = LAUNCHER;
-    niveau->objets[6][4].donnee_suppl = gen3;
-	niveau->objets[6][9].type = LAUNCHER;
-    niveau->objets[6][9].donnee_suppl = gen4;
-    niveau->objets[0][0].type = DESTINATION;
+	board->objets[1][2].type = LAUNCHER;
+    board->objets[1][2].donnee_suppl = gen;
+    board->objets[2][10].type = LAUNCHER;
+    board->objets[2][10].donnee_suppl = gen2;
+	board->objets[6][4].type = LAUNCHER;
+    board->objets[6][4].donnee_suppl = gen3;
+	board->objets[6][9].type = LAUNCHER;
+    board->objets[6][9].donnee_suppl = gen4;
+    board->objets[0][0].type = DESTINATION;
     coo_destination.x = 0;
     coo_destination.y = 0;
-    niveau->coo_destination = coo_destination;
+    board->coo_destination = coo_destination;
 	/* init WALL */
-    niveau->objets[1][5].type = WALL;
+    board->objets[1][5].type = WALL;
 
-    niveau->objets[2][0].type = WALL;
-    niveau->objets[2][1].type = WALL;
-    niveau->objets[2][2].type = WALL;
-    niveau->objets[2][3].type = WALL;
-    niveau->objets[2][4].type = WALL;
-    niveau->objets[2][5].type = WALL;
-    niveau->objets[2][11].type = WALL;
+    board->objets[2][0].type = WALL;
+    board->objets[2][1].type = WALL;
+    board->objets[2][2].type = WALL;
+    board->objets[2][3].type = WALL;
+    board->objets[2][4].type = WALL;
+    board->objets[2][5].type = WALL;
+    board->objets[2][11].type = WALL;
 
-    niveau->objets[4][0].type = WALL;
+    board->objets[4][0].type = WALL;
 
-    niveau->objets[4][3].type = WALL;
-    niveau->objets[4][4].type = WALL;
-    niveau->objets[4][5].type = WALL;
-    niveau->objets[4][6].type = WALL;
-    niveau->objets[4][7].type = WALL;
-    niveau->objets[4][8].type = WALL;
-    niveau->objets[4][9].type = WALL;
-    niveau->objets[4][10].type = WALL;
-    niveau->objets[4][11].type = WALL;
+    board->objets[4][3].type = WALL;
+    board->objets[4][4].type = WALL;
+    board->objets[4][5].type = WALL;
+    board->objets[4][6].type = WALL;
+    board->objets[4][7].type = WALL;
+    board->objets[4][8].type = WALL;
+    board->objets[4][9].type = WALL;
+    board->objets[4][10].type = WALL;
+    board->objets[4][11].type = WALL;
 
-    niveau->objets[6][0].type = WALL;
-    niveau->objets[6][1].type = WALL;
-    niveau->objets[6][2].type = WALL;
-    niveau->objets[6][3].type = WALL;
+    board->objets[6][0].type = WALL;
+    board->objets[6][1].type = WALL;
+    board->objets[6][2].type = WALL;
+    board->objets[6][3].type = WALL;
 
-    niveau->objets[6][5].type = WALL;
-    niveau->objets[6][6].type = WALL;
+    board->objets[6][5].type = WALL;
+    board->objets[6][6].type = WALL;
 
-    niveau->objets[6][10].type = WALL;
-    niveau->objets[6][11].type = WALL;
+    board->objets[6][10].type = WALL;
+    board->objets[6][11].type = WALL;
 
     Coordonnees coo_p;
 	coo_p.x = 7;
     coo_p.y = 0;
-    niveau->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
-    niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
+    board->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
+    board->objets[coo_p.x][coo_p.y].type = board->p1.typePlayer;
 
 
-	return niveau;
+	return board;
 
 }
 
 
-Board niveau3(){
+Board level3(){
 
-	Board niveau;
-    Coordonnees taille_niveau, coo_dest;
-    taille_niveau.x = 8;
-    taille_niveau.y = 12;
-    niveau = malloc_Niveau(taille_niveau);
-    init_niveaux(niveau, taille_niveau);
+	Board board;
+    Coordonnees taille_board, coo_dest;
+    taille_board.x = 8;
+    taille_board.y = 12;
+    board = malloc_board(taille_board);
+    init_board(board, taille_board);
 
     Generation* gen;
     Generation* gen3;
@@ -269,49 +266,49 @@ Board niveau3(){
 	gen4->allure_proj = une_milliseconde * 300;
     gen4->intervalle = une_seconde;
 
-	niveau->objets[0][9].type = LAUNCHER;
-    niveau->objets[0][9].donnee_suppl = gen;
-	niveau->objets[4][11].type = LAUNCHER;
-    niveau->objets[4][11].donnee_suppl = gen3;
-	niveau->objets[5][2].type = LAUNCHER;
-    niveau->objets[5][2].donnee_suppl = gen4;
-    niveau->objets[0][6].type = DESTINATION;
+	board->objets[0][9].type = LAUNCHER;
+    board->objets[0][9].donnee_suppl = gen;
+	board->objets[4][11].type = LAUNCHER;
+    board->objets[4][11].donnee_suppl = gen3;
+	board->objets[5][2].type = LAUNCHER;
+    board->objets[5][2].donnee_suppl = gen4;
+    board->objets[0][6].type = DESTINATION;
     coo_dest.x = 0;
     coo_dest.y = 6;
-    niveau->coo_destination = coo_dest;
+    board->coo_destination = coo_dest;
 	/* init WALL */
-    niveau->objets[1][0].type = WALL;
-    niveau->objets[1][1].type = WALL;
+    board->objets[1][0].type = WALL;
+    board->objets[1][1].type = WALL;
 
-    niveau->objets[3][0].type = WALL;
+    board->objets[3][0].type = WALL;
 
-    niveau->objets[0][7].type = WALL;
-    niveau->objets[1][7].type = WALL;
-    niveau->objets[2][7].type = WALL;
-    niveau->objets[2][6].type = WALL;
-    niveau->objets[2][5].type = WALL;
-    niveau->objets[2][4].type = WALL;
-    niveau->objets[2][3].type = WALL;
-    niveau->objets[3][3].type = WALL;
-    niveau->objets[4][3].type = WALL;
-    niveau->objets[5][3].type = WALL;
-    niveau->objets[6][3].type = WALL;
+    board->objets[0][7].type = WALL;
+    board->objets[1][7].type = WALL;
+    board->objets[2][7].type = WALL;
+    board->objets[2][6].type = WALL;
+    board->objets[2][5].type = WALL;
+    board->objets[2][4].type = WALL;
+    board->objets[2][3].type = WALL;
+    board->objets[3][3].type = WALL;
+    board->objets[4][3].type = WALL;
+    board->objets[5][3].type = WALL;
+    board->objets[6][3].type = WALL;
 
-    niveau->objets[5][4].type = WALL;
-    niveau->objets[5][5].type = WALL;
-    niveau->objets[5][6].type = WALL;
-    niveau->objets[6][6].type = WALL;
-    niveau->objets[6][7].type = WALL;
-    niveau->objets[6][8].type = WALL;
-    niveau->objets[6][9].type = WALL;
+    board->objets[5][4].type = WALL;
+    board->objets[5][5].type = WALL;
+    board->objets[5][6].type = WALL;
+    board->objets[6][6].type = WALL;
+    board->objets[6][7].type = WALL;
+    board->objets[6][8].type = WALL;
+    board->objets[6][9].type = WALL;
 
     Coordonnees coo_p;
 
 	coo_p.x = 3;
     coo_p.y = 4;
-    niveau->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
-    niveau->objets[coo_p.x][coo_p.y].type = niveau->p1.typePlayer;
+    board->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
+    board->objets[coo_p.x][coo_p.y].type = board->p1.typePlayer;
     
 
-	return niveau;
+	return board;
 }

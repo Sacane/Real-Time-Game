@@ -56,7 +56,7 @@ void affiche_coordonnee(Coordonnees coordonnee);
  * @param size : Coordinates, size of the board
  * @return : Board, a game board  
  */
-Board malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
+Board malloc_board (Coordonnees taille); /* Effectue les malloc's
                                              * pour obtenir un 
                                              * Niveau* de la taille 
                                              * donnee */
@@ -65,7 +65,7 @@ Board malloc_Niveau (Coordonnees taille); /* Effectue les malloc's
  * Function that frees the memory taken by a level
  * @param level : Board, level of the board
  */
-void free_Niveau (Board niveau); /* Libere la memoire prise par un
+void free_board (Board board); /* Libere la memoire prise par un
                                     * Niveau */
 
 
@@ -76,7 +76,7 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
  * @param level : Board, a level of game
  * @param size : Coordinates, coordinates of the game board
  */
-void init_niveaux(Board niveau, Coordonnees taille);
+void init_board(Board board, Coordonnees taille);
 
 int move_players(Board board, Player* player);
 
@@ -132,7 +132,7 @@ bool check_player_reached(Board niveau);
  * Fonction that print in the terminal the level given in argument
  * @param level : Board, the game board
  */
-void affiche_Niveau (Board niveau); /* Affiche dans le terminal le
+void print_board (Board niveau); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */
 
 

@@ -314,7 +314,6 @@ static int listener(MLV_Keyboard_button button, Board board, Player *player){
 	return -1;
 }		
 
-/*return 1 if the player who move is the player1, 0 if it's the player 2*/
 static int check_which_player_move(MLV_Keyboard_button touche){
 	switch(touche){
 		case MLV_KEYBOARD_z:
@@ -370,26 +369,26 @@ static void erase_player_after_reached(Board board, unsigned int width, unsigned
 	MLV_actualise_window();
 }
 
-void launch(Board niveau, bool *is_reached){
+void launch(Board gameboard, bool *is_reached){
     unsigned int x, y;
     int decalage_x, decalage_y;
     MLV_Image *font;
     MLV_Image *array_img[SIZE_ARR_IMG];
 	unsigned int width, height;
     MLV_Keyboard_button touche;
-	Arbre tas;
+	Heap tas;
 	Event e;
 	TypeObjet obj;
 	MLV_Button_state state;
 
 	MLV_get_desktop_size(&x, &y);
-    decalage_x = (niveau->taille.y < niveau->taille.x) ? 50 : 25;
-    decalage_y = (niveau->taille.y > niveau->taille.x) ? 50 : 25;
-	width = (x / (niveau->taille.y)) - decalage_y;
-	height = (y / niveau->taille.x) - decalage_x; 
+    decalage_x = (gameboard->taille.y < gameboard->taille.x) ? 50 : 25;
+    decalage_y = (gameboard->taille.y > gameboard->taille.x) ? 50 : 25;
+	width = (x / (gameboard->taille.y)) - decalage_y;
+	height = (y / gameboard->taille.x) - decalage_x; 
 	width = 50;
 	height = 45;
-    tas = construit_Tas (niveau);
+    tas = construit_Tas (gameboard);
 
     MLV_create_window("RealTimeGame", "Game", x, y);
     init_array_img(array_img);
@@ -399,64 +398,64 @@ void launch(Board niveau, bool *is_reached){
 		fprintf(stderr, "Image non-existente ou impossible à charger\n");
 		exit(1);
 	}
-    MLV_resize_image(font, width * niveau->taille.y, height * niveau->taille.x);
-	MLV_draw_image(array_img[CHARACTER_SOUTH], niveau->p1.coo_player.y, niveau->p1.coo_player.x);
+    MLV_resize_image(font, width * gameboard->taille.y, height * gameboard->taille.x);
+	MLV_draw_image(array_img[CHARACTER_SOUTH], gameboard->p1.coo_player.y, gameboard->p1.coo_player.x);
 	
-	update_plateau(niveau, array_img, font, width, height);
+	update_plateau(gameboard, array_img, font, width, height);
     while (true) {
-		if(niveau->is_game_over){
+		if(gameboard->is_game_over){
 			break;
 		}
-		if(check_victory(niveau)){
+		if(check_victory(gameboard)){
 			(*is_reached) = true;
 			break;
 		}
-		if(check_game_over(niveau)){
+		if(check_game_over(gameboard)){
 			break;
 		}
 
-        check_player_move(&(niveau->p1));
-		if(niveau->mulptiplayer_mode){
-			check_player_move(&(niveau->p2));
+        check_player_move(&(gameboard->p1));
+		if(gameboard->mulptiplayer_mode){
+			check_player_move(&(gameboard->p2));
 		}
 		MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &state);
 
 		if(state == MLV_PRESSED){
 			if(touche == MLV_KEYBOARD_ESCAPE){
-				niveau->is_game_over = true;
+				gameboard->is_game_over = true;
 				break;
 			}
 			switch(check_which_player_move(touche)){
 				case PLAYER1:
-					if(listener(touche, niveau, &(niveau->p1)) == -1){
+					if(listener(touche, gameboard, &(gameboard->p1)) == -1){
 						break;
 					}
 					
-					if(going_to_obj(niveau, niveau->p1, DESTINATION)){
-						niveau->p1.has_player_win = true;
-						erase_player_after_reached(niveau, width, height, font);
+					if(going_to_obj(gameboard, gameboard->p1, DESTINATION)){
+						gameboard->p1.has_player_win = true;
+						erase_player_after_reached(gameboard, width, height, font);
 					}
-					if(going_to_obj(niveau, niveau->p1, SWITCH)){
+					if(going_to_obj(gameboard, gameboard->p1, SWITCH)){
 						printf("Ici\n");
-						trigger_switch(niveau, niveau->p1);
+						trigger_switch(gameboard, gameboard->p1);
 						printf("end trigger\n");
-						refresh_switch(niveau, niveau->p1, font, width, height);
+						refresh_switch(gameboard, gameboard->p1, font, width, height);
 						printf("end refresh\n");
 					}
 
-					if(!se_dirige_vers_mur(niveau->p1.coo_player.x, niveau->p1.coo_player.y, niveau->p1.dir_player, niveau)){
+					if(!se_dirige_vers_mur(gameboard->p1.coo_player.x, gameboard->p1.coo_player.y, gameboard->p1.dir_player, gameboard)){
 						printf("move\n");
-						switch(move_players(niveau, &(niveau->p1))){
+						switch(move_players(gameboard, &(gameboard->p1))){
 							
 							case -1:
 								
 								break;
 							case 0:
 								printf("0\n");
-								niveau->p1.is_player_alive = false;
+								gameboard->p1.is_player_alive = false;
 								break;
 							case 1:
-								refresh_player(niveau->p1.coo_player, niveau, width, height, array_img, font);
+								refresh_player(gameboard->p1.coo_player, gameboard, width, height, array_img, font);
 								break;
 							default:
 								break;
@@ -465,26 +464,26 @@ void launch(Board niveau, bool *is_reached){
 					break;
 
 				case PLAYER2:
-					if(listener(touche, niveau, &(niveau->p2))== -1){
+					if(listener(touche, gameboard, &(gameboard->p2))== -1){
 						break;
 					}
-					if(going_to_obj(niveau, niveau->p2, DESTINATION)){
-						niveau->p2.has_player_win = true;
-						erase_player_after_reached(niveau, width, height, font);
+					if(going_to_obj(gameboard, gameboard->p2, DESTINATION)){
+						gameboard->p2.has_player_win = true;
+						erase_player_after_reached(gameboard, width, height, font);
 					}
-					if(going_to_obj(niveau, niveau->p2, SWITCH)){
-						trigger_switch(niveau, niveau->p2);
-						refresh_switch(niveau, niveau->p2, font, width, height);
+					if(going_to_obj(gameboard, gameboard->p2, SWITCH)){
+						trigger_switch(gameboard, gameboard->p2);
+						refresh_switch(gameboard, gameboard->p2, font, width, height);
 					}
-					switch(move_players(niveau, &(niveau->p2))){
+					switch(move_players(gameboard, &(gameboard->p2))){
 						case -1:
 							printf("destination\n");
 							break;
 						case 0:
-							niveau->p2.has_player_win = true;
+							gameboard->p2.has_player_win = true;
 							break;
 						case 1:
-							refresh_player(niveau->p2.coo_player, niveau, width, height, array_img, font);
+							refresh_player(gameboard->p2.coo_player, gameboard, width, height, array_img, font);
 							
 							break;
 						default:
@@ -500,23 +499,23 @@ void launch(Board niveau, bool *is_reached){
 			state = MLV_RELEASED;
 		}
         
-        if (un_evenement_est_pret(tas)){
-            e = ote_minimum(tas);
-			obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
-            execute_event(e, tas, niveau);
+        if (event_is_ready(tas)){
+            e = heap_pop(tas);
+			obj = gameboard->objets[e.coo_obj.x][e.coo_obj.y].type;
+            execute_event(e, tas, gameboard);
 			if(obj == PROJECTILE){
-				refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+				refresh_projectile(e.coo_obj, gameboard, width, height, array_img, font);
 			}else if(obj == LAUNCHER){
-				refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+				refresh_launcher(e.coo_obj, gameboard, width, height, array_img);
 			}
             while(e.moment == tas->valeurs[0].moment){
-                e = ote_minimum(tas);
-				obj = niveau->objets[e.coo_obj.x][e.coo_obj.y].type;
-				execute_event(e, tas, niveau);
+                e = heap_pop(tas);
+				obj = gameboard->objets[e.coo_obj.x][e.coo_obj.y].type;
+				execute_event(e, tas, gameboard);
 				if(obj == PROJECTILE){
-					refresh_projectile(e.coo_obj, niveau, width, height, array_img, font);
+					refresh_projectile(e.coo_obj, gameboard, width, height, array_img, font);
 				}else if(obj == LAUNCHER){
-					refresh_launcher(e.coo_obj, niveau, width, height, array_img);
+					refresh_launcher(e.coo_obj, gameboard, width, height, array_img);
 				}
 			}
 			
@@ -525,7 +524,7 @@ void launch(Board niveau, bool *is_reached){
         }   
         else
             millisleep (10);
-		if(check_player_reached(niveau)){
+		if(check_player_reached(gameboard)){
 			(*is_reached) = true;
 			printf("C'EST ICI\n");
 			break;
@@ -536,6 +535,6 @@ void launch(Board niveau, bool *is_reached){
     free_array_img(array_img);
     MLV_free_window();
     printf("program ended in : %lu seconds\n", clock() / ((1000) * une_milliseconde));
-    free_Tas(tas);
+    free_heap(tas);
     printf("end_free\n");
 }

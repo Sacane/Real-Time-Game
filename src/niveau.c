@@ -1,7 +1,7 @@
 #include "../include/niveau.h"
 #include <string.h>
 
-Board malloc_Niveau (Coordonnees taille){
+Board malloc_board (Coordonnees taille){
 
     Board tmp;
     unsigned int i;
@@ -19,20 +19,20 @@ Board malloc_Niveau (Coordonnees taille){
 
 
 
-void free_Niveau (Board niveau){
+void free_board (Board gameboard){
     
     unsigned int i, j;
 
-    for(i = 0; i < niveau->taille.x; i++){
-        for(j = 0; j < niveau->taille.y; j++){
-            if(niveau->objets[i][j].donnee_suppl)
-                free(niveau->objets[i][j].donnee_suppl);
+    for(i = 0; i < gameboard->taille.x; i++){
+        for(j = 0; j < gameboard->taille.y; j++){
+            if(gameboard->objets[i][j].donnee_suppl)
+                free(gameboard->objets[i][j].donnee_suppl);
         }
-        free(niveau->objets[i]);
+        free(gameboard->objets[i]);
     }
     
-    free(niveau->objets);
-    free(niveau);
+    free(gameboard->objets);
+    free(gameboard);
 }
 
 Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type){
@@ -47,7 +47,7 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
     return p;
 }
 
-void init_niveaux(Board niveau, Coordonnees taille){
+void init_board(Board niveau, Coordonnees taille){
 
     unsigned int i, j;
     for(i = 0; i < taille.x; i++){
@@ -328,7 +328,7 @@ void trigger_switch(Board board, Player player){
     free(trigger);
 }
 
-void affiche_Niveau (Board niveau) {
+void print_board (Board niveau) {
 
 	unsigned int i, j;
     Deplacement *dep;

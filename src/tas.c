@@ -12,44 +12,44 @@ static unsigned int verif_pere(int i){
 }
 
 
-bool estTas(Arbre arbre){
+bool is_heap(Heap heap){
 
-	assert(arbre->valeurs != NULL);
+	assert(heap->valeurs != NULL);
 	unsigned int i, pere;
 
-	for(i = (arbre->taille) - 1; i > 0; i--){
+	for(i = (heap->taille) - 1; i > 0; i--){
 
 		pere = verif_pere(i);
-		if((arbre->valeurs)[0].moment < pere)
+		if((heap->valeurs)[0].moment < pere)
 			return false;
-		if((arbre->valeurs)[pere].moment > (arbre->valeurs)[i].moment)
+		if((heap->valeurs)[pere].moment > (heap->valeurs)[i].moment)
 			return false;
 	}
 	return true;
 }
 
 
-Arbre malloc_Tas(unsigned capacite_initiale) {
+Heap malloc_heap(unsigned capacite_initiale) {
 
     assert(capacite_initiale > 0);
     
-	Arbre arbre = (Arbre)malloc(sizeof(Tas));
-    verif_malloc(arbre);
-	arbre->taille = 0;
-	arbre->capacite = capacite_initiale;
-	arbre->valeurs = (Event*)malloc(capacite_initiale*sizeof(Event)); 
-    verif_malloc(arbre->valeurs);
+	Heap heap = (Heap)malloc(sizeof(Tree));
+    verif_malloc(heap);
+	heap->taille = 0;
+	heap->capacite = capacite_initiale;
+	heap->valeurs = (Event*)malloc(capacite_initiale*sizeof(Event)); 
+    verif_malloc(heap->valeurs);
     
-	return arbre; 
+	return heap; 
 }
 
-void free_Tas(Arbre tas){
+void free_heap(Heap tas){
 
     if(tas->valeurs != NULL) free(tas->valeurs);
     free(tas);
 }
 
-void realloc_Tas(Arbre tas){
+void realloc_heap(Heap tas){
 
     assert(tas->valeurs != NULL);
 
@@ -59,7 +59,7 @@ void realloc_Tas(Arbre tas){
 }
 
 
-bool un_evenement_est_pret(Arbre tas){
+bool event_is_ready(Heap tas){
 
     assert(tas->valeurs != NULL);
 
@@ -68,7 +68,7 @@ bool un_evenement_est_pret(Arbre tas){
 }
 
 
-static void defiler(Arbre tas, int i) {
+static void defiler(Heap tas, int i) {
 
     assert(tas->valeurs != NULL);
     assert(i >= 0);
@@ -92,23 +92,23 @@ static void defiler(Arbre tas, int i) {
 }
 
 
-void ajoute_evenement(Arbre arbre, Event valeur){
+void add_event(Heap heap, Event valeur){
     
-	assert(arbre->valeurs != NULL);
-    assert(arbre != NULL);
+	assert(heap->valeurs != NULL);
+    assert(heap != NULL);
 
-    arbre->valeurs[arbre->taille] = valeur;
-	(arbre->taille)++;
+    heap->valeurs[heap->taille] = valeur;
+	(heap->taille)++;
     
-    if(arbre->taille >= arbre->capacite){
-        realloc_Tas(arbre);
+    if(heap->taille >= heap->capacite){
+        realloc_heap(heap);
     }
 
-    defiler(arbre, (arbre->taille) -1);
+    defiler(heap, (heap->taille) -1);
 	
 }
 
-static void enfiler(Arbre h, unsigned int i)
+static void enfiler(Heap h, unsigned int i)
 {
     assert(h->valeurs != NULL);
     
@@ -140,7 +140,7 @@ static void enfiler(Arbre h, unsigned int i)
 
 
 
-Event ote_minimum(Arbre tas){
+Event heap_pop(Heap tas){
 
 	assert(tas->valeurs != NULL);
 	Event min;
@@ -156,7 +156,7 @@ Event ote_minimum(Arbre tas){
 }
 
 
-void affiche_Tas(Arbre tas){
+void print_heap(Heap tas){
 
 	assert(tas->valeurs != NULL);
     printf("On affiche le tas :\n");

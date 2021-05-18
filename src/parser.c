@@ -11,7 +11,7 @@ Board read_file(char* name_file){
     FILE *in;
     char *typeObject;
     typeObject = (char*)malloc(sizeof(char) * BUFSIZ);
-    char multijoueur;
+    char multiplayer;
 
     in = fopen(name_file, "r");
     if(!in){
@@ -20,15 +20,15 @@ Board read_file(char* name_file){
     }
 
     fscanf(in, "size = %u x %u\n", &size_level.x, &size_level.y);
-    res = malloc_Niveau(size_level);
+    res = malloc_board(size_level);
     printf("%d x %d\n", res->taille.x, res->taille.y);
-    printf("check multijoueurs\n");
-    fscanf(in, "multijoueur : %c\n", &multijoueur);
-    if(multijoueur == 'y'){
+    printf("check multiplayers\n");
+    fscanf(in, "multijoueur : %c\n", &multiplayer);
+    if(multiplayer == 'y'){
         printf("Mode multiplayer activated\n");
         res->mulptiplayer_mode = true;
     }
-    if(multijoueur == 'n'){
+    if(multiplayer == 'n'){
         printf("Mode multiplayer disable\n");
         res->mulptiplayer_mode = false;
     }

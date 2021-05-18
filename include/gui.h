@@ -101,7 +101,7 @@ int action_listener(MLV_Keyboard_button button, Board board);
  * @param level : Board, the game board
  * @param is_reached : bool*,
  */
-void launch(Board niveau, bool *is_reached);
+void launch(Board gameboard, bool *is_reached);
 
 /*void gui_launcher(Board gameboard, bool *is_reached);*/
 
