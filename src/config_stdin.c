@@ -1,3 +1,8 @@
+/**
+ * \file config_stdin.c
+ * \author university 'Gustave eiffel'
+ * 
+*/
 #include <stdio.h>
 #include <termios.h>
 #include <fcntl.h>

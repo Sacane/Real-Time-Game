@@ -4,10 +4,9 @@
  * \date : 01-04-21
  * \last modification : 21-05-21
  * 
- * Module used to manipulate and initialize the image used in the game
+ * File containing the prototypes of the functions of the file image.c
  *
  */
-
 
 #ifndef __IMAGE__H__
 #define __IMAGE__H__
@@ -40,13 +39,23 @@ typedef enum {
 
 /**
  * Function to initialize an array of image
- * @param array_img[] : MLV_Image *
+ * \param array_img[] : MLV_Image *, array of image
  */
 void init_array_img(MLV_Image *array_img[]);
 
+
+/**
+ * Function to resize an image
+ * \param array_img[] : MLV_Image*
+ * \param width : int, the width of the image
+ * \param height : int, the height of the image
+ */
+void resize_all_img(MLV_Image* array_img[],  int width, int height);
+
+
 /**
  * Function to free the memory space of an image array
- * @param array[] : MLV_Image *
+ * \param array_img[] : MLV_Image *, array of image
  */
 void free_array_img(MLV_Image *array[]);
 

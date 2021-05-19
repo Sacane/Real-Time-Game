@@ -1,8 +1,25 @@
+/**
+ * \file management.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * This module is used to manage all functions related to the management of the game.
+ *
+ */
+
 #include "../include/management.h"
 
 
-Heap build_heap_by_board(Board niveau){
-    printf("%u x %u\n", niveau->taille.x, niveau->taille.y);
+/**
+ * \fn Heap build_heap_by_board(Board level)
+ * \brief Function to build a heap containing the initial Events of a Level
+ * Carefull : we suppose the heap not allocated yet, the function does it already.
+ * \param level : Board, a game board
+ * \return Heap, the Heap filled according to the initials event in the gameboard.
+ */
+Heap build_heap_by_board(Board level){
+    printf("%u x %u\n", level->size.x, level->size.y);
     printf("Construct\n");
 	Heap heap;
     heap = malloc_heap(INITIAL_SIZE); 
@@ -10,12 +27,12 @@ Heap build_heap_by_board(Board niveau){
 	unsigned int i, j;
     Generation *gen = (Generation*)malloc(sizeof(Generation));
     verif_malloc(gen);
-	for(i = 0; i < niveau->taille.x ; i++){
-		for(j = 0; j < niveau->taille.y; j++){
-			if(niveau->objets[i][j].type == LAUNCHER) {
+	for(i = 0; i < level->size.x ; i++){
+		for(j = 0; j < level->size.y; j++){
+			if(level->objects[i][j].type == LAUNCHER) {
                 printf("agter\n");
-                assert(niveau->objets[i][j].data != NULL);
-                memcpy(gen, niveau->objets[i][j].data, sizeof(Generation));
+                assert(level->objects[i][j].data != NULL);
+                memcpy(gen, level->objects[i][j].data, sizeof(Generation));
                 printf("ad\n");
 				event.coo_obj.x = i;
 				event.coo_obj.y = j;
@@ -29,42 +46,49 @@ Heap build_heap_by_board(Board niveau){
 }
 
 
-static void spawn_projectile_by_direction(Board board, Direction direction, Coordinates *pos_projectile, Coordinates pos_lanceur){
+/**
+ * \fn static void spawn_projectile_by_direction(Board board, Direction direction, Coordinates *pos_projectile, Coordinates pos_launcher)
+ * \param board : Board, a game board
+ * \param direction : Direction, a direction to take
+ * \param pos_projectile : Coordinates *, coordinate of the projectile
+ * \param pos_launcher : Coordinates, coordinate of the launcher
+ */
+static void spawn_projectile_by_direction(Board board, Direction direction, Coordinates *pos_projectile, Coordinates pos_launcher){
 	
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
-    memcpy(generation, board->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
+    memcpy(generation, board->objects[pos_launcher.x][pos_launcher.y].data, sizeof(Generation));
     deplacement->allure = generation->allure_proj;
     
     switch(direction){
         case NORTH:
-            pos_projectile->x = pos_lanceur.x - 1;
-            pos_projectile->y = pos_lanceur.y;
+            pos_projectile->x = pos_launcher.x - 1;
+            pos_projectile->y = pos_launcher.y;
             deplacement->direction = NORTH;
             break;
         case SOUTH:
-            pos_projectile->x = pos_lanceur.x + 1;
-            pos_projectile->y = pos_lanceur.y;
+            pos_projectile->x = pos_launcher.x + 1;
+            pos_projectile->y = pos_launcher.y;
             deplacement->direction = SOUTH;
             break;
         case EAST:
-            pos_projectile->x = pos_lanceur.x;
-            pos_projectile->y = pos_lanceur.y + 1;
+            pos_projectile->x = pos_launcher.x;
+            pos_projectile->y = pos_launcher.y + 1;
             deplacement->direction = EAST;
             break;
         case WEST:
-            pos_projectile->x = pos_lanceur.x;
-            pos_projectile->y = pos_lanceur.y - 1;
+            pos_projectile->x = pos_launcher.x;
+            pos_projectile->y = pos_launcher.y - 1;
             deplacement->direction = WEST;
             break;
         default:
             printf("Erreur de direction\n");
     }
-    board->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
-    board->objets[pos_projectile->x][pos_projectile->y].data = deplacement;
+    board->objects[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
+    board->objects[pos_projectile->x][pos_projectile->y].data = deplacement;
 
     if(equals_coordinates(*pos_projectile, board->p1.coo_player)){
         board->p1.is_player_alive = false;
@@ -77,100 +101,142 @@ static void spawn_projectile_by_direction(Board board, Direction direction, Coor
     free(generation);
 }
 
-/*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
-static void update_launcher_in_heap(Event lanceur, Heap tas, Coordinates pos_lanceur, Board niveau){
+
+
+/**
+ * \fn static void update_launcher_in_heap(Event launcher, Heap heap, Coordinates pos_launcher, Board level)
+ * \brief Takes the old launcher in the heap as a parameter and updates the heap to reset the launcher event 1 second after removal from the heap
+ * \param launcher : Event, a launcher
+ * \param heap : Heap, a heap to deal with
+ * \param pos_launcher : Coordinates, coordinate of the launcher
+ * \param level : Board, a game board
+ */
+static void update_launcher_in_heap(Event launcher, Heap heap, Coordinates pos_launcher, Board level){
 
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
     Event new_launcher;
-    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
-    update_moment = lanceur.moment + generation->intervalle;
+    memcpy(generation, level->objects[pos_launcher.x][pos_launcher.y].data, sizeof(Generation));
+    update_moment = launcher.moment + generation->intervalle;
     new_launcher.moment = update_moment;
-    new_launcher.coo_obj = lanceur.coo_obj;
-    add_event(tas, new_launcher);
+    new_launcher.coo_obj = launcher.coo_obj;
+    add_event(heap, new_launcher);
 
     free(generation);
 }
 
-void trigger_launcher(Board niveau, Heap tas, Coordinates pos_lanceur, Event ancien_lanceur){
+
+/**
+ * \fn void trigger_launcher(Board level, Heap heap, Coordinates pos_launcher, Event previous_launcher)
+ * \brief Function to activate a player's event
+ * \param level : Board, a game board
+ * \param heap : Heap, a pointer to a heap
+ * \param pos_launcher : Coordinates, coordinates of laucher
+ * \param previous_launcher : Event, the player event
+ */
+void trigger_launcher(Board level, Heap heap, Coordinates pos_launcher, Event previous_launcher){
 	
-    assert(niveau != NULL);
-    assert(tas != NULL);
-    assert(niveau->objets[pos_lanceur.x][pos_lanceur.y].type == LAUNCHER);
-    assert(pos_lanceur.x <= niveau->taille.x);
-    assert(pos_lanceur.y <= niveau->taille.y);
+    assert(level != NULL);
+    assert(heap != NULL);
+    assert(level->objects[pos_launcher.x][pos_launcher.y].type == LAUNCHER);
+    assert(pos_launcher.x <= level->size.x);
+    assert(pos_launcher.y <= level->size.y);
     
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
-    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
+    memcpy(generation, level->objects[pos_launcher.x][pos_launcher.y].data, sizeof(Generation));
     Direction direction;
     Coordinates pos_projectile;
     Event event_proj;
 
     for(direction = NORTH; direction <= EAST; direction++){
-        if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
-            spawn_projectile_by_direction(niveau, direction, &pos_projectile, pos_lanceur);
-            event_proj.moment = ancien_lanceur.moment + generation->allure_proj;
+        if(!se_dirige_vers_mur(pos_launcher.x, pos_launcher.y, direction, level)){
+            spawn_projectile_by_direction(level, direction, &pos_projectile, pos_launcher);
+            event_proj.moment = previous_launcher.moment + generation->allure_proj;
             event_proj.coo_obj = pos_projectile;
-            add_event(tas, event_proj);
+            add_event(heap, event_proj);
         }
     }
 
-    update_launcher_in_heap(ancien_lanceur, tas, pos_lanceur, niveau);
+    update_launcher_in_heap(previous_launcher, heap, pos_launcher, level);
 
     free(generation);
 }
 
 
-void trigger_projectile(Heap tas, Board niveau, Coordinates pos_projectile, Event projectile){
+/**
+ * \fn void trigger_projectile(Heap heap, Board level, Coordinates pos_projectile, Event projectile)
+ * \brief Function to activate the event of a projectile
+ * \param heap : Heap, a pointer to a heap
+ * \param level : Board, a game board
+ * \param pos_projectile : Coordinates, coordinates of a projectile
+ * \param projectile : Event, the projectile event
+ */
+void trigger_projectile(Heap heap, Board level, Coordinates pos_projectile, Event projectile){
 
-	assert(tas != NULL);
-	assert(niveau != NULL);
-	assert(pos_projectile.x <= niveau->taille.x);
-	assert(pos_projectile.y <= niveau->taille.y);
-    assert(niveau->objets[pos_projectile.x][pos_projectile.y].type == PROJECTILE);
+	assert(heap != NULL);
+	assert(level != NULL);
+	assert(pos_projectile.x <= level->size.x);
+	assert(pos_projectile.y <= level->size.y);
+    assert(level->objects[pos_projectile.x][pos_projectile.y].type == PROJECTILE);
 
     Event evenement_projectile;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
-    dep = niveau->objets[pos_projectile.x][pos_projectile.y].data;
-    move_projectile(niveau, &pos_projectile);
+    dep = level->objects[pos_projectile.x][pos_projectile.y].data;
+    move_projectile(level, &pos_projectile);
     unsigned long moment = projectile.moment + dep->allure;
 
-	if(pos_projectile.x <= niveau->taille.x && pos_projectile.y <= niveau->taille.y){
+	if(pos_projectile.x <= level->size.x && pos_projectile.y <= level->size.y){
 		evenement_projectile.moment = moment;
 		evenement_projectile.coo_obj = pos_projectile;
-		add_event(tas, evenement_projectile);
+		add_event(heap, evenement_projectile);
     }
 }
 
-void execute_event(Event e, Heap tas, Board niveau) {
 
-    assert(tas != NULL);
-	assert(tas->valeurs != NULL);
-    assert(niveau != NULL);
-	assert(e.coo_obj.x <= niveau->taille.x);
-    assert(e.coo_obj.y <= niveau->taille.y);
+/** 
+ * \fn void execute_event(Event e, Heap heap, Board level)
+ * \brief Execute an event according to the coordinate of the object in the given gameboard,
+ * this function also update the heap's state by adding the next event according to the event e given.
+ * \param e : event to execute
+ * \param heap : Heap, heap to add the next event
+ * \param level : Board, gameboard to update according to the event
+ */
+void execute_event(Event e, Heap heap, Board level) {
+
+    assert(heap != NULL);
+	assert(heap->values != NULL);
+    assert(level != NULL);
+	assert(e.coo_obj.x <= level->size.x);
+    assert(e.coo_obj.y <= level->size.y);
     Coordinates coo_event;
     coo_event.x = e.coo_obj.x;
     coo_event.y = e.coo_obj.y;
 
-    switch(niveau->objets[coo_event.x][coo_event.y].type){
+    switch(level->objects[coo_event.x][coo_event.y].type){
         case PROJECTILE:
-            trigger_projectile(tas, niveau, coo_event, e);
+            trigger_projectile(heap, level, coo_event, e);
             break;
         case LAUNCHER:
-            trigger_launcher(niveau, tas, coo_event, e);
+            trigger_launcher(level, heap, coo_event, e);
             break;
         default:
             break;
     }
 }
 
+
+/**
+ * \fn void launch_command(Board board, bool *is_reached)
+ * \brief Launch the game in the command line. 
+ * \param board : Board, The gameboard containing all the object and players in the game.
+ * \param is_reached : boolean to check if the game is reached or lost.
+ */ 
 void launch_command(Board board, bool *is_reached){
     
     init_stdin();
-    Heap tas = build_heap_by_board(board);
+    Heap heap = build_heap_by_board(board);
     Event e;
 	char touche;
     int success = true;
@@ -270,14 +336,14 @@ void launch_command(Board board, bool *is_reached){
             (*is_reached) = false;
             break;
         }
-        if ( is_event_ready(tas)) {
+        if ( is_event_ready(heap)) {
 
-            e = heap_pop(tas);
+            e = heap_pop(heap);
             
-            execute_event(e, tas, board);
-            while(e.moment == tas->valeurs[0].moment){
-                e = heap_pop(tas);
-                execute_event(e, tas, board);
+            execute_event(e, heap, board);
+            while(e.moment == heap->values[0].moment){
+                e = heap_pop(heap);
+                execute_event(e, heap, board);
             }
             print_board(board);
     		printf("\n");
@@ -289,7 +355,7 @@ void launch_command(Board board, bool *is_reached){
             break;
         }
     }
-    free_heap(tas);
+    free_heap(heap);
     restaure_stdin();
 
 }

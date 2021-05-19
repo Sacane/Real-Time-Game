@@ -4,8 +4,7 @@
  * \date de création : 01-04-21
  * \last modification : 21-05-21
  * 
- * Module use to manage an heap (data structure), this heap 
- * will store the event used to manage the game, the heap is store by the moment of the event
+ * File containing the prototypes of the functions of the file heap.c
  */
 
 #ifndef __HEAP__H__
@@ -29,9 +28,9 @@ typedef struct {
 
 typedef struct {
   
-	unsigned taille;    
+	unsigned size;    
 	unsigned capacite;  
-	Event* valeurs;
+	Event* values;
 	
 } Tree, *Heap;
 
@@ -64,6 +63,7 @@ void free_heap(Heap heap);
 void realloc_heap(Heap heap);
 
 /**
+ * \param heap : Heap, heap to analyze
  * \return true if there is an event that is ready to be execute, elsewhere return false.
  */
 bool is_event_ready(Heap heap); 

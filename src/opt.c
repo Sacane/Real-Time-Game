@@ -1,6 +1,25 @@
+/**
+ * \file opt.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module to manage the different game options 
+ *
+ */
+
 #include "../include/opt.h"
 
 
+/**
+ * \fn void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard)
+ * \brief Function to manage the different usage options
+ * \param argc : int, the number of arguments
+ * \param argv[] : char* [], array of arguments
+ * \param mode : int*, a pointer to an int (the chosen mode)
+ * \param name_file : char*, string of characters of the name of the given file 
+ * \param gameboard : Board *, pointer to a board
+ */
 void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard){
     int c, level_number;
     int option_index = 0;
@@ -25,7 +44,6 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
             case -1:
                 break;
             case 's':
-                printf("enter folder : \n");
                 strcpy(name_file, "levels");
                 level_number = strtol(optarg, NULL, 10);
                 read_folder(name_file, level_number);

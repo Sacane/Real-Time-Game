@@ -1,7 +1,23 @@
+/**
+ * \file object.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module use to manipulate the different kind of objects in the game
+ *
+ */
+
 #include "../include/object.h"
 
 
-void fill_projectile(Objet* obj, Deplacement* deplacement){
+/**
+ * \fn void fill_projectile(Object* obj, Deplacement* deplacement)
+ * \brief Function that modifies the properties of the object 'obj' by assigning it the displacement as a projectile
+ * \param obj : Object*, object to modify
+ * \param deplacement : Deplacement*, additional data of the object
+ */
+void fill_projectile(Object* obj, Deplacement* deplacement){
 
     assert(deplacement != NULL);
 
@@ -9,7 +25,13 @@ void fill_projectile(Objet* obj, Deplacement* deplacement){
     obj->data = deplacement;
 }
 
-void fill_launcher(Objet* launcher, Generation* gen){
+/**
+ * \fn void fill_launcher(Object* launcher, Generation* gen)
+ * \brief  Modifies the properties of the launcher object by assigning it the gen generation as a launcher
+ * \param launcher : Object*, laucher to fill
+ * \param gen : Generation*, a generation 
+*/
+void fill_launcher(Object* launcher, Generation* gen){
 
     assert(gen != NULL);
 
@@ -17,7 +39,15 @@ void fill_launcher(Objet* launcher, Generation* gen){
     launcher->data = gen;
 }
 
-bool equals_obj(Objet obj1, Objet obj2){
+
+/**
+ * \fn bool equals_obj(Object obj1, Object obj2)
+ * \brief Function to check if two objects are equal
+ * \param obj1 : Object, an object
+ * \param obj2 : Object, an object
+ * \return bool, true if both objects are equal, false otherwise
+ */
+bool equals_obj(Object obj1, Object obj2){
     
     Deplacement* depl = malloc(sizeof(Deplacement));
     Deplacement* depl2 = malloc(sizeof(sizeof(Deplacement)));
@@ -47,7 +77,14 @@ bool equals_obj(Objet obj1, Objet obj2){
     return true;
 }
 
-TypeObjet str_to_obj(char* type){
+
+/**
+ * \fn TypeObject str_to_obj(char* type)
+ * \brief Function to convert a string into an objects (type)
+ * \param type : char*, a string of characters 
+ * \return TypeObject, the type of the object 
+ */
+TypeObject str_to_obj(char* type){
     if(strcmp(type, "PROJECTILE") == 0){
         return PROJECTILE;
     }

@@ -1,13 +1,12 @@
 /**
  * \file : level_maker.h
  * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
- * \creation date : 08-04-21
+ * \date : 08-04-21
  * \last modification : 21-05-21
  * 
  * File containing the prototypes of the functions in the level_maker.c file
  *
  */
-
 
 #ifndef __LEVEL_MAKER__H__
 #define __LEVEL_MAKER__H__
@@ -19,6 +18,10 @@
  */
 Board level0();
 
+
+/**
+ * Function to initialize a game board (level 1 test)
+ */
 Board level1test();
 
 /**

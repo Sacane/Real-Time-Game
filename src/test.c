@@ -1,7 +1,23 @@
+/**
+ * \file test.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * File containing the functions ---- 
+ *
+ */
+
 #include "../include/test.h"
 
 
 
+/**
+ * \fn static bool test_add_event(int *total_test)
+ * \brief Test function of the add_event function
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_add_event(int *total_test) {
     *total_test += 1;
     Heap test_heap = malloc_heap(INITIAL_SIZE);
@@ -19,7 +35,7 @@ static bool test_add_event(int *total_test) {
     
     add_event(test_heap, event1);
 
-    if(test_heap->valeurs[0].moment != 300){
+    if(test_heap->values[0].moment != 300){
         free_heap(test_heap);
         return false;
     }
@@ -52,17 +68,31 @@ static bool test_add_event(int *total_test) {
     return true;
 }
 
+
+/**
+ * \fn static bool test_minimum_aux(Event min, Heap Tas)
+ * \brief Test function of the minimun_aux function
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_minimum_aux(Event min, Heap Tas){
     unsigned int i;
     
-    for(i = 0; i < Tas->taille; i++){
-        if(min.moment > Tas->valeurs[i].moment){
+    for(i = 0; i < Tas->size; i++){
+        if(min.moment > Tas->values[i].moment){
             return false;
         }
     }
     return true;
 }
 
+
+/**
+ * \fn static bool test_ote_minimum(int *total_test)
+ * \brief Test function of the ote_minimum function
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_ote_minimum(int *total_test){
     *total_test += 1;
 	Heap arbre = malloc_heap(INITIAL_SIZE);
@@ -103,7 +133,7 @@ static bool test_ote_minimum(int *total_test){
 		return false;
 	}
 
-    if(arbre->valeurs[0].moment == 293){
+    if(arbre->values[0].moment == 293){
         printf("La valeur est toujours dans le tas\n");
         return false;
     }
@@ -120,6 +150,12 @@ static bool test_ote_minimum(int *total_test){
 }
 
 
+/**
+ * \fn static bool test_build_heap(int *total_test)
+ * \brief Test function of the build_heap function
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_build_heap(int *total_test){
     *total_test += 1;
 	Board level = level0();
@@ -147,13 +183,13 @@ static bool test_build_heap(int *total_test){
 		return false; 
 	}
 
-	if(equals_coordinates(lanceur1, (arbre->valeurs[0]).coo_obj) == false){
+	if(equals_coordinates(lanceur1, (arbre->values[0]).coo_obj) == false){
         free_board(level);
         free_heap(arbre);
         return false;
     }
 
-	if(equals_coordinates(lanceur2, (arbre->valeurs[1]).coo_obj) == false){
+	if(equals_coordinates(lanceur2, (arbre->values[1]).coo_obj) == false){
         free_board(level);
         free_heap(arbre);
         return false;
@@ -165,16 +201,18 @@ static bool test_build_heap(int *total_test){
 
 }
 
-/*
-    - Tester si l'ancien coordonnée du projectile à bien comme type "VIDE"
-    - Tester si la nouvelle coordonnée dans le level contient bien le projectile
-    - Tester si lorsqu'il y a un mur, le projectile est bien effacé du Board
-*/
+
+/**
+ * \fn static bool test_move_projectile_NORTH(int *total_test)
+ * \brief Test function of the move_projectile function (to the North)
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_move_projectile_NORTH(int *total_test){
 
     *total_test += 1;
 	Board level = level0();
-	Objet objet; 
+	Object object; 
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
@@ -183,17 +221,17 @@ static bool test_move_projectile_NORTH(int *total_test){
 	deplacement->direction = NORTH;
 	coo.x = 3;
     coo.y = 2;
-	objet.type = PROJECTILE; 
-	objet.data = deplacement;
-    level->objets[coo.x][coo.y] = objet;
+	object.type = PROJECTILE; 
+	object.data = deplacement;
+    level->objects[coo.x][coo.y] = object;
 	move_projectile(level, &coo);
 
-	if(level->objets[3][2].type != VIDE){
+	if(level->objects[3][2].type != VIDE){
         printf("Projectile non-déplacé (NORTH) !");
 		return false;
 	}
 
-	if(level->objets[2][2].type != PROJECTILE){
+	if(level->objects[2][2].type != PROJECTILE){
         printf("Projectile pas au bon endroit (NORTH) !\n");
 		return false;
 	}
@@ -204,7 +242,7 @@ static bool test_move_projectile_NORTH(int *total_test){
 
     move_projectile(level, &new_coord);
 
-    if(level->objets[1][2].type != WALL){
+    if(level->objects[1][2].type != WALL){
         printf("Le mur a été modifié par un projectile (NORTH) !\n");
         return false;
     }
@@ -217,11 +255,11 @@ static bool test_move_projectile_NORTH(int *total_test){
 	new1coord2.x = 0;
 	new1coord2.y = 2;
 
-    level->objets[new1coord2.x][new1coord2.y].type = PROJECTILE;
-    level->objets[new1coord2.x][new1coord2.y].data = dep;
+    level->objects[new1coord2.x][new1coord2.y].type = PROJECTILE;
+    level->objects[new1coord2.x][new1coord2.y].data = dep;
 
     move_projectile( level, &new1coord2);
-	if (level->objets[0][2].type != VIDE){
+	if (level->objects[0][2].type != VIDE){
         printf("Projectile toujours présent (NORTH) \n");
 		return false;
 	}
@@ -230,36 +268,43 @@ static bool test_move_projectile_NORTH(int *total_test){
 	return true; 
 }
 
+
+/**
+ * \fn static bool test_move_projectile_SOUTH(int *total_test)
+ * \brief Test function of the move_projectile function (to the South)
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_move_projectile_SOUTH(int *total_test){
 
 	*total_test += 1;
     Board level = level0();
-    Objet objet;
+    Object object;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(dep);
 	Coordinates coords;
     dep->direction = SOUTH;
     coords.x = 2;
     coords.y = 3;
-    objet.type = PROJECTILE;
-    objet.data = dep;
-    level->objets[coords.x][coords.y] = objet;
+    object.type = PROJECTILE;
+    object.data = dep;
+    level->objects[coords.x][coords.y] = object;
 
 	move_projectile( level, &coords);
 
-    if(level->objets[2][3].type != VIDE){
+    if(level->objects[2][3].type != VIDE){
         printf("Projectile non-déplacé (SOUTH) !");
 		return false;
 	}
 
-	if(level->objets[3][3].type != PROJECTILE){
+	if(level->objects[3][3].type != PROJECTILE){
         printf("Projectile pas au bon endroit (SOUTH) !\n");
 		return false;
 	}
     move_projectile( level, &coords);
 
 
-    if(level->objets[4][3].type != PROJECTILE){
+    if(level->objects[4][3].type != PROJECTILE){
         printf("Projectile toujours présent (SOUTH)\n");
 		return false;
 	}
@@ -273,11 +318,17 @@ static bool test_move_projectile_SOUTH(int *total_test){
 }
 
 
+/**
+ * \fn static bool test_move_projectile_EAST(int *total_test)
+ * \brief Test function of the move_projectile function (to the East)
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_move_projectile_EAST(int *total_test){
 
     *total_test += 1;
 	Board level = level0();
-	Objet objet;
+	Object object;
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
@@ -286,27 +337,27 @@ static bool test_move_projectile_EAST(int *total_test){
 	deplacement->direction = EAST;
     coord.x = 0;
     coord.y = 7;
-	objet.type = PROJECTILE; 
-	objet.data = deplacement;
-    level->objets[coord.x][coord.y] = objet;
+	object.type = PROJECTILE; 
+	object.data = deplacement;
+    level->objects[coord.x][coord.y] = object;
 
 
 	move_projectile(level, &coord); 
 
 
-	if(level->objets[0][7].type != VIDE){
+	if(level->objects[0][7].type != VIDE){
         printf("Projectile non-déplacé ! (EAST)");
 		return false;
 	}
 
-	if(level->objets[0][8].type != PROJECTILE){
+	if(level->objects[0][8].type != PROJECTILE){
         printf("Projectile pas au bon endroit (EAST)!\n");
 		return false;
 	}
 
     move_projectile(level, &coord); 
     
-	if (level->objets[0][9].type != PROJECTILE){
+	if (level->objects[0][9].type != PROJECTILE){
         printf("Projectile toujours présent (EAST) \n");
 		return false;
 	}
@@ -320,11 +371,18 @@ static bool test_move_projectile_EAST(int *total_test){
 	return true; 
 }
 
+
+/**
+ * \fn static bool test_move_projectile_WEST(int *total_test)
+ * \brief Test function of the move_projectile function (to the West)
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_move_projectile_WEST(int *total_test){
 
 	*total_test += 1;
 	Board level = level0();
-	Objet objet; 
+	Object object; 
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
@@ -333,25 +391,25 @@ static bool test_move_projectile_WEST(int *total_test){
 	deplacement->direction = WEST;
 	coo.x = 2;
     coo.y = 2;
-	objet.type = PROJECTILE; 
-	objet.data = deplacement;
-    level->objets[coo.x][coo.y] = objet;
+	object.type = PROJECTILE; 
+	object.data = deplacement;
+    level->objects[coo.x][coo.y] = object;
 
 	move_projectile(level, &coo);
 	
-	if(level->objets[2][2].type != VIDE){
+	if(level->objects[2][2].type != VIDE){
         printf("Projectile non-déplacé (WEST)!");
 		return false;
 	}
 
-	if(level->objets[2][1].type != PROJECTILE){
+	if(level->objects[2][1].type != PROJECTILE){
         printf("Projectile pas au bon endroit (WEST)!\n");
 		return false;
 	}
     
     move_projectile(level, &coo);
 
-	if (level->objets[2][0].type != PROJECTILE){
+	if (level->objects[2][0].type != PROJECTILE){
         printf("Projectile toujours présent (WEST) \n");
 		return false;
 	}
@@ -360,7 +418,7 @@ static bool test_move_projectile_WEST(int *total_test){
     coord.x = 2;
     coord.y = 0;
     move_projectile(level, &coord);
-    if(level->objets[2][0].type != VIDE){
+    if(level->objects[2][0].type != VIDE){
         printf("Le projectile est toujours là ! (WEST)\n");
         return false;
     }
@@ -369,17 +427,30 @@ static bool test_move_projectile_WEST(int *total_test){
 	return true; 
 }
 
-/* Si la coordonnée remaining se trouve parmis les éléments du tas, la fonction return true, false sinon */
+
+/**
+ * \fn static bool test_move_projectile_WEST(int *total_test)
+ * \brief Test function of the equals_heap function 
+ * \param total_test : int *
+ * \return bool, If the remaining coordinate is among the elements of the heap, the function return true, false otherwise
+ */
 static bool test_equals_heap(Heap heap, Coordinates remaining){
     unsigned int i;
-    for(i = 0; i < heap->taille; i++){
-        if(equals_coordinates(remaining, heap->valeurs[i].coo_obj)){
+    for(i = 0; i < heap->size; i++){
+        if(equals_coordinates(remaining, heap->values[i].coo_obj)){
             return true;
         }
     }
     return false;
 }
 
+
+/**
+ * \fn static bool test_trigger_launcher(int *total_test)
+ * \brief Test function of the trigger_launcher function 
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static bool test_trigger_launcher(int *total_test){
     *total_test += 1;
     Board level = level0();
@@ -395,7 +466,7 @@ static bool test_trigger_launcher(int *total_test){
 
         e = heap_pop(tas);
 
-    }while(level->objets[e.coo_obj.x][e.coo_obj.y].type != LAUNCHER);
+    }while(level->objects[e.coo_obj.x][e.coo_obj.y].type != LAUNCHER);
 
     trigger_launcher(level, tas, e.coo_obj, e);
 
@@ -431,9 +502,12 @@ static bool test_trigger_launcher(int *total_test){
 }
 
 
-
-
-
+/**
+ * \fn static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test))
+ * \brief Test function qtest
+ * \param total_test : int *
+ * \return bool, true if the test succeeded, false otherwise
+ */
 static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test)){
     if(test_function(total_test)){
         (*counter)++;
@@ -445,8 +519,10 @@ static void qtest(const char* name_fun, int *counter, int *total_test, bool(*tes
 }
 
 
-
-
+/**
+ * \fn void main_test()
+ * \brief Function 'main' of tests 
+ */
 void main_test(){
     int compteur = 0;
     int total_test = 0;

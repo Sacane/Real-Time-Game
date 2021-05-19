@@ -1,10 +1,10 @@
 /**
- * \fichier : objet.h
- * \auteurs : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
- * \date de création : 01-04-21
- * \dernière modification : 21-05-21
+ * \file : object.h
+ * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date : 01-04-21
+ * \last modification : 21-05-21
  * 
- * Module use to manipulate the different kind of objects in the game
+ * File containing the prototypes of the functions of the file object.c
  *
  */
 
@@ -19,10 +19,10 @@ typedef enum {
 	VIDE = 0,          LAUNCHER,           WALL,
 	PROJECTILE,   DESTINATION, PLAYER1, PLAYER2,
 	SWITCH, DOOR,
-} TypeObjet;
+} TypeObject;
 
 typedef struct object{
-	TypeObjet type;     /* Type de l'objet */
+	TypeObject type;     /* Type de l'object */
 	void* data; /* Donnee supplementaire: son type depend de 
 						* `type` ci-dessus :
 						* - Deplacement*  si  type == PROJECTILE
@@ -30,7 +30,7 @@ typedef struct object{
 						* - donnee\_suppl vaut NULL pour les 
 						*   autres types. */
 	
-} Objet;
+} Object;
 
 typedef struct {
 
@@ -64,39 +64,41 @@ typedef struct {
 
 /**
  * Function that modifies the properties of the object 'obj' by assigning it the displacement as a projectile
- * @param argc : int, the number of the argument (of the chosen option)
- * @param obj : Object*, object to modify
- * @param deplacement : Deplacement*, additional data of the object
+ * \param obj : Object*, object to modify
+ * \param deplacement : Deplacement*, additional data of the object
  */
-void fill_projectile(Objet* obj, Deplacement* deplacement);
+void fill_projectile(Object* obj, Deplacement* deplacement);
 
 /**
  * Function to print the type of the object
- * @param object : Object, the type of the object
- * function for @test
+ * \param object : Object, the type of the object
+ * function for \test
  */
-void print_kind_object(Objet object);
+void print_kind_object(Object object);
 
-/*
- * Modifie les propriétés de l'objet lanceur en lui attribuant la génération gen en tant que lanceur
+
+/**
+ * Modifies the properties of the launcher object by assigning it the gen generation as a launcher
+ * \param launcher : Object*, laucher to fill
+ * \param gen : Generation*, a generation 
 */
-void fill_launcher(Objet* lanceur, Generation* gen);
+void fill_launcher(Object* lanceur, Generation* gen);
 
 
 /**
  * Function to convert a string into an objects (type)
- * @param type : char*, a string of characters 
- * @return TypeObjet, the type of the object 
+ * \param type : char*, a string of characters 
+ * \return TypeObject, the type of the object 
  */
-TypeObjet str_to_obj(char* type);
+TypeObject str_to_obj(char* type);
 
 /**
  * Function to check if two objects are equal
- * @param obj1 : Object, an object
- * @param obj2 : Object, an object
- * @return bool, true if both objects are equal, false otherwise
+ * \param obj1 : Object, an object
+ * \param obj2 : Object, an object
+ * \return bool, true if both objects are equal, false otherwise
  */
-bool equals_obj(Objet obj1, Objet obj2);
+bool equals_obj(Object obj1, Object obj2);
 
 
 

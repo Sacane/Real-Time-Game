@@ -1,6 +1,6 @@
 /**
  * \file config_stdin.h
- * \authors university 'Gustave eiffel'
+ * \author university 'Gustave eiffel'
  * 
 */
 

@@ -1,3 +1,13 @@
+/**
+ * \file main.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * File containing the main function of the game
+ *
+ */
+
 #include <stdio.h>
 #include "../include/test.h"
 #include "../include/gui.h"
@@ -32,7 +42,7 @@ int main(int argc, char* argv[]) {
             launch(level, &is_level_reached); 
             break;
         case ERROR:
-            printf("Une erreur est apparue, sortie du programme\n");
+            printf("An error has occur\n");
             if(NULL != level){
                 free_board(level);    
             }
@@ -45,7 +55,7 @@ int main(int argc, char* argv[]) {
     }
     
     if(mode == GRAPHIC || mode == COMMAND){
-        (is_level_reached) ? printf("Félicitation vous avez fini le niveau !\n") : printf("Vous avez perdu ! \n");
+        (is_level_reached) ? printf("Congratuations ! You won !\n") : printf("You lost ! \n");
     }
     if(level != NULL)
         free_board(level);

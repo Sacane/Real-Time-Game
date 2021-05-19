@@ -1,6 +1,21 @@
+/**
+ * \file image.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module used to manipulate and initialize the image used in the game
+ *
+ */
+
 #include "../include/image.h"
 
 
+/**
+ * \fn void init_array_img(MLV_Image* array_img[])
+ * \brief Function to initialize an array of image
+ * \param array_img[] : MLV_Image *, array of image
+ */
 void init_array_img(MLV_Image* array_img[]){
 	
 	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
@@ -37,6 +52,14 @@ void init_array_img(MLV_Image* array_img[]){
     verif_malloc(array_img[SWITCH_IMG]);
 }
 
+
+/**
+ * \fn void resize_all_img(MLV_Image* array_img[],  int width, int height)
+ * \brief Function to resize an image
+ * \param array_img[] : MLV_Image*
+ * \param width : int, the width of the image
+ * \param height : int, the height of the image
+ */
 void resize_all_img(MLV_Image* array_img[],  int width, int height){
 	int i;
 	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
@@ -44,6 +67,12 @@ void resize_all_img(MLV_Image* array_img[],  int width, int height){
 	}
 }
 
+
+/**
+ * \fn void free_array_img(MLV_Image *array[])
+ * \brief Function to free the memory space of an image array
+ * \param array_img[] : MLV_Image *, array of image
+ */
 void free_array_img(MLV_Image *array[]){
 	int i;
 	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){

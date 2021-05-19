@@ -1,6 +1,24 @@
+/**
+ * \file heap.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module use to manage an heap (data structure), this heap 
+ * will store the event used to manage the game, the heap is store by the moment of the event
+ *
+ */
+
 #include "../include/heap.h"
 #include <string.h>
 
+
+/**
+ * \fn static unsigned int father(int i)
+ * \brief Check if a value is a father un the heap
+ * \param i : int, value to  analyze
+ * \return unisigned int
+ */ 
 static unsigned int father(int i){
 
     assert(i >= 0);
@@ -12,76 +30,110 @@ static unsigned int father(int i){
 }
 
 
+/**
+ * \fn bool is_heap(Heap heap)
+ * \brief Check if the entire heap is a heap or not.
+ * \param heap : Heap, heap to check
+ * \return true if the array represent a heap, elsewhere return false
+ */ 
 bool is_heap(Heap heap){
 
-	assert(heap->valeurs != NULL);
+	assert(heap->values != NULL);
 	unsigned int i, pere;
 
-	for(i = (heap->taille) - 1; i > 0; i--){
+	for(i = (heap->size) - 1; i > 0; i--){
 
 		pere = father(i);
-		if((heap->valeurs)[0].moment < pere)
+		if((heap->values)[0].moment < pere)
 			return false;
-		if((heap->valeurs)[pere].moment > (heap->valeurs)[i].moment)
+		if((heap->values)[pere].moment > (heap->values)[i].moment)
 			return false;
 	}
 	return true;
 }
 
 
+/**
+ * \fn Heap malloc_heap(unsigned capacite_initiale)
+ * \brief malloc the heap according to the given initial capacity 
+ * \param initial_capacity : initial capacity of the heap for the allocation
+ * \return : Heap, the allocated heap 
+ */ 
 Heap malloc_heap(unsigned capacite_initiale) {
 
     assert(capacite_initiale > 0);
     
 	Heap heap = (Heap)malloc(sizeof(Tree));
     verif_malloc(heap);
-	heap->taille = 0;
+	heap->size = 0;
 	heap->capacite = capacite_initiale;
-	heap->valeurs = (Event*)malloc(capacite_initiale*sizeof(Event)); 
-    verif_malloc(heap->valeurs);
+	heap->values = (Event*)malloc(capacite_initiale*sizeof(Event)); 
+    verif_malloc(heap->values);
     
 	return heap; 
 }
 
-void free_heap(Heap tas){
 
-    if(tas->valeurs != NULL) free(tas->valeurs);
-    free(tas);
+/**
+ * \fn void free_heap(Heap heap)
+ * \brief Free the memory used by the given heap.
+ * \param heap : Heap, heap to free
+ */
+void free_heap(Heap heap){
+
+    if(heap->values != NULL) free(heap->values);
+    free(heap);
 }
 
-void realloc_heap(Heap tas){
 
-    assert(tas->valeurs != NULL);
+/**
+ * \fn void realloc_heap(Heap heap)
+ * \brief realloc the heap if its size is greater than its capacity
+ * \param heap : Heap, heap to realloc
+*/
+void realloc_heap(Heap heap){
 
-    tas->capacite *= 2; 
-    tas->valeurs = (Event*)realloc(tas->valeurs, sizeof(Event)*tas->capacite);
+    assert(heap->values != NULL);
+
+    heap->capacite *= 2; 
+    heap->values = (Event*)realloc(heap->values, sizeof(Event)*heap->capacite);
     
 }
 
 
-bool is_event_ready(Heap tas){
+/**
+ * \fn bool is_event_ready(Heap heap)
+ * \param heap : Heap, heap to analyze
+ * \return true if there is an event that is ready to be execute, elsewhere return false.
+ */
+bool is_event_ready(Heap heap){
 
-    assert(tas->valeurs != NULL);
+    assert(heap->values != NULL);
 
-    return (tas->valeurs[0].moment <= maintenant());
+    return (heap->values[0].moment <= maintenant());
 
 }
 
 
-static void shift_up(Heap tas, int i) {
+/**
+ * \fn static void shift_up(Heap heap, int i)
+ * \param heap : Heap, heap to analyze
+ * \param i : int
+ */
+static void shift_up(Heap heap, int i) {
 
-    assert(tas->valeurs != NULL);
+    assert(heap->values != NULL);
     assert(i >= 0);
     
     int f = father(i);
     Event tmp;
 
     if (i == 0) return;
-    while (tas->valeurs[f].moment > tas->valeurs[i].moment) { 
+    while (heap->values[f].moment > heap->values[i].moment) { 
 
-        tmp = tas->valeurs[f];
-        tas->valeurs[f] = tas->valeurs[i];
-        tas->valeurs[i] = tmp;
+        tmp = heap->values[f];
+        heap->values[f] = heap->values[i];
+        heap->values[i] = tmp;
 
         i = f;
         if (f == 0)
@@ -92,46 +144,57 @@ static void shift_up(Heap tas, int i) {
 }
 
 
-void add_event(Heap heap, Event valeur){
+/**
+ * \fn void add_event(Heap heap, Event value)
+ * \brief Add an event in the heap and update it to make it still be a heap
+ * \param heap : Heap, heap where we add the event
+ * \param value : Event
+*/
+void add_event(Heap heap, Event value){
     
-	assert(heap->valeurs != NULL);
+	assert(heap->values != NULL);
     assert(heap != NULL);
 
-    heap->valeurs[heap->taille] = valeur;
-	(heap->taille)++;
+    heap->values[heap->size] = value;
+	(heap->size)++;
     
-    if(heap->taille >= heap->capacite){
+    if(heap->size >= heap->capacite){
         realloc_heap(heap);
     }
 
-    shift_up(heap, (heap->taille) -1);
+    shift_up(heap, (heap->size) -1);
 	
 }
 
-static void shift_down(Heap h, unsigned int i)
-{
-    assert(h->valeurs != NULL);
+
+/**
+ * \fn static void shift_down(Heap h, unsigned int i)
+ * \param heap : Heap, heap where we add the event
+ * \param i : unsigned int
+*/
+static void shift_down(Heap h, unsigned int i){
+    assert(h->values != NULL);
     
 
     unsigned int next;
-    unsigned int max = h->taille - 1; 
+    unsigned int max = h->size - 1; 
     Event tmp;
 
     
-    if(h->taille == 0){
+    if(h->size == 0){
         return;
     }
-    if (h->taille - 1 == 0)
+    if (h->size - 1 == 0)
         return;
     while ((i * 2) + 1 <= max || (i * 2) + 2 <= max) {
         next = (i * 2) + 1;
-        if (((i * 2) + 2 <= max) && (h->valeurs[next].moment > h->valeurs[(i*2)+2].moment))
+        if (((i * 2) + 2 <= max) && (h->values[next].moment > h->values[(i*2)+2].moment))
             next = (i * 2) + 2;
 
-        if ((h->valeurs[i].moment > h->valeurs[next].moment)) {
-            tmp = h->valeurs[i];
-            h->valeurs[i] = h->valeurs[next];
-            h->valeurs[next] = tmp;
+        if ((h->values[i].moment > h->values[next].moment)) {
+            tmp = h->values[i];
+            h->values[i] = h->values[next];
+            h->values[next] = tmp;
             i = next;
         } else
             return;
@@ -139,35 +202,45 @@ static void shift_down(Heap h, unsigned int i)
 }
 
 
+/**
+ * \fn Event heap_pop(Heap heap)
+ * \brief Update the heap by removing the smallest element in the heap, the heap will automatically be update to make it still be a heap
+ * \param heap : Heap, heap to update
+ * \return Event, the event removed from the heap
+*/
+Event heap_pop(Heap heap){
 
-Event heap_pop(Heap tas){
-
-	assert(tas->valeurs != NULL);
+	assert(heap->values != NULL);
 	Event min;
 
-    min=(tas->valeurs)[0];
-    tas->valeurs[0] = tas->valeurs[tas->taille-1];
-    (tas->taille)--;
+    min=(heap->values)[0];
+    heap->values[0] = heap->values[heap->size-1];
+    (heap->size)--;
 
-    shift_down(tas, 0);
+    shift_down(heap, 0);
 
     
 	return min;
 }
 
 
-void print_heap(Heap tas){
+/**
+ * \fn void print_heap(Heap heap)
+ * \brief Print in the stdout the actual heap's state
+ * \param heap : Heap, heap to print
+ */    
+void print_heap(Heap heap){
 
-	assert(tas->valeurs != NULL);
+	assert(heap->values != NULL);
     unsigned int i;
     printf("[");
-    for(i = 0; i < tas->taille; i++){
+    for(i = 0; i < heap->size; i++){
         
-        if(i != tas->taille-1){
-            printf("(%u, %u): %lu, ", tas->valeurs[i].coo_obj.x,tas->valeurs[i].coo_obj.y, tas->valeurs[i].moment);
+        if(i != heap->size-1){
+            printf("(%u, %u): %lu, ", heap->values[i].coo_obj.x,heap->values[i].coo_obj.y, heap->values[i].moment);
         }
         else{
-            printf("(%u, %u): %lu, ", tas->valeurs[i].coo_obj.x,tas->valeurs[i].coo_obj.y, tas->valeurs[i].moment);
+            printf("(%u, %u): %lu, ", heap->values[i].coo_obj.x,heap->values[i].coo_obj.y, heap->values[i].moment);
         }
     }
     printf("]\n");

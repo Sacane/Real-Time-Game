@@ -1,6 +1,22 @@
+/**
+ * \file parser.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * File containing the functions ---- 
+ *
+ */
+
 #include "../include/parser.h"
 
 
+/**
+ * \fn Board read_file(char* name_file)
+ * \brief Function to read a given file
+ * \param name_file : char*, a string of characters
+ * \return : Board, a game board
+ */
 Board read_file(char* name_file){
 
     Board res;
@@ -22,7 +38,7 @@ Board read_file(char* name_file){
 
     fscanf(in, "size = %u x %u\n", &size_level.x, &size_level.y);
     res = malloc_board(size_level);
-    printf("%d x %d\n", res->taille.x, res->taille.y);
+    printf("%d x %d\n", res->size.x, res->size.y);
     printf("check multiplayers\n");
     fscanf(in, "multiplayer : %c\n", &multiplayer);
     if(multiplayer == 'y'){
@@ -45,25 +61,25 @@ Board read_file(char* name_file){
                 gen = (Generation*)malloc(sizeof(Generation));
                 printf("Filling of launchers...\n");
                 fscanf(in, " %u x %u allure : %lu interval : %lu", &x, &y, &allure, &intervalle);
-                res->objets[x][y].type = LAUNCHER;
+                res->objects[x][y].type = LAUNCHER;
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
-                res->objets[x][y].data = gen;
+                res->objects[x][y].data = gen;
                 printf("... OK, datas check : interval %lu, allure : %lu\n", intervalle, allure);
                 break;
 
             case WALL:
                 printf("Filling of walls...\n");
                 fscanf(in, " %u x %u", &x, &y);
-                res->objets[x][y].type = WALL;
-                res->objets[x][y].data = NULL;
+                res->objects[x][y].type = WALL;
+                res->objects[x][y].data = NULL;
                 printf("OK\n");
                 break;
 
             case DESTINATION:
                 printf("Filling destination...");
                 fscanf(in, " %u x %u", &x, &y);
-                res->objets[x][y].type = DESTINATION;
+                res->objects[x][y].type = DESTINATION;
                 coo_switch.x = x;
                 coo_switch.y = y;
                 res->coo_destination = coo_switch;
@@ -80,7 +96,7 @@ Board read_file(char* name_file){
                 printf(".");
                 res->p1 = init_player(coo_player, SOUTH, une_milliseconde * allure_player, PLAYER1);
                 printf(".");
-                res->objets[coo_player.x][coo_player.y].type = PLAYER1;
+                res->objects[coo_player.x][coo_player.y].type = PLAYER1;
                 printf("OK\n");
                 
                 break;
@@ -93,7 +109,7 @@ Board read_file(char* name_file){
                 printf(".");
                 res->p2 = init_player(coo_player, SOUTH, une_milliseconde * allure_player, PLAYER2);
                 printf(".");
-                res->objets[coo_player.x][coo_player.y].type = PLAYER2;
+                res->objects[coo_player.x][coo_player.y].type = PLAYER2;
                 printf("OK\n");
                 break;
             case SWITCH:
@@ -106,9 +122,9 @@ Board read_file(char* name_file){
                 coo_door.x = x2;
                 coo_door.y = y2;
                 trigger->coo_door = coo_door;
-                res->objets[x][y].type = SWITCH;
-                res->objets[x2][y2].type = DOOR;
-                res->objets[x][y].data = trigger;
+                res->objects[x][y].type = SWITCH;
+                res->objects[x2][y2].type = DOOR;
+                res->objects[x][y].data = trigger;
                 printf("OK\n");
                 break;
             default:
@@ -121,6 +137,15 @@ Board read_file(char* name_file){
     return res;
 }
 
+
+/**
+ * \fn static char *build_path_level(const char* name_folder, int level_state, char* suffix)
+ * \brief Function to build a path level 
+ * \param name_folder : char*, a string of characters
+ * \param level_state : int
+ * \param suffix : char*
+ * \return : char
+ */
 static char *build_path_level(const char* name_folder, int level_state, char* suffix){
 
     char *name_folder_cpy, *suffix_cpy, *res;
@@ -150,6 +175,13 @@ static char *build_path_level(const char* name_folder, int level_state, char* su
 
 }
 
+
+/**
+ * \fn void read_folder(char* name_folder, int level_start)
+ * \brief Function to read a folder to create a game board
+ * \param name_folder : char*, a string of characters
+ * \param level_start : int
+ */
 void read_folder(char* name_folder, int level_start){
     int i;
     char num_char[2];

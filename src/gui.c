@@ -1,18 +1,37 @@
+/**
+ * \file gui.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module used to initialize and manipulate the gui part of the game
+ *
+ */
+
 #include "../include/gui.h"
 
 
-
+/**
+ * \fn void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height)
+ * \brief Function to draw a board by an image
+ * \param niveau : Board, a game board
+ * \param array_img[] : MLV_Image *, array of image
+ * \param x_source : int
+ * \param y_source : int
+ * \param width : unsigned int, the width of the image
+ * \param height : unsigned int, the height of the image
+ */
 void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
 	int x_height, y_height;
 	x_height = y_source * width;
 	y_height = x_source * height;
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	verif_malloc(depl);
-	switch(niveau->objets[x_source][y_source].type){
+	switch(niveau->objects[x_source][y_source].type){
 		case VIDE: 
 			break;
 		case PROJECTILE:
-			depl = niveau->objets[x_source][y_source].data;
+			depl = niveau->objects[x_source][y_source].data;
 			switch(depl->direction){
 				case NORTH:
 					MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
@@ -79,25 +98,46 @@ void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y
 	}
 }
 
-void update_plateau(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
+
+/**
+ * \fn void update_Board(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height)
+ * \brief Function update a board 
+ * \param level : Board, a game board
+ * \param array_img[] : MLV_Image *
+ * \param font : MLV_Image *
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ */
+void update_Board(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigned int width, unsigned int height){
 
 	unsigned int i, j;
 
 	MLV_draw_image(font, 0, 0);
-	for(i = 0; i < niveau->taille.x; ++i){
-		for(j = 0; j < niveau->taille.y; ++j){
+	for(i = 0; i < niveau->size.x; ++i){
+		for(j = 0; j < niveau->size.y; ++j){
 			draw_img_by_board(niveau, array_img, i, j, width, height);
 		}
 	}
 	MLV_actualise_window();
 }
 
+
+/**
+ * \fn static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font)
+ * \brief Function refresh a projectile 
+ * \param coo_proj : Coordinates, coordinate of projectile
+ * \param board : Board
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ * \param array_img[] : MLV_Image *, array of images
+ * \param font : MLV_Image *
+ */
 static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
 	
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	verif_malloc(depl);
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
-	depl = board->objets[coo_proj.x][coo_proj.y].data;
+	depl = board->objects[coo_proj.x][coo_proj.y].data;
 	if(se_dirige_vers_mur(coo_proj.x, coo_proj.y, depl->direction, board)){
 		return;
 	}
@@ -118,6 +158,16 @@ static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int w
 	}
 }
 
+
+/**
+ * \fn static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[])
+ * \brief Function refresh a launcher 
+ * \param coo_launcher : Coordinates, coordinate of launcher
+ * \param board : Board
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ * \param array_img[] : MLV_Image *, array of images
+ */
 static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
 	Direction direction;
 
@@ -141,9 +191,20 @@ static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int
 	}
 }
 
+
+/**
+ * \fn static void refresh_player(Coordinates coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font)
+ * \brief Function refresh a player 
+ * \param coo_player : Coordinates, coordinate of player
+ * \param board : Board
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ * \param array_img[] : MLV_Image *, array of images
+ * \param font : MLV_Image *
+ */
 static void refresh_player(Coordinates coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 
-	switch(board->objets[coo_player.x][coo_player.y].type){
+	switch(board->objects[coo_player.x][coo_player.y].type){
 		case PLAYER1:
 			switch(board->p1.dir_player){
 				case NORTH:
@@ -210,15 +271,21 @@ static void refresh_player(Coordinates coo_player, Board board, unsigned int wid
 }
 
 
-
+/**
+ * \fn static int listener(MLV_Keyboard_button button, Board board, Player *player)
+ * \param button : MLV_Keyboard_button, button pressed
+ * \param board : Board
+ * \param player : Player *, a pointer to a player
+ * \return int
+ */
 static int listener(MLV_Keyboard_button button, Board board, Player *player){
-	printf("Listener\n");
+
 	switch(button){
 		case MLV_KEYBOARD_z:
 			board->p1.dir_player = NORTH;
 			break;
 		case MLV_KEYBOARD_q:
-			printf("WEST\n");
+
 			board->p1.dir_player = WEST;
 			break;
 		case MLV_KEYBOARD_s:
@@ -263,10 +330,16 @@ static int listener(MLV_Keyboard_button button, Board board, Player *player){
 		return -1;
 	}
 
-	printf("end_listener (-1)\n");
 	return -1;
 }		
 
+
+/**
+ * \fn static int check_which_player_move(MLV_Keyboard_button touche)
+ * \brief Check which player have to move
+ * \param touche : MLV_Keyboard_button, button pressed
+ * \return int
+ */
 static int check_which_player_move(MLV_Keyboard_button touche){
 	switch(touche){
 		case MLV_KEYBOARD_z:
@@ -285,6 +358,16 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 	return -1;
 }
 
+
+/**
+ * \fn static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigned int width, unsigned int height)
+ * \brief Function refresh a switch 
+ * \param niveau : Board, a game board
+ * \param player : Player, a player
+ * \param font : MLV_Image *
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ */
 static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigned int width, unsigned int height){
 
 	Trigger *trigg;
@@ -292,16 +375,16 @@ static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigne
 	verif_malloc(trigg);
 	switch(player.dir_player){
 		case NORTH:
-			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));
+			memcpy(trigg, niveau->objects[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));
 			break;
 		case SOUTH:
-			memcpy(trigg, niveau->objets[player.coo_player.x + 1][player.coo_player.y].data, sizeof(Trigger));
+			memcpy(trigg, niveau->objects[player.coo_player.x + 1][player.coo_player.y].data, sizeof(Trigger));
 			break;
 		case EAST:
-			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].data, sizeof(Trigger));
+			memcpy(trigg, niveau->objects[player.coo_player.x][player.coo_player.y + 1].data, sizeof(Trigger));
 			break;
 		case WEST:
-			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y - 1].data, sizeof(Trigger));
+			memcpy(trigg, niveau->objects[player.coo_player.x][player.coo_player.y - 1].data, sizeof(Trigger));
 			break;
 	}
 
@@ -311,6 +394,15 @@ static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigne
 	free(trigg);
 }
 
+
+/**
+ * \fn static void erase_player_after_reached(Board board, unsigned int width, unsigned int height, MLV_Image* font)
+ * \brief Function that deletes a player after his arrival at the destination 
+ * \param niveau : Board, a game board
+ * \param width : unsigned int, width of the game board
+ * \param height : unsigned int, height of the game board
+ * \param font : MLV_Image *
+ */
 static void erase_player_after_reached(Board board, unsigned int width, unsigned int height, MLV_Image* font){
 	if(!board->p1.is_player_alive){
 		MLV_draw_partial_image(font, (board->p1.coo_player.y) * width, (board->p1.coo_player.x) * height, width, height, board->p1.coo_player.y * width, (board->p1.coo_player.x) * height);
@@ -323,6 +415,13 @@ static void erase_player_after_reached(Board board, unsigned int width, unsigned
 	MLV_actualise_window();
 }
 
+
+/**
+ * \fn void launch(Board gameboard, bool *is_reached)
+ * \brief Function that initializes the appearance of a launcher
+ * \param level : Board, the game board
+ * \param is_reached : bool*,
+ */
 void launch(Board gameboard, bool *is_reached){
 	assert(gameboard != NULL);
     unsigned int x, y;
@@ -333,20 +432,18 @@ void launch(Board gameboard, bool *is_reached){
     MLV_Keyboard_button touche;
 	Heap tas = build_heap_by_board(gameboard);
 	Event e;
-	TypeObjet obj;
+	TypeObject obj;
 	MLV_Button_state state;
 
 	MLV_get_desktop_size(&x, &y);
 	
-    decalage_x = (gameboard->taille.y < gameboard->taille.x) ? 50 : 25;
-    decalage_y = (gameboard->taille.y > gameboard->taille.x) ? 50 : 25;
-	width = (x / (gameboard->taille.y)) - decalage_y;
-	height = (y / gameboard->taille.x) - decalage_x; 
+    decalage_x = (gameboard->size.y < gameboard->size.x) ? 50 : 25;
+    decalage_y = (gameboard->size.y > gameboard->size.x) ? 50 : 25;
+	width = (x / (gameboard->size.y)) - decalage_y;
+	height = (y / gameboard->size.x) - decalage_x; 
 	width = 50;
 	height = 45;
-	printf("heap\n");
  
-	printf("heap builded\n");
     MLV_create_window("RealTimeGame", "Game", x, y);
     init_array_img(array_img);
     resize_all_img(array_img, width, height);
@@ -355,10 +452,9 @@ void launch(Board gameboard, bool *is_reached){
 		fprintf(stderr, "Image non-existente ou impossible à charger\n");
 		exit(1);
 	}
-    MLV_resize_image(font, width * gameboard->taille.y, height * gameboard->taille.x);
+    MLV_resize_image(font, width * gameboard->size.y, height * gameboard->size.x);
 	MLV_draw_image(array_img[CHARACTER_SOUTH], gameboard->p1.coo_player.y, gameboard->p1.coo_player.x);
-	printf("update platea\n");
-	update_plateau(gameboard, array_img, font, width, height);
+	update_Board(gameboard, array_img, font, width, height);
     while (true) {
 		if(gameboard->is_game_over){
 			break;
@@ -458,16 +554,16 @@ void launch(Board gameboard, bool *is_reached){
         
         if (is_event_ready(tas)){
             e = heap_pop(tas);
-			obj = gameboard->objets[e.coo_obj.x][e.coo_obj.y].type;
+			obj = gameboard->objects[e.coo_obj.x][e.coo_obj.y].type;
             execute_event(e, tas, gameboard);
 			if(obj == PROJECTILE){
 				refresh_projectile(e.coo_obj, gameboard, width, height, array_img, font);
 			}else if(obj == LAUNCHER){
 				refresh_launcher(e.coo_obj, gameboard, width, height, array_img);
 			}
-            while(e.moment == tas->valeurs[0].moment){
+            while(e.moment == tas->values[0].moment){
                 e = heap_pop(tas);
-				obj = gameboard->objets[e.coo_obj.x][e.coo_obj.y].type;
+				obj = gameboard->objects[e.coo_obj.x][e.coo_obj.y].type;
 				execute_event(e, tas, gameboard);
 				if(obj == PROJECTILE){
 					refresh_projectile(e.coo_obj, gameboard, width, height, array_img, font);

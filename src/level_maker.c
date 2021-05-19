@@ -1,6 +1,21 @@
+/**
+ * \file level_maker.c
+ * \authors Ramaroson Rakotomihamina Johan && Li Christine
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module containing the functions of the game levels
+ *
+ */
+
 #include "../include/level_maker.h"
 
 
+/**
+ * \fn Board level0()
+ * \brief Function to initialize a game board (level 0)
+ * \return Board, a game board
+ */
 Board level0() {
 
     Board board;
@@ -25,40 +40,44 @@ Board level0() {
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
 
-    board->objets[0][0].type = LAUNCHER;
-    board->objets[0][0].data = gen;
-    board->objets[3][5].type = LAUNCHER;
-    board->objets[3][5].data = gen2;
-    board->objets[4][9].type = DESTINATION;
+    board->objects[0][0].type = LAUNCHER;
+    board->objects[0][0].data = gen;
+    board->objects[3][5].type = LAUNCHER;
+    board->objects[3][5].data = gen2;
+    board->objects[4][9].type = DESTINATION;
 	coo_destination.x = 4;
     coo_destination.y = 9;
     board->coo_destination = coo_destination;
 
-    board->objets[1][0].type = WALL;
-    board->objets[1][1].type = WALL;
-    board->objets[1][2].type = WALL;
-    board->objets[1][3].type = WALL;
-    board->objets[1][4].type = WALL;
-    board->objets[1][5].type = WALL;
-    board->objets[1][6].type = WALL;
-    board->objets[1][8].type = WALL;
-    board->objets[2][8].type = WALL;
-    board->objets[3][8].type = WALL;
-    board->objets[4][8].type = WALL;
+    board->objects[1][0].type = WALL;
+    board->objects[1][1].type = WALL;
+    board->objects[1][2].type = WALL;
+    board->objects[1][3].type = WALL;
+    board->objects[1][4].type = WALL;
+    board->objects[1][5].type = WALL;
+    board->objects[1][6].type = WALL;
+    board->objects[1][8].type = WALL;
+    board->objects[2][8].type = WALL;
+    board->objects[3][8].type = WALL;
+    board->objects[4][8].type = WALL;
 
     Coordinates coo_p1;
     coo_p1.x = 4;
     coo_p1.y = 0;
 
     board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    board->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
+    board->objects[coo_p1.x][coo_p1.y].type = PLAYER1;
     board->mulptiplayer_mode = false;
     
     return board;
 }
 
 
-
+/**
+ * \fn Board level1test()
+ * \brief Function to initialize a game board (level 1 test)
+ * \return Board, a game board
+ */
 Board level1test(){
 
     Board board;
@@ -83,14 +102,14 @@ Board level1test(){
     gen = (Generation*)malloc(sizeof(Generation));
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
-    board->objets[4][2].type = LAUNCHER;
-    board->objets[4][2].data = gen;
-    board->objets[3][2].type = DOOR;
-    board->objets[1][8].type = DOOR;
-    board->objets[3][9].type = SWITCH;
-    board->objets[2][8].type = SWITCH;
-    board->objets[3][9].data = trigg;
-    board->objets[2][8].data = trigg2;
+    board->objects[4][2].type = LAUNCHER;
+    board->objects[4][2].data = gen;
+    board->objects[3][2].type = DOOR;
+    board->objects[1][8].type = DOOR;
+    board->objects[3][9].type = SWITCH;
+    board->objects[2][8].type = SWITCH;
+    board->objects[3][9].data = trigg;
+    board->objects[2][8].data = trigg2;
     Coordinates coo_p1, coo_p2;
     coo_p1.x = 0;
     coo_p1.y = 0;
@@ -99,8 +118,8 @@ Board level1test(){
 
     board->p2 = init_player(coo_p2, SOUTH, une_milliseconde * 10, PLAYER2);
     board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    board->objets[coo_p1.x][coo_p1.y].type = PLAYER1;
-    board->objets[coo_p2.x][coo_p2.y].type = PLAYER2;
+    board->objects[coo_p1.x][coo_p1.y].type = PLAYER1;
+    board->objects[coo_p2.x][coo_p2.y].type = PLAYER2;
     board->mulptiplayer_mode = true;
 
     return board;
@@ -108,6 +127,11 @@ Board level1test(){
 }
 
 
+/**
+ * \fn Board level1()
+ * \brief Function to initialize a game board (level 1)
+ * \return Board, a game board
+ */
 Board level1(){
 
     Board board;
@@ -135,37 +159,42 @@ Board level1(){
     gen3->intervalle = une_seconde;
 
 
-	board->objets[4][0].type = LAUNCHER;
-    board->objets[4][0].data = gen;
-    board->objets[1][6].type = LAUNCHER;
-    board->objets[1][6].data = gen2;
-	board->objets[3][9].type = LAUNCHER;
-    board->objets[3][9].data = gen3;
-    board->objets[0][3].type = DESTINATION;
+	board->objects[4][0].type = LAUNCHER;
+    board->objects[4][0].data = gen;
+    board->objects[1][6].type = LAUNCHER;
+    board->objects[1][6].data = gen2;
+	board->objects[3][9].type = LAUNCHER;
+    board->objects[3][9].data = gen3;
+    board->objects[0][3].type = DESTINATION;
     coo_destination.x = 0; 
     coo_destination.y = 3;
     board->coo_destination = coo_destination;
     /* init WALL */
-    board->objets[0][2].type = WALL;
-    board->objets[1][2].type = WALL;
-    board->objets[1][3].type = WALL;
-    board->objets[1][4].type = WALL;
-    board->objets[1][5].type = WALL;
-    board->objets[2][3].type = WALL;
-    board->objets[4][5].type = WALL;
-    board->objets[4][6].type = WALL;
+    board->objects[0][2].type = WALL;
+    board->objects[1][2].type = WALL;
+    board->objects[1][3].type = WALL;
+    board->objects[1][4].type = WALL;
+    board->objects[1][5].type = WALL;
+    board->objects[2][3].type = WALL;
+    board->objects[4][5].type = WALL;
+    board->objects[4][6].type = WALL;
 
     Coordinates coo_p1;
 	coo_p1.x = 0;
     coo_p1.y = 0;
     board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
-    board->objets[coo_p1.x][coo_p1.y].type = board->p1.typePlayer;
+    board->objects[coo_p1.x][coo_p1.y].type = board->p1.typePlayer;
     
 
 	return board;
 }
 
 
+/**
+ * \fn Board level2()
+ * \brief Function to initialize a game board (level 2)
+ * \return Board, a game board
+ */
 Board level2(){
 
 	Board board;
@@ -197,57 +226,57 @@ Board level2(){
 	gen4->allure_proj = une_milliseconde * 300;
     gen4->intervalle = une_seconde;
 
-	board->objets[1][2].type = LAUNCHER;
-    board->objets[1][2].data = gen;
-    board->objets[2][10].type = LAUNCHER;
-    board->objets[2][10].data = gen2;
-	board->objets[6][4].type = LAUNCHER;
-    board->objets[6][4].data = gen3;
-	board->objets[6][9].type = LAUNCHER;
-    board->objets[6][9].data = gen4;
-    board->objets[0][0].type = DESTINATION;
+	board->objects[1][2].type = LAUNCHER;
+    board->objects[1][2].data = gen;
+    board->objects[2][10].type = LAUNCHER;
+    board->objects[2][10].data = gen2;
+	board->objects[6][4].type = LAUNCHER;
+    board->objects[6][4].data = gen3;
+	board->objects[6][9].type = LAUNCHER;
+    board->objects[6][9].data = gen4;
+    board->objects[0][0].type = DESTINATION;
     coo_destination.x = 0;
     coo_destination.y = 0;
     board->coo_destination = coo_destination;
 	/* init WALL */
-    board->objets[1][5].type = WALL;
+    board->objects[1][5].type = WALL;
 
-    board->objets[2][0].type = WALL;
-    board->objets[2][1].type = WALL;
-    board->objets[2][2].type = WALL;
-    board->objets[2][3].type = WALL;
-    board->objets[2][4].type = WALL;
-    board->objets[2][5].type = WALL;
-    board->objets[2][11].type = WALL;
+    board->objects[2][0].type = WALL;
+    board->objects[2][1].type = WALL;
+    board->objects[2][2].type = WALL;
+    board->objects[2][3].type = WALL;
+    board->objects[2][4].type = WALL;
+    board->objects[2][5].type = WALL;
+    board->objects[2][11].type = WALL;
 
-    board->objets[4][0].type = WALL;
+    board->objects[4][0].type = WALL;
 
-    board->objets[4][3].type = WALL;
-    board->objets[4][4].type = WALL;
-    board->objets[4][5].type = WALL;
-    board->objets[4][6].type = WALL;
-    board->objets[4][7].type = WALL;
-    board->objets[4][8].type = WALL;
-    board->objets[4][9].type = WALL;
-    board->objets[4][10].type = WALL;
-    board->objets[4][11].type = WALL;
+    board->objects[4][3].type = WALL;
+    board->objects[4][4].type = WALL;
+    board->objects[4][5].type = WALL;
+    board->objects[4][6].type = WALL;
+    board->objects[4][7].type = WALL;
+    board->objects[4][8].type = WALL;
+    board->objects[4][9].type = WALL;
+    board->objects[4][10].type = WALL;
+    board->objects[4][11].type = WALL;
 
-    board->objets[6][0].type = WALL;
-    board->objets[6][1].type = WALL;
-    board->objets[6][2].type = WALL;
-    board->objets[6][3].type = WALL;
+    board->objects[6][0].type = WALL;
+    board->objects[6][1].type = WALL;
+    board->objects[6][2].type = WALL;
+    board->objects[6][3].type = WALL;
 
-    board->objets[6][5].type = WALL;
-    board->objets[6][6].type = WALL;
+    board->objects[6][5].type = WALL;
+    board->objects[6][6].type = WALL;
 
-    board->objets[6][10].type = WALL;
-    board->objets[6][11].type = WALL;
+    board->objects[6][10].type = WALL;
+    board->objects[6][11].type = WALL;
 
     Coordinates coo_p;
 	coo_p.x = 7;
     coo_p.y = 0;
     board->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
-    board->objets[coo_p.x][coo_p.y].type = board->p1.typePlayer;
+    board->objects[coo_p.x][coo_p.y].type = board->p1.typePlayer;
 
 
 	return board;
@@ -255,6 +284,11 @@ Board level2(){
 }
 
 
+/**
+ * \fn Board level3()
+ * \brief Function to initialize a game board (level 3)
+ * \return Board, a game board
+ */
 Board level3(){
 
 	Board board;
@@ -281,48 +315,48 @@ Board level3(){
 	gen4->allure_proj = une_milliseconde * 300;
     gen4->intervalle = une_seconde;
 
-	board->objets[0][9].type = LAUNCHER;
-    board->objets[0][9].data = gen;
-	board->objets[4][11].type = LAUNCHER;
-    board->objets[4][11].data = gen3;
-	board->objets[5][2].type = LAUNCHER;
-    board->objets[5][2].data = gen4;
-    board->objets[0][6].type = DESTINATION;
+	board->objects[0][9].type = LAUNCHER;
+    board->objects[0][9].data = gen;
+	board->objects[4][11].type = LAUNCHER;
+    board->objects[4][11].data = gen3;
+	board->objects[5][2].type = LAUNCHER;
+    board->objects[5][2].data = gen4;
+    board->objects[0][6].type = DESTINATION;
     coo_dest.x = 0;
     coo_dest.y = 6;
     board->coo_destination = coo_dest;
 	/* init WALL */
-    board->objets[1][0].type = WALL;
-    board->objets[1][1].type = WALL;
+    board->objects[1][0].type = WALL;
+    board->objects[1][1].type = WALL;
 
-    board->objets[3][0].type = WALL;
+    board->objects[3][0].type = WALL;
 
-    board->objets[0][7].type = WALL;
-    board->objets[1][7].type = WALL;
-    board->objets[2][7].type = WALL;
-    board->objets[2][6].type = WALL;
-    board->objets[2][5].type = WALL;
-    board->objets[2][4].type = WALL;
-    board->objets[2][3].type = WALL;
-    board->objets[3][3].type = WALL;
-    board->objets[4][3].type = WALL;
-    board->objets[5][3].type = WALL;
-    board->objets[6][3].type = WALL;
+    board->objects[0][7].type = WALL;
+    board->objects[1][7].type = WALL;
+    board->objects[2][7].type = WALL;
+    board->objects[2][6].type = WALL;
+    board->objects[2][5].type = WALL;
+    board->objects[2][4].type = WALL;
+    board->objects[2][3].type = WALL;
+    board->objects[3][3].type = WALL;
+    board->objects[4][3].type = WALL;
+    board->objects[5][3].type = WALL;
+    board->objects[6][3].type = WALL;
 
-    board->objets[5][4].type = WALL;
-    board->objets[5][5].type = WALL;
-    board->objets[5][6].type = WALL;
-    board->objets[6][6].type = WALL;
-    board->objets[6][7].type = WALL;
-    board->objets[6][8].type = WALL;
-    board->objets[6][9].type = WALL;
+    board->objects[5][4].type = WALL;
+    board->objects[5][5].type = WALL;
+    board->objects[5][6].type = WALL;
+    board->objects[6][6].type = WALL;
+    board->objects[6][7].type = WALL;
+    board->objects[6][8].type = WALL;
+    board->objects[6][9].type = WALL;
 
     Coordinates coo_p;
 
 	coo_p.x = 3;
     coo_p.y = 4;
     board->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
-    board->objets[coo_p.x][coo_p.y].type = board->p1.typePlayer;
+    board->objects[coo_p.x][coo_p.y].type = board->p1.typePlayer;
     
 
 	return board;
