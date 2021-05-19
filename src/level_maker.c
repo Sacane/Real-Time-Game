@@ -13,7 +13,12 @@ Board level0() {
     Generation* gen;
     Generation* gen2;
     gen2 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen2);
+
+
     gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
+
 
     gen2->allure_proj = une_milliseconde*300;
     gen2->intervalle = une_seconde;
@@ -69,7 +74,9 @@ Board level1test(){
     coo_door2.y = 8;
     Trigger *trigg, *trigg2;
     trigg = (Trigger*)malloc(sizeof(Trigger));
+    verif_malloc(trigg);
     trigg2 = (Trigger*)malloc(sizeof(Trigger));
+    verif_malloc(trigg2);
     trigg->coo_door = coo_door; 
     trigg2->coo_door = coo_door2;
     
@@ -114,8 +121,11 @@ Board level1(){
     Generation* gen2;
     Generation* gen3;
     gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
     gen2 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen2);
     gen3 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen3);
     
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
@@ -170,9 +180,13 @@ Board level2(){
     Generation* gen3;
     Generation* gen4;
     gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
     gen2 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen2);
     gen3 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen3);
     gen4 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen4);
 
 	gen->allure_proj = une_milliseconde * 300;
     gen->intervalle = une_seconde;
@@ -254,8 +268,11 @@ Board level3(){
     Generation* gen3;
     Generation* gen4;
     gen = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen);
     gen3 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen3);
     gen4 = (Generation*)malloc(sizeof(Generation));
+    verif_malloc(gen4);
 
 	gen->allure_proj = une_milliseconde * 300;
     gen->intervalle = une_seconde;

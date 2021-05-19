@@ -7,6 +7,7 @@ void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y
 	x_height = y_source * width;
 	y_height = x_source * height;
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+	verif_malloc(depl);
 	switch(niveau->objets[x_source][y_source].type){
 		case VIDE: 
 			break;
@@ -94,6 +95,7 @@ void update_plateau(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsig
 static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
 	
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
+	verif_malloc(depl);
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
 	depl = board->objets[coo_proj.x][coo_proj.y].data;
 	if(se_dirige_vers_mur(coo_proj.x, coo_proj.y, depl->direction, board)){
@@ -287,6 +289,7 @@ static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigne
 
 	Trigger *trigg;
 	trigg = (Trigger*)malloc(sizeof(Trigger));
+	verif_malloc(trigg);
 	switch(player.dir_player){
 		case NORTH:
 			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));

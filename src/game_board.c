@@ -7,12 +7,15 @@ Board malloc_board (Coordinates taille){
     unsigned int i;
 
     tmp = (Board)malloc(sizeof(Level));
+    verif_malloc(tmp);
     tmp->taille = taille;
     tmp->mulptiplayer_mode = false;
     tmp->is_game_over = false;
     tmp->objets = (Objet**)malloc(sizeof(Objet*) * taille.y * taille.x);
+    verif_malloc(tmp->objets);
     for(i = 0; i < taille.x; i++){
       tmp->objets[i] = (Objet*)malloc(sizeof(Objet) * taille.y);
+      verif_malloc(tmp->objets[i]);
     }
     return tmp;
 }
@@ -164,7 +167,7 @@ void move_projectile(Board board, Coordinates *coordinate){
     Deplacement* deplacement;
     
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
-
+    verif_malloc(deplacement);
     memcpy(deplacement, board->objets[coordinate->x][coordinate->y].data, sizeof(Deplacement));
 
     if(se_dirige_vers_mur(coordinate->x, coordinate->y, deplacement->direction, board)){
@@ -277,6 +280,7 @@ int move_players(Board board, Player *player){
     }
     if(board->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
         trigger = (Trigger*)malloc(sizeof(Trigger));
+        verif_malloc(trigger);
         memcpy(trigger, board->objets[player->coo_player.x][player->coo_player.y].data, sizeof(Trigger));
         board->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
 
@@ -307,6 +311,7 @@ bool check_player_reached(Board board){
 void trigger_switch(Board board, Player player){
     Trigger *trigger;
     trigger = (Trigger*)malloc(sizeof(Trigger));
+    verif_malloc(trigger);
     switch(player.dir_player){
         case NORTH:
             memcpy(trigger, board->objets[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));

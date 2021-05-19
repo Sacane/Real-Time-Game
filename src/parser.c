@@ -11,8 +11,9 @@ Board read_file(char* name_file){
     FILE *in;
     char *typeObject;
     typeObject = (char*)malloc(sizeof(char) * BUFSIZ);
+    verif_malloc(typeObject);
     char multiplayer;
-    
+
     in = fopen(name_file, "r");
     if(!in){
         fprintf(stderr, "File doesn't exist !\n");
@@ -97,7 +98,7 @@ Board read_file(char* name_file){
                 break;
             case SWITCH:
                 trigger = (Trigger*)malloc(sizeof(Trigger));
-                
+                verif_malloc(trigger);
                 printf("Filling switch : ");
                 fscanf(in, " %u x %u DOOR %u x %u", &x, &y, &x2, &y2);
                 coo_switch.x = x;
@@ -126,13 +127,17 @@ static char *build_path_level(const char* name_folder, int level_state, char* su
     char num_char[2];
     size_t sum_len = strlen(suffix) + strlen(name_folder);
     name_folder_cpy = (char*)malloc(sizeof(char)* strlen(name_folder));
+    verif_malloc(name_folder_cpy);
+
     suffix_cpy = (char *)malloc(sizeof(char) * strlen(suffix));
+    verif_malloc(suffix_cpy);
 
     strcpy(name_folder_cpy, name_folder);   
     strcpy(suffix_cpy, suffix);
     sprintf(num_char, "%d", level_state);
 
     res = (char*)malloc(sizeof(res) * sum_len + 10);
+    verif_malloc(res);
     strcat( name_folder_cpy, "/level");
     strcat(name_folder_cpy, num_char);
     strcat(name_folder_cpy, suffix);

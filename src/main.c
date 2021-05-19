@@ -11,8 +11,10 @@ int main(int argc, char* argv[]) {
     char* name_file = NULL, *name_folder = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
+    verif_malloc(name_file);
     bool is_level_reached = false;
     name_folder = (char*)malloc(sizeof(char) * BUFSIZ);
+    verif_malloc(name_folder);
     opt_management(argc, argv, &mode, name_file, &level);
     strcpy(name_folder, "levels/");
     if(level == NULL){
