@@ -1,7 +1,7 @@
-#include "../include/niveau.h"
+#include "../include/game_board.h"
 #include <string.h>
 
-Board malloc_board (Coordonnees taille){
+Board malloc_board (Coordinates taille){
 
     Board tmp;
     unsigned int i;
@@ -16,8 +16,6 @@ Board malloc_board (Coordonnees taille){
     }
     return tmp;
 }
-
-
 
 void free_board (Board gameboard){
     
@@ -36,7 +34,7 @@ void free_board (Board gameboard){
     free(gameboard);
 }
 
-Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type){
+Player init_player(Coordinates init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type){
     Player p;
     p.coo_player = init_coo;
     p.dir_player = init_dir;
@@ -48,23 +46,23 @@ Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed
     return p;
 }
 
-void init_board(Board niveau, Coordonnees taille){
+void init_board(Board board, Coordinates taille){
 
     unsigned int i, j;
     for(i = 0; i < taille.x; i++){
         for(j = 0; j < taille.y; j++){
-            niveau->objets[i][j].type = VIDE;
-            niveau->objets[i][j].data = NULL;
+            board->objets[i][j].type = VIDE;
+            board->objets[i][j].data = NULL;
         }
     }
 }
 
 
-void affiche_coordonnee(Coordonnees coordonnee){
+void affiche_coordonnee(Coordinates coordonnee){
     printf("(%u, %u)", coordonnee.x, coordonnee.y);
 }
 
-bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second){
+bool equals_coordinates(Coordinates first, Coordinates second){
     return (first.y == second.y) && (first.x == second.x);
 }
 
@@ -158,20 +156,20 @@ bool going_to_obj(Board board, Player player, TypeObjet type){
     return false;
 }
 
-void move_projectile(Board niveau, Coordonnees *coordonnees){
+void move_projectile(Board board, Coordinates *coordinate){
     
-    assert(niveau != NULL);
-    assert(niveau->objets[coordonnees->x][coordonnees->y].type == PROJECTILE);
+    assert(board != NULL);
+    assert(board->objets[coordinate->x][coordinate->y].type == PROJECTILE);
     
     Deplacement* deplacement;
     
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
 
-    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].data, sizeof(Deplacement));
+    memcpy(deplacement, board->objets[coordinate->x][coordinate->y].data, sizeof(Deplacement));
 
-    if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
+    if(se_dirige_vers_mur(coordinate->x, coordinate->y, deplacement->direction, board)){
         free(deplacement);
-        niveau->objets[coordonnees->x][coordonnees->y].type = VIDE;
+        board->objets[coordinate->x][coordinate->y].type = VIDE;
 
         return;
     }
@@ -180,47 +178,47 @@ void move_projectile(Board niveau, Coordonnees *coordonnees){
 
         case NORTH:
 
-            niveau->objets[--coordonnees->x][coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
-            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-            niveau->objets[coordonnees->x + 1][coordonnees->y].type = VIDE;
+            board->objets[--coordinate->x][coordinate->y].type = PROJECTILE;
+            board->objets[coordinate->x][coordinate->y].data = deplacement;
+            fill_projectile(&board->objets[coordinate->x][coordinate->y], deplacement);
+            board->objets[coordinate->x + 1][coordinate->y].type = VIDE;
 
             break;
         case SOUTH:
             
-            niveau->objets[++coordonnees->x][coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
-            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+            board->objets[++coordinate->x][coordinate->y].type = PROJECTILE;
+            board->objets[coordinate->x][coordinate->y].data = deplacement;
+            fill_projectile(&board->objets[coordinate->x][coordinate->y], deplacement);
             
-            niveau->objets[coordonnees->x - 1][coordonnees->y].type = VIDE;
+            board->objets[coordinate->x - 1][coordinate->y].type = VIDE;
 
             
             break;
         case EAST:
             
-            niveau->objets[coordonnees->x][++coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
-            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-            niveau->objets[coordonnees->x][coordonnees->y - 1].type = VIDE;
+            board->objets[coordinate->x][++coordinate->y].type = PROJECTILE;
+            board->objets[coordinate->x][coordinate->y].data = deplacement;
+            fill_projectile(&board->objets[coordinate->x][coordinate->y], deplacement);
+            board->objets[coordinate->x][coordinate->y - 1].type = VIDE;
 
             break;
         case WEST:
-            niveau->objets[coordonnees->x][--coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
-            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
-            niveau->objets[coordonnees->x][coordonnees->y + 1].type = VIDE;
+            board->objets[coordinate->x][--coordinate->y].type = PROJECTILE;
+            board->objets[coordinate->x][coordinate->y].data = deplacement;
+            fill_projectile(&board->objets[coordinate->x][coordinate->y], deplacement);
+            board->objets[coordinate->x][coordinate->y + 1].type = VIDE;
 		
             break;
     }
 
-    if(est_coordonnee_equivalent(*coordonnees, niveau->p1.coo_player)){
-        niveau->p1.is_player_alive = false;
+    if(equals_coordinates(*coordinate, board->p1.coo_player)){
+        board->p1.is_player_alive = false;
     }
-    if(niveau->mulptiplayer_mode){
+    if(board->mulptiplayer_mode){
         
-        if(est_coordonnee_equivalent(*coordonnees, niveau->p2.coo_player)){
+        if(equals_coordinates(*coordinate, board->p2.coo_player)){
             printf("EQUALS multiplayer\n");
-            niveau->p2.is_player_alive = false;
+            board->p2.is_player_alive = false;
         }
     }
 
@@ -244,19 +242,19 @@ bool check_game_over(Board board){
     return (board->mulptiplayer_mode) ? (!board->p1.is_player_alive || !board->p2.is_player_alive) : (!board->p1.is_player_alive);
 }
 
-int move_players(Board niveau, Player *player){
-    assert(niveau != NULL);
+int move_players(Board board, Player *player){
+    assert(board != NULL);
 
     Trigger *trigger;
     
-    if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, niveau)){
+    if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
         return -1;
     }
-    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == DESTINATION){
+    if(board->objets[player->coo_player.x][player->coo_player.y].type == DESTINATION){
         return -1;
     }
     
-    niveau->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
+    board->objets[player->coo_player.x][player->coo_player.y].type = VIDE;
     switch(player->dir_player){
         case NORTH:
             player->coo_player.x -= 1;
@@ -272,20 +270,20 @@ int move_players(Board niveau, Player *player){
             break;
     }
     
-    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == PROJECTILE){
+    if(board->objets[player->coo_player.x][player->coo_player.y].type == PROJECTILE){
         printf("You just walk into a projectile ! Game OVER.\n");
         player->is_player_alive = false;
         return 0;
     }
-    if(niveau->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
+    if(board->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
         trigger = (Trigger*)malloc(sizeof(Trigger));
-        memcpy(trigger, niveau->objets[player->coo_player.x][player->coo_player.y].data, sizeof(Trigger));
-        niveau->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
+        memcpy(trigger, board->objets[player->coo_player.x][player->coo_player.y].data, sizeof(Trigger));
+        board->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
 
         free(trigger);
     }
-    if(niveau->objets[player->coo_player.x][player->coo_player.y].type != DESTINATION){
-        niveau->objets[player->coo_player.x][player->coo_player.y].type = player->typePlayer;
+    if(board->objets[player->coo_player.x][player->coo_player.y].type != DESTINATION){
+        board->objets[player->coo_player.x][player->coo_player.y].type = player->typePlayer;
     }
     else{
         
@@ -302,8 +300,8 @@ void check_player_move(Player *p){
     }
 }
 
-bool check_player_reached(Board niveau){
-    return (!niveau->mulptiplayer_mode) ? (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination)) : (est_coordonnee_equivalent(niveau->p1.coo_player, niveau->coo_destination) && (est_coordonnee_equivalent(niveau->p2.coo_player, niveau->coo_destination)));
+bool check_player_reached(Board board){
+    return (!board->mulptiplayer_mode) ? (equals_coordinates(board->p1.coo_player, board->coo_destination)) : (equals_coordinates(board->p1.coo_player, board->coo_destination) && (equals_coordinates(board->p2.coo_player, board->coo_destination)));
 }
 
 void trigger_switch(Board board, Player player){
@@ -329,14 +327,14 @@ void trigger_switch(Board board, Player player){
     free(trigger);
 }
 
-void print_board (Board niveau) {
+void print_board (Board board) {
 
 	unsigned int i, j;
     Deplacement *dep;
-	for(i = 0; i < niveau->taille.x ; i++) {
-		for(j = 0; j < niveau->taille.y; j++) {
+	for(i = 0; i < board->taille.x ; i++) {
+		for(j = 0; j < board->taille.y; j++) {
 
-			switch (niveau->objets[i][j].type)
+			switch (board->objets[i][j].type)
 			{
 			case VIDE: 
 				printf(".");
@@ -349,7 +347,7 @@ void print_board (Board niveau) {
 				break;
 			
 			case PROJECTILE: 
-                dep = niveau->objets[i][j].data;
+                dep = board->objets[i][j].data;
 				switch (dep->direction)
 				{
 				case NORTH: 

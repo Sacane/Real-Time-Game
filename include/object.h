@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef __OBJET__H__
-#define __OBJET__H__
+#ifndef __OBJECT__H__
+#define __OBJECT__H__
 
 #include "wrapper.h"
 
@@ -36,7 +36,7 @@ typedef struct object{
 
 typedef struct {
 
-	Coordonnees coo_door;
+	Coordinates coo_door;
 
 }Trigger;
 

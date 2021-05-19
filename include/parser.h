@@ -4,7 +4,8 @@
  * \creation date : 01-04-21
  * \last modification : 21-05-21
  * 
- * File containing the prototypes of the functions in the parser.c file
+ * The module is used to manipulate the file and folders to read it and build a gameboard or 
+ * launch the game
  *
  */
 
@@ -12,16 +13,16 @@
 #define __PARSER__H__
 
 #include <string.h>
-#include "niveau.h"
+#include "game_board.h"
 #include "temps.h"
 #include "gui.h"
 #include "management.h"
-#define MAX_LEVEL 6
+#define MAX_LEVEL 6 /* Simple macro represents the maximum level made as file */
 
 /**
  * Function to read a given file
- * @param name_file : char*, a string of characters
- * @return : Board, a game board
+ * \param name_file : char*, a string of characters
+ * \return : Board, a game board
  */
 Board read_file(char* name_file);
 

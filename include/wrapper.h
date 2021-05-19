@@ -4,7 +4,8 @@
  * \creation date : 01-04-21
  * \last modification : 21-05-21
  * 
- * File containing the prototypes of the functions in the wrapper.c file
+ * This module contains all the include necessary to all the modules
+ * It also manage the game_mode required to launch the game and control the errors.
  *
  */
 
@@ -26,20 +27,20 @@ typedef enum{
   DEBUG,
   ERROR,
   FOLDER,
-}Mode;
+}Game_mode;
 
 typedef struct{
 
   unsigned x;
   unsigned y;
   
-} Coordonnees;
+} Coordinates;
 
 /**
  * Function to check if the allocation has been successful
- * @param objet : void*, the game board
+ * @param data : data to check
  */
-void verif_malloc(void *objet);
+void verif_malloc(void *data);
 
 
 

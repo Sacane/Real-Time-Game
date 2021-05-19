@@ -67,7 +67,7 @@ static bool test_ote_minimum(int *total_test){
     *total_test += 1;
 	Heap arbre = malloc_heap(INITIAL_SIZE);
 	Event event1, event2, event3, event4, event5, eventMin;
-    Coordonnees pos1, pos2, pos3, pos4, pos5;
+    Coordinates pos1, pos2, pos3, pos4, pos5;
     pos1.x = 0;
     pos1.y = 0;
     pos2.x = 1;
@@ -125,15 +125,15 @@ static bool test_build_heap(int *total_test){
 	Board level = level0();
     Heap arbre;
     
-    Coordonnees lanceur1;
+    Coordinates lanceur1;
     lanceur1.x = 0;
     lanceur1.y = 0;
     
-    Coordonnees lanceur2;
+    Coordinates lanceur2;
     lanceur2.x = 3;
     lanceur2.y = 5;
 
-	arbre = construit_Tas(level);
+	arbre = build_heap_by_board(level);
 	
     if(!arbre){
         free_board(level);
@@ -147,13 +147,13 @@ static bool test_build_heap(int *total_test){
 		return false; 
 	}
 
-	if(est_coordonnee_equivalent(lanceur1, (arbre->valeurs[0]).coo_obj) == false){
+	if(equals_coordinates(lanceur1, (arbre->valeurs[0]).coo_obj) == false){
         free_board(level);
         free_heap(arbre);
         return false;
     }
 
-	if(est_coordonnee_equivalent(lanceur2, (arbre->valeurs[1]).coo_obj) == false){
+	if(equals_coordinates(lanceur2, (arbre->valeurs[1]).coo_obj) == false){
         free_board(level);
         free_heap(arbre);
         return false;
@@ -178,15 +178,15 @@ static bool test_move_projectile_NORTH(int *total_test){
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
-	Coordonnees coordonnees;
+	Coordinates coo;
 
 	deplacement->direction = NORTH;
-	coordonnees.x = 3;
-    coordonnees.y = 2;
+	coo.x = 3;
+    coo.y = 2;
 	objet.type = PROJECTILE; 
 	objet.data = deplacement;
-    level->objets[coordonnees.x][coordonnees.y] = objet;
-	move_projectile(level, &coordonnees);
+    level->objets[coo.x][coo.y] = objet;
+	move_projectile(level, &coo);
 
 	if(level->objets[3][2].type != VIDE){
         printf("Projectile non-déplacé (NORTH) !");
@@ -198,7 +198,7 @@ static bool test_move_projectile_NORTH(int *total_test){
 		return false;
 	}
     
-    Coordonnees new_coord;
+    Coordinates new_coord;
     new_coord.x = 2;
     new_coord.y = 2;
 
@@ -213,7 +213,7 @@ static bool test_move_projectile_NORTH(int *total_test){
     Deplacement* dep;
     dep = (Deplacement*)malloc(sizeof(Deplacement));
     dep->direction = NORTH;
-	Coordonnees new1coord2;
+	Coordinates new1coord2;
 	new1coord2.x = 0;
 	new1coord2.y = 2;
 
@@ -237,7 +237,7 @@ static bool test_move_projectile_SOUTH(int *total_test){
     Objet objet;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(dep);
-	Coordonnees coords;
+	Coordinates coords;
     dep->direction = SOUTH;
     coords.x = 2;
     coords.y = 3;
@@ -263,7 +263,7 @@ static bool test_move_projectile_SOUTH(int *total_test){
         printf("Projectile toujours présent (SOUTH)\n");
 		return false;
 	}
-    Coordonnees coord;
+    Coordinates coord;
     coord.x = 4;
     coord.y = 3;
     move_projectile( level, &coord);
@@ -281,7 +281,7 @@ static bool test_move_projectile_EAST(int *total_test){
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
-    Coordonnees coord;
+    Coordinates coord;
 	
 	deplacement->direction = EAST;
     coord.x = 0;
@@ -311,7 +311,7 @@ static bool test_move_projectile_EAST(int *total_test){
 		return false;
 	}
 
-    Coordonnees coords; 
+    Coordinates coords; 
     coords.x = 0;
     coords.y = 9; 
     move_projectile(level, &coords); 
@@ -328,16 +328,16 @@ static bool test_move_projectile_WEST(int *total_test){
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
     verif_malloc(deplacement);
-	Coordonnees coordonnees;
+	Coordinates coo;
 
 	deplacement->direction = WEST;
-	coordonnees.x = 2;
-    coordonnees.y = 2;
+	coo.x = 2;
+    coo.y = 2;
 	objet.type = PROJECTILE; 
 	objet.data = deplacement;
-    level->objets[coordonnees.x][coordonnees.y] = objet;
+    level->objets[coo.x][coo.y] = objet;
 
-	move_projectile(level, &coordonnees);
+	move_projectile(level, &coo);
 	
 	if(level->objets[2][2].type != VIDE){
         printf("Projectile non-déplacé (WEST)!");
@@ -349,14 +349,14 @@ static bool test_move_projectile_WEST(int *total_test){
 		return false;
 	}
     
-    move_projectile(level, &coordonnees);
+    move_projectile(level, &coo);
 
 	if (level->objets[2][0].type != PROJECTILE){
         printf("Projectile toujours présent (WEST) \n");
 		return false;
 	}
 
-    Coordonnees coord;
+    Coordinates coord;
     coord.x = 2;
     coord.y = 0;
     move_projectile(level, &coord);
@@ -370,10 +370,10 @@ static bool test_move_projectile_WEST(int *total_test){
 }
 
 /* Si la coordonnée remaining se trouve parmis les éléments du tas, la fonction return true, false sinon */
-static bool test_equals_heap(Heap heap, Coordonnees remaining){
+static bool test_equals_heap(Heap heap, Coordinates remaining){
     unsigned int i;
     for(i = 0; i < heap->taille; i++){
-        if(est_coordonnee_equivalent(remaining, heap->valeurs[i].coo_obj)){
+        if(equals_coordinates(remaining, heap->valeurs[i].coo_obj)){
             return true;
         }
     }
@@ -384,8 +384,8 @@ static bool test_trigger_launcher(int *total_test){
     *total_test += 1;
     Board level = level0();
     Heap tas;
-    Coordonnees eval;
-    tas = construit_Tas(level);
+    Coordinates eval;
+    tas = build_heap_by_board(level);
     Event e = heap_pop(tas);
     int i;
 

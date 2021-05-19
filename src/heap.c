@@ -1,4 +1,4 @@
-#include "../include/tas.h"
+#include "../include/heap.h"
 #include <string.h>
 
 static unsigned int father(int i){
@@ -159,7 +159,6 @@ Event heap_pop(Heap tas){
 void print_heap(Heap tas){
 
 	assert(tas->valeurs != NULL);
-    printf("On affiche le tas :\n");
     unsigned int i;
     printf("[");
     for(i = 0; i < tas->taille; i++){

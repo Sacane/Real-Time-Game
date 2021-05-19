@@ -1,57 +1,8 @@
 #include "../include/gui.h"
 
 
-void init_array_img(MLV_Image* array_img[]){
-	
-	array_img[PROJECTILE_EAST] = MLV_load_image("assets/projectiles/proj_east.png");
-	array_img[PROJECTILE_NORTH] = MLV_load_image("assets/projectiles/proj_north.png");
-	array_img[PROJECTILE_SOUTH] = MLV_load_image("assets/projectiles/proj_south.png");
-	array_img[PROJECTILE_WEST] = MLV_load_image("assets/projectiles/proj_west.png");
-	array_img[CHARACTER_EAST] = MLV_load_image("assets/character/character_east.png");
-	array_img[CHARACTER_NORTH] = MLV_load_image("assets/character/character_north.png");
-	array_img[CHARACTER_SOUTH] = MLV_load_image("assets/character/character_south.png");
-	array_img[CHARACTER_WEST] = MLV_load_image("assets/character/character_west.png");
-	array_img[WALL_IMG] = MLV_load_image("assets/Wall.png");
-	array_img[LAUNCHER_IMG] = MLV_load_image("assets/launcher.png");
-	array_img[DEST] = MLV_load_image("assets/dest.png");
-	array_img[PLAYER2_NORTH_IMG] = MLV_load_image("assets/character/player2_north.png");
-	if(!array_img[PLAYER2_NORTH_IMG]){
-		fprintf(stderr,"null player_north\n");
-		exit(EXIT_FAILURE);
-	}
-	array_img[PLAYER2_SOUTH_IMG] = MLV_load_image("assets/character/player2_south.png");
-	if(!array_img[PLAYER2_SOUTH_IMG]){
-		fprintf(stderr,"null player_south\n");
-		exit(EXIT_FAILURE);
-	}
-	array_img[PLAYER2_EAST_IMG] = MLV_load_image("assets/character/player2_east.png");
-	if(!array_img[PLAYER2_EAST_IMG]){
-		fprintf(stderr,"null player_east\n");
-		exit(EXIT_FAILURE);
-	}
-	array_img[PLAYER2_WEST_IMG] = MLV_load_image("assets/character/player2_west.png");
-	if(!array_img[PLAYER2_WEST_IMG]){
-		fprintf(stderr, "null player_west\n");
-		exit(EXIT_FAILURE);
-	}
-	array_img[SWITCH_IMG] = MLV_load_image("assets/switch.png");
-}
 
-void resize_all_img(MLV_Image* array_img[],  int width, int height){
-	int i;
-	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
-		MLV_resize_image(array_img[i], width, height);
-	}
-}
-
-void free_array_img(MLV_Image *array[]){
-	int i;
-	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
-		MLV_free_image(array[i]);
-	}
-}
-
-static void draw_img(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
+void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height){
 	int x_height, y_height;
 	x_height = y_source * width;
 	y_height = x_source * height;
@@ -134,13 +85,13 @@ void update_plateau(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsig
 	MLV_draw_image(font, 0, 0);
 	for(i = 0; i < niveau->taille.x; ++i){
 		for(j = 0; j < niveau->taille.y; ++j){
-			draw_img(niveau, array_img, i, j, width, height);
+			draw_img_by_board(niveau, array_img, i, j, width, height);
 		}
 	}
 	MLV_actualise_window();
 }
 
-static void refresh_projectile(Coordonnees coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
+static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
 	
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
@@ -151,44 +102,44 @@ static void refresh_projectile(Coordonnees coo_proj, Board board, unsigned int w
 
 	switch(depl->direction){
 		case NORTH:
-			draw_img(board, array_img, coo_proj.x - 1, coo_proj.y, width, height);
+			draw_img_by_board(board, array_img, coo_proj.x - 1, coo_proj.y, width, height);
 			break;
 		case SOUTH:
-			draw_img(board, array_img, coo_proj.x + 1, coo_proj.y, width, height);
+			draw_img_by_board(board, array_img, coo_proj.x + 1, coo_proj.y, width, height);
 			break;
 		case EAST:
-			draw_img(board, array_img, coo_proj.x, coo_proj.y + 1, width, height);
+			draw_img_by_board(board, array_img, coo_proj.x, coo_proj.y + 1, width, height);
 			break;
 		case WEST:
-			draw_img(board, array_img, coo_proj.x, coo_proj.y - 1, width, height);
+			draw_img_by_board(board, array_img, coo_proj.x, coo_proj.y - 1, width, height);
 			break;
 	}
 }
 
-static void refresh_launcher(Coordonnees coo_launcher, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
+static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[]){
 	Direction direction;
 
 	for(direction = NORTH; direction <= EAST; direction++){
 		if(!se_dirige_vers_mur(coo_launcher.x, coo_launcher.y, direction, board)){
 			switch(direction){
 				case NORTH:
-					draw_img(board, array_img, coo_launcher.x - 1, coo_launcher.y, width, height);
+					draw_img_by_board(board, array_img, coo_launcher.x - 1, coo_launcher.y, width, height);
 					break;
 				case EAST:
-					draw_img(board, array_img, coo_launcher.x, coo_launcher.y + 1, width, height);
+					draw_img_by_board(board, array_img, coo_launcher.x, coo_launcher.y + 1, width, height);
 					break;
 				case WEST:
-					draw_img(board, array_img, coo_launcher.x, coo_launcher.y - 1, width, height);
+					draw_img_by_board(board, array_img, coo_launcher.x, coo_launcher.y - 1, width, height);
 					break;
 				case SOUTH:
-					draw_img(board, array_img, coo_launcher.x + 1, coo_launcher.y, width, height);
+					draw_img_by_board(board, array_img, coo_launcher.x + 1, coo_launcher.y, width, height);
 					break;
 			}
 		}
 	}
 }
 
-static void refresh_player(Coordonnees coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
+static void refresh_player(Coordinates coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 
 	switch(board->objets[coo_player.x][coo_player.y].type){
 		case PLAYER1:
@@ -252,7 +203,7 @@ static void refresh_player(Coordonnees coo_player, Board board, unsigned int wid
 		
 	}
 
-	draw_img(board, array_img, coo_player.x, coo_player.y, width, height);
+	draw_img_by_board(board, array_img, coo_player.x, coo_player.y, width, height);
 	MLV_actualise_window();
 }
 
@@ -377,7 +328,7 @@ void launch(Board gameboard, bool *is_reached){
     MLV_Image *array_img[SIZE_ARR_IMG];
 	unsigned int width, height;
     MLV_Keyboard_button touche;
-	Heap tas = construit_Tas(gameboard);
+	Heap tas = build_heap_by_board(gameboard);
 	Event e;
 	TypeObjet obj;
 	MLV_Button_state state;

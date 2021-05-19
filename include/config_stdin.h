@@ -1,3 +1,9 @@
+/**
+ * \file config_stdin.h
+ * \authors university 'Gustave eiffel'
+ * 
+*/
+
 
 /* Il faut appeler cette fonction avant de lancer le jeu en mode texte. 
  * NB: il ne faut appeler cette fonction qu'une seule fois.

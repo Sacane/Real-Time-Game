@@ -1,4 +1,4 @@
-#include "../include/objet.h"
+#include "../include/object.h"
 
 
 void fill_projectile(Objet* obj, Deplacement* deplacement){

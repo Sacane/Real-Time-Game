@@ -1,8 +1,8 @@
 /**
- * \fichier : gui.h
- * \auteurs : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
- * \date de création : 01-04-21
- * \dernière modification : 21-05-21
+ * \file : gui.h
+ * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date : 01-04-21
+ * \last modification : 21-05-21
  * 
  * DESCRIPTION
  *
@@ -12,45 +12,10 @@
 #ifndef __GUI__H__
 #define __GUI__H__
 
-#include "management.h"
-
 #include <MLV/MLV_all.h>
 
-#define SIZE_ARR_IMG 20 /* We can store max 20 img in the array of img, */
-                        /* If you attend to add more than 20 images, you have to increment this value */
-
-typedef enum {
-    CHARACTER_SOUTH,
-    CHARACTER_NORTH,
-    CHARACTER_EAST,
-    CHARACTER_WEST,
-    PROJECTILE_SOUTH,
-    PROJECTILE_NORTH,
-    PROJECTILE_EAST,
-    PROJECTILE_WEST,
-    WALL_IMG,
-    LAUNCHER_IMG,
-    DEST,
-    PLAYER2_NORTH_IMG,
-    PLAYER2_SOUTH_IMG,
-    PLAYER2_EAST_IMG,
-    PLAYER2_WEST_IMG,
-    SWITCH_IMG,
-}typeImage;
-
-
-/**
- * Function to initialize an array of image
- * @param array_img[] : MLV_Image *
- */
-void init_array_img(MLV_Image *array_img[]);
-
-/**
- * Function to free the memory space of an image array
- * @param array[] : MLV_Image *
- */
-void free_array_img(MLV_Image *array[]);
-
+#include "image.h"
+#include "management.h"
 
 /**
  * Function to initialize a board
@@ -88,13 +53,8 @@ void draw_Object(Objet objet);
  */
 void resize_all_img(MLV_Image* array_img[],  int width, int height);
 
-/**
- * Function to retrieve the player's keyboard action
- * @param button : MLV_Keyboard_button
- * @param board : Board, the game board
- * @return int, the action given
- */
-int action_listener(MLV_Keyboard_button button, Board board);
+void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y_source, unsigned int width, unsigned int height);
+
 
 /**
  * DESCRIPTION

@@ -1,12 +1,10 @@
 #include "../include/level_maker.h"
 
 
-/* a modifié en local*/
-
 Board level0() {
 
     Board board;
-    Coordonnees size_board, coo_destination;
+    Coordinates size_board, coo_destination;
     size_board.x = 5;
     size_board.y = 10;
     board = malloc_board(size_board);
@@ -43,7 +41,7 @@ Board level0() {
     board->objets[3][8].type = WALL;
     board->objets[4][8].type = WALL;
 
-    Coordonnees coo_p1;
+    Coordinates coo_p1;
     coo_p1.x = 4;
     coo_p1.y = 0;
 
@@ -60,7 +58,7 @@ Board level1test(){
 
     Board board;
     Generation* gen;
-    Coordonnees size_board, coo_door, coo_door2;
+    Coordinates size_board, coo_door, coo_door2;
     size_board.x = 5;
     size_board.y = 10;
     coo_door.x = 3;
@@ -86,7 +84,7 @@ Board level1test(){
     board->objets[2][8].type = SWITCH;
     board->objets[3][9].data = trigg;
     board->objets[2][8].data = trigg2;
-    Coordonnees coo_p1, coo_p2;
+    Coordinates coo_p1, coo_p2;
     coo_p1.x = 0;
     coo_p1.y = 0;
     coo_p2.x = 2;
@@ -106,7 +104,7 @@ Board level1test(){
 Board level1(){
 
     Board board;
-    Coordonnees size_board, coo_destination;
+    Coordinates size_board, coo_destination;
     size_board.x = 5;
     size_board.y = 10;
     board = malloc_board(size_board);
@@ -147,7 +145,7 @@ Board level1(){
     board->objets[4][5].type = WALL;
     board->objets[4][6].type = WALL;
 
-    Coordonnees coo_p1;
+    Coordinates coo_p1;
 	coo_p1.x = 0;
     coo_p1.y = 0;
     board->p1 = init_player(coo_p1, SOUTH, une_milliseconde * 10, PLAYER1);
@@ -161,7 +159,7 @@ Board level1(){
 Board level2(){
 
 	Board board;
-    Coordonnees size_board, coo_destination;
+    Coordinates size_board, coo_destination;
     size_board.x = 8;
     size_board.y = 12;
     board = malloc_board(size_board);
@@ -231,7 +229,7 @@ Board level2(){
     board->objets[6][10].type = WALL;
     board->objets[6][11].type = WALL;
 
-    Coordonnees coo_p;
+    Coordinates coo_p;
 	coo_p.x = 7;
     coo_p.y = 0;
     board->p1 = init_player(coo_p, SOUTH, une_milliseconde * 10, PLAYER1);
@@ -246,7 +244,7 @@ Board level2(){
 Board level3(){
 
 	Board board;
-    Coordonnees size_board, coo_dest;
+    Coordinates size_board, coo_dest;
     size_board.x = 8;
     size_board.y = 12;
     board = malloc_board(size_board);
@@ -302,7 +300,7 @@ Board level3(){
     board->objets[6][8].type = WALL;
     board->objets[6][9].type = WALL;
 
-    Coordonnees coo_p;
+    Coordinates coo_p;
 
 	coo_p.x = 3;
     coo_p.y = 4;

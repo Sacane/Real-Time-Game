@@ -5,8 +5,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
     int c, level_number;
     int option_index = 0;
     if(argc < 2){
-        *gameboard = level1test();
-        printf("Ah\n");
+        *gameboard = level0();
     }
     while(1){
 
@@ -29,7 +28,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
                 printf("enter folder : \n");
                 strcpy(name_file, "levels");
                 level_number = strtol(optarg, NULL, 10);
-                read_folder(name_file, level_number, GRAPHIC);
+                read_folder(name_file, level_number, COMMAND);
                 *mode = FOLDER;
                 break;
             case 'f':
@@ -55,7 +54,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
                         *gameboard = level3();
                         break;
                     default:
-                        printf("Le niveau selectionner n'existe pas\n");
+                        printf("Sorry, the level %d can't be launch as Test\n", level_number);
                         *mode = ERROR;
                         break;
                 }
@@ -70,14 +69,14 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
                     printf("Launch program in graphic mode\n");
                 }
                 else{
-                    printf("Mode inconnue\n");
+                    printf("unknown mode\n");
                     *mode = ERROR;
                 }
                 break;
                 
 
             case '?':
-                printf("On sort\n");
+                printf("unknown option\n");
                 break;
             default:
                 abort();

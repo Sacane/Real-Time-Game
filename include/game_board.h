@@ -1,26 +1,26 @@
 /**
- * \fichier : niveau.h
- * \auteurs : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
- * \date de création : 01-04-21
- * \dernière modification : 21-05-21
+ * \file : game_board.h
+ * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date : 01-04-21
+ * \last modification : 21-05-21
  * 
  * DESCRIPTION
  *
  */
 
-#ifndef __NIVEAU__H__
-#define __NIVEAU__H__
+#ifndef __GAME_BOARD__H__
+#define __GAME_BOARD__H__
 
-#include "objet.h"
+#include "object.h"
 
 #define MODE_ONE_PLAYER 0;
 #define MODE_TWO_PLAYER 1;
 
-
+/* Structure to store the datas of a player. */
 typedef struct player{
     
     TypeObjet typePlayer;
-    Coordonnees coo_player;
+    Coordinates coo_player;
     Direction dir_player;
     unsigned long moment_depl_player;
     bool is_player_alive;
@@ -32,10 +32,10 @@ typedef struct player{
 
 typedef struct Level{
     
-    Coordonnees taille; 
+    Coordinates taille; 
     Objet** objets; 
     bool is_game_over;
-    Coordonnees coo_destination;
+    Coordinates coo_destination;
     bool mulptiplayer_mode;
     Player p1;
     Player p2;
@@ -48,7 +48,7 @@ typedef struct Level{
  * Function to print coordinates
  * @param coordinate : Coordinate
  */
-void affiche_coordonnee(Coordonnees coordonnee);
+void affiche_coordonnee(Coordinates coordonnee);
 
 
 /**
@@ -56,7 +56,7 @@ void affiche_coordonnee(Coordonnees coordonnee);
  * @param size : Coordinates, size of the board
  * @return : Board, a game board  
  */
-Board malloc_board (Coordonnees taille); /* Effectue les malloc's
+Board malloc_board (Coordinates taille); /* Effectue les malloc's
                                              * pour obtenir un 
                                              * Niveau* de la taille 
                                              * donnee */
@@ -69,19 +69,31 @@ void free_board (Board board); /* Libere la memoire prise par un
                                     * Niveau */
 
 
-Player init_player(Coordonnees init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type);
+Player init_player(Coordinates init_coo, Direction init_dir, unsigned long speed_player_init, TypeObjet type);
 
 /**
  * Function that initializes a game level 
  * @param level : Board, a level of game
  * @param size : Coordinates, coordinates of the game board
  */
-void init_board(Board board, Coordonnees taille);
+void init_board(Board board, Coordinates taille);
 
 int move_players(Board board, Player* player);
 
+
+/**
+ * check if the game is over according to the state of the board
+ * \param board of the game
+ * \return true if the game is lost, false if not.
+*/
 bool check_game_over(Board board);
 
+
+/**
+ * check if the player(s) won the game according to the state of the board
+ * \param board of the game
+ * \return true if the game is win, false if not
+*/
 bool check_victory(Board board);
 
 /**
@@ -101,7 +113,7 @@ void trigger_switch(Board board, Player player);
  * @param second : Coordinates, the second coordinate to compare
  * @return bool, true if both of the coordinates are equals, false otherwise
  */
-bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
+bool equals_coordinates(Coordinates first, Coordinates second);
 
 
 /**
@@ -109,7 +121,7 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
  * @param level : Board, a game board
  * @param coordinates : Coordinates*, coordinates of the projectile
  */
-void move_projectile(Board niveau, Coordonnees *coordonnees);
+void move_projectile(Board gameboard, Coordinates *Coordinates);
 
 /**
  * Function to check if an object is heading towards the wall 
@@ -125,14 +137,14 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Boa
  * @param level : Board, the game board
  * @return bool, true if the level has been reached, false otherwise
  */
-bool check_player_reached(Board niveau);
+bool check_player_reached(Board gameboard);
 
 
 /**
  * Fonction that print in the terminal the level given in argument
  * @param level : Board, the game board
  */
-void print_board (Board niveau); /* Affiche dans le terminal le
+void print_board (Board gameboard); /* Affiche dans le terminal le
                                        * Niveau donnee en argument */
 
 

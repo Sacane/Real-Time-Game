@@ -1,7 +1,7 @@
 #include "../include/management.h"
 
-/* On suppose que le tas n'est pas encore alloué, on le construit en fonction des éléments du niveau */
-Heap construit_Tas(Board niveau){
+
+Heap build_heap_by_board(Board niveau){
     printf("%u x %u\n", niveau->taille.x, niveau->taille.y);
     printf("Construct\n");
 	Heap heap;
@@ -29,7 +29,7 @@ Heap construit_Tas(Board niveau){
 }
 
 
-void creer_projectile_selon_direction(Board board, Direction direction, Coordonnees *pos_projectile, Coordonnees pos_lanceur){
+static void spawn_projectile_by_direction(Board board, Direction direction, Coordinates *pos_projectile, Coordinates pos_lanceur){
 	
     Deplacement* deplacement;
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
@@ -66,11 +66,11 @@ void creer_projectile_selon_direction(Board board, Direction direction, Coordonn
     board->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
     board->objets[pos_projectile->x][pos_projectile->y].data = deplacement;
 
-    if(est_coordonnee_equivalent(*pos_projectile, board->p1.coo_player)){
+    if(equals_coordinates(*pos_projectile, board->p1.coo_player)){
         board->p1.is_player_alive = false;
     }
     if(board->mulptiplayer_mode){
-        if(est_coordonnee_equivalent(*pos_projectile, board->p2.coo_player)){
+        if(equals_coordinates(*pos_projectile, board->p2.coo_player)){
             board->p2.is_player_alive = false;
         }
     }
@@ -78,7 +78,7 @@ void creer_projectile_selon_direction(Board board, Direction direction, Coordonn
 }
 
 /*Prend en paramètre l'ancien lanceur dans le tas et remet à jour le tas pour remettre l'évènement du lanceur 1 seconde après retrait du tas*/
-static void update_launcher_in_heap(Event lanceur, Heap tas, Coordonnees pos_lanceur, Board niveau){
+static void update_launcher_in_heap(Event lanceur, Heap tas, Coordinates pos_lanceur, Board niveau){
 
     unsigned long update_moment;
     Generation *generation = (Generation*)malloc(sizeof(Generation));
@@ -93,7 +93,7 @@ static void update_launcher_in_heap(Event lanceur, Heap tas, Coordonnees pos_lan
     free(generation);
 }
 
-void trigger_launcher(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur){
+void trigger_launcher(Board niveau, Heap tas, Coordinates pos_lanceur, Event ancien_lanceur){
 	
     assert(niveau != NULL);
     assert(tas != NULL);
@@ -105,12 +105,12 @@ void trigger_launcher(Board niveau, Heap tas, Coordonnees pos_lanceur, Event anc
     verif_malloc(generation);
     memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
     Direction direction;
-    Coordonnees pos_projectile;
+    Coordinates pos_projectile;
     Event event_proj;
 
     for(direction = NORTH; direction <= EAST; direction++){
         if(!se_dirige_vers_mur(pos_lanceur.x, pos_lanceur.y, direction, niveau)){
-            creer_projectile_selon_direction(niveau, direction, &pos_projectile, pos_lanceur);
+            spawn_projectile_by_direction(niveau, direction, &pos_projectile, pos_lanceur);
             event_proj.moment = ancien_lanceur.moment + generation->allure_proj;
             event_proj.coo_obj = pos_projectile;
             add_event(tas, event_proj);
@@ -122,11 +122,8 @@ void trigger_launcher(Board niveau, Heap tas, Coordonnees pos_lanceur, Event anc
     free(generation);
 }
 
-/*
- (1) - Déplace le projectile : en fonction de la direction
- (2) - si le projectile n'a pas disparu (mur / hors plateau), rajoute dans le tas l'évènement du projectile à la position mis à jour
-*/
-void trigger_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile){
+
+void trigger_projectile(Heap tas, Board niveau, Coordinates pos_projectile, Event projectile){
 
 	assert(tas != NULL);
 	assert(niveau != NULL);
@@ -154,7 +151,7 @@ void execute_event(Event e, Heap tas, Board niveau) {
     assert(niveau != NULL);
 	assert(e.coo_obj.x <= niveau->taille.x);
     assert(e.coo_obj.y <= niveau->taille.y);
-    Coordonnees coo_event;
+    Coordinates coo_event;
     coo_event.x = e.coo_obj.x;
     coo_event.y = e.coo_obj.y;
 
@@ -173,7 +170,7 @@ void execute_event(Event e, Heap tas, Board niveau) {
 void launch_command(Board board, bool *is_reached){
     
     init_stdin();
-    Heap tas = construit_Tas(board);
+    Heap tas = build_heap_by_board(board);
     Event e;
 	char touche;
     int success = true;

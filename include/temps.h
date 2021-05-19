@@ -1,3 +1,9 @@
+/**
+ * Extern module use to make the time manipulation more understandable
+ * \authors : University 'Gustave eiffel'
+ * 
+ */ 
+
 #ifndef __TEMPS__H__
 #define __TEMPS__H__
 
