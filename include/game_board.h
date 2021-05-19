@@ -102,9 +102,20 @@ bool check_victory(Board board);
  */
 void check_player_move(Player *p);
 
-/*return true si le player va vers un interrupteur, false sinon*/
+/**
+ * check if the next case where the player is going in its next move
+ * \param type to check the next case's type
+ * \param player to check its direction 
+ * \param board
+ * \return true si le player va vers un interrupteur, false sinon
+*/
 bool going_to_obj(Board board, Player player, TypeObjet type);
 
+
+/**
+ * \param board to update after trigger the switch
+ * \param player 
+*/
 void trigger_switch(Board board, Player player);
 
 /**
