@@ -34,7 +34,7 @@ Heap construit_Tas(Board niveau); /* Construit un Tas contenant les
  * @param pos_launcher : Coordinates, coordinates of laucher
  * @param previous_launcher : Event, the player event
  */
-void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur);
+void trigger_launcher(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur);
 
 
 /**
@@ -44,7 +44,7 @@ void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event an
  * @param pos_projectile : Coordinates, coordinates of a projectile
  * @param projectile : Event, the projectile event
  */
-void declenche_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile); 
+void trigger_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile); 
 
 /* Execute un Event , ce qui peut consister a deplacer un
 * objet dans le Niveau , verifier si la partie est terminee,

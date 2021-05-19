@@ -19,13 +19,13 @@
 
 typedef enum {
 	VIDE = 0,          LAUNCHER,           WALL,
-	PROJECTILE,   DESTINATION, PIQUES, PLAYER1, PLAYER2,
+	PROJECTILE,   DESTINATION, PLAYER1, PLAYER2,
 	SWITCH, DOOR,
 } TypeObjet;
 
 typedef struct object{
 	TypeObjet type;     /* Type de l'objet */
-	void* donnee_suppl; /* Donnee supplementaire: son type depend de 
+	void* data; /* Donnee supplementaire: son type depend de 
 						* `type` ci-dessus :
 						* - Deplacement*  si  type == PROJECTILE
 						* - Generation* si type == LANCEUR
@@ -70,7 +70,7 @@ typedef struct {
  * @param obj : Object*, object to modify
  * @param deplacement : Deplacement*, additional data of the object
  */
-void remplis_projectile(Objet* obj, Deplacement* deplacement);
+void fill_projectile(Objet* obj, Deplacement* deplacement);
 
 /**
  * Function to print the type of the object
@@ -82,7 +82,7 @@ void print_kind_object(Objet object);
 /*
  * Modifie les propriétés de l'objet lanceur en lui attribuant la génération gen en tant que lanceur
 */
-void remplis_lanceur(Objet* lanceur, Generation* gen);
+void fill_launcher(Objet* lanceur, Generation* gen);
 
 
 /**

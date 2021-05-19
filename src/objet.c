@@ -1,20 +1,20 @@
 #include "../include/objet.h"
 
 
-void remplis_projectile(Objet* obj, Deplacement* deplacement){
+void fill_projectile(Objet* obj, Deplacement* deplacement){
 
     assert(deplacement != NULL);
 
     obj->type = PROJECTILE;
-    obj->donnee_suppl = deplacement;
+    obj->data = deplacement;
 }
 
-void remplis_lanceur(Objet* launcher, Generation* gen){
+void fill_launcher(Objet* launcher, Generation* gen){
 
     assert(gen != NULL);
 
     launcher->type = LAUNCHER;
-    launcher->donnee_suppl = gen;
+    launcher->data = gen;
 }
 
 bool equals_obj(Objet obj1, Objet obj2){
@@ -29,8 +29,8 @@ bool equals_obj(Objet obj1, Objet obj2){
     }
     switch(obj1.type){
         case PROJECTILE:
-            memcpy(depl, obj1.donnee_suppl, sizeof(Deplacement));
-            memcpy(depl2, obj2.donnee_suppl, sizeof(Deplacement));
+            memcpy(depl, obj1.data, sizeof(Deplacement));
+            memcpy(depl2, obj2.data, sizeof(Deplacement));
             if(depl->direction != depl2->direction
             || depl->direction != depl2->direction){
                 free(depl);

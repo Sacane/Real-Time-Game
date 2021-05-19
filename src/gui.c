@@ -60,7 +60,7 @@ static void draw_img(Board niveau, MLV_Image *array_img[], int x_source, int y_s
 		case VIDE: 
 			break;
 		case PROJECTILE:
-			depl = niveau->objets[x_source][y_source].donnee_suppl;
+			depl = niveau->objets[x_source][y_source].data;
 			switch(depl->direction){
 				case NORTH:
 					MLV_draw_image(array_img[PROJECTILE_NORTH], x_height, y_height);
@@ -144,7 +144,7 @@ static void refresh_projectile(Coordonnees coo_proj, Board board, unsigned int w
 	
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
-	depl = board->objets[coo_proj.x][coo_proj.y].donnee_suppl;
+	depl = board->objets[coo_proj.x][coo_proj.y].data;
 	if(se_dirige_vers_mur(coo_proj.x, coo_proj.y, depl->direction, board)){
 		return;
 	}
@@ -338,16 +338,16 @@ static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigne
 	trigg = (Trigger*)malloc(sizeof(Trigger));
 	switch(player.dir_player){
 		case NORTH:
-			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));
 			break;
 		case SOUTH:
-			memcpy(trigg, niveau->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x + 1][player.coo_player.y].data, sizeof(Trigger));
 			break;
 		case EAST:
-			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y + 1].data, sizeof(Trigger));
 			break;
 		case WEST:
-			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
+			memcpy(trigg, niveau->objets[player.coo_player.x][player.coo_player.y - 1].data, sizeof(Trigger));
 			break;
 	}
 
@@ -371,7 +371,6 @@ static void erase_player_after_reached(Board board, unsigned int width, unsigned
 
 void launch(Board gameboard, bool *is_reached){
 	assert(gameboard != NULL);
-	printf("launch\n");
     unsigned int x, y;
     int decalage_x, decalage_y;
     MLV_Image *font;

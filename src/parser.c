@@ -47,7 +47,7 @@ Board read_file(char* name_file){
                 res->objets[x][y].type = LAUNCHER;
                 gen->allure_proj = une_milliseconde * allure;
                 gen->intervalle = une_milliseconde * intervalle;
-                res->objets[x][y].donnee_suppl = gen;
+                res->objets[x][y].data = gen;
                 printf("... OK, datas check : interval %lu, allure : %lu\n", intervalle, allure);
                 break;
 
@@ -55,7 +55,7 @@ Board read_file(char* name_file){
                 printf("Filling of walls...\n");
                 fscanf(in, " %u x %u", &x, &y);
                 res->objets[x][y].type = WALL;
-                res->objets[x][y].donnee_suppl = NULL;
+                res->objets[x][y].data = NULL;
                 printf("OK\n");
                 break;
 
@@ -107,14 +107,14 @@ Board read_file(char* name_file){
                 trigger->coo_door = coo_door;
                 res->objets[x][y].type = SWITCH;
                 res->objets[x2][y2].type = DOOR;
-                res->objets[x][y].donnee_suppl = trigger;
+                res->objets[x][y].data = trigger;
                 printf("OK\n");
                 break;
             default:
                 break;
         }
     }
-    printf("Reading file terminated\n");
+    printf("Reading file : Success\n");
     free(typeObject);
     fclose(in);
     return res;

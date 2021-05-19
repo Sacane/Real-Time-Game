@@ -1,7 +1,7 @@
 #include "../include/tas.h"
 #include <string.h>
 
-static unsigned int verif_pere(int i){
+static unsigned int father(int i){
 
     assert(i >= 0);
 
@@ -19,7 +19,7 @@ bool is_heap(Heap heap){
 
 	for(i = (heap->taille) - 1; i > 0; i--){
 
-		pere = verif_pere(i);
+		pere = father(i);
 		if((heap->valeurs)[0].moment < pere)
 			return false;
 		if((heap->valeurs)[pere].moment > (heap->valeurs)[i].moment)
@@ -68,12 +68,12 @@ bool is_event_ready(Heap tas){
 }
 
 
-static void defiler(Heap tas, int i) {
+static void shift_up(Heap tas, int i) {
 
     assert(tas->valeurs != NULL);
     assert(i >= 0);
     
-    int f = verif_pere(i);
+    int f = father(i);
     Event tmp;
 
     if (i == 0) return;
@@ -87,7 +87,7 @@ static void defiler(Heap tas, int i) {
         if (f == 0)
             return;
         else
-            f = verif_pere(f);
+            f = father(f);
     }
 }
 
@@ -104,17 +104,17 @@ void add_event(Heap heap, Event valeur){
         realloc_heap(heap);
     }
 
-    defiler(heap, (heap->taille) -1);
+    shift_up(heap, (heap->taille) -1);
 	
 }
 
-static void enfiler(Heap h, unsigned int i)
+static void shift_down(Heap h, unsigned int i)
 {
     assert(h->valeurs != NULL);
     
 
-    unsigned int next_i;
-    unsigned int max_i = h->taille - 1; 
+    unsigned int next;
+    unsigned int max = h->taille - 1; 
     Event tmp;
 
     
@@ -123,16 +123,16 @@ static void enfiler(Heap h, unsigned int i)
     }
     if (h->taille - 1 == 0)
         return;
-    while ((i * 2) + 1 <= max_i || (i * 2) + 2 <= max_i) {
-        next_i = (i * 2) + 1;
-        if (((i * 2) + 2 <= max_i) && (h->valeurs[next_i].moment > h->valeurs[(i*2)+2].moment))
-            next_i = (i * 2) + 2;
+    while ((i * 2) + 1 <= max || (i * 2) + 2 <= max) {
+        next = (i * 2) + 1;
+        if (((i * 2) + 2 <= max) && (h->valeurs[next].moment > h->valeurs[(i*2)+2].moment))
+            next = (i * 2) + 2;
 
-        if ((h->valeurs[i].moment > h->valeurs[next_i].moment)) {
+        if ((h->valeurs[i].moment > h->valeurs[next].moment)) {
             tmp = h->valeurs[i];
-            h->valeurs[i] = h->valeurs[next_i];
-            h->valeurs[next_i] = tmp;
-            i = next_i;
+            h->valeurs[i] = h->valeurs[next];
+            h->valeurs[next] = tmp;
+            i = next;
         } else
             return;
     }
@@ -149,7 +149,7 @@ Event heap_pop(Heap tas){
     tas->valeurs[0] = tas->valeurs[tas->taille-1];
     (tas->taille)--;
 
-    enfiler(tas, 0);
+    shift_down(tas, 0);
 
     
 	return min;

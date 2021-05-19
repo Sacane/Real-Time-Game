@@ -184,9 +184,9 @@ static bool test_move_projectile_NORTH(int *total_test){
 	coordonnees.x = 3;
     coordonnees.y = 2;
 	objet.type = PROJECTILE; 
-	objet.donnee_suppl = deplacement;
+	objet.data = deplacement;
     level->objets[coordonnees.x][coordonnees.y] = objet;
-	deplace_projectile(level, &coordonnees);
+	move_projectile(level, &coordonnees);
 
 	if(level->objets[3][2].type != VIDE){
         printf("Projectile non-déplacé (NORTH) !");
@@ -202,7 +202,7 @@ static bool test_move_projectile_NORTH(int *total_test){
     new_coord.x = 2;
     new_coord.y = 2;
 
-    deplace_projectile(level, &new_coord);
+    move_projectile(level, &new_coord);
 
     if(level->objets[1][2].type != WALL){
         printf("Le mur a été modifié par un projectile (NORTH) !\n");
@@ -218,9 +218,9 @@ static bool test_move_projectile_NORTH(int *total_test){
 	new1coord2.y = 2;
 
     level->objets[new1coord2.x][new1coord2.y].type = PROJECTILE;
-    level->objets[new1coord2.x][new1coord2.y].donnee_suppl = dep;
+    level->objets[new1coord2.x][new1coord2.y].data = dep;
 
-    deplace_projectile( level, &new1coord2);
+    move_projectile( level, &new1coord2);
 	if (level->objets[0][2].type != VIDE){
         printf("Projectile toujours présent (NORTH) \n");
 		return false;
@@ -242,10 +242,10 @@ static bool test_move_projectile_SOUTH(int *total_test){
     coords.x = 2;
     coords.y = 3;
     objet.type = PROJECTILE;
-    objet.donnee_suppl = dep;
+    objet.data = dep;
     level->objets[coords.x][coords.y] = objet;
 
-	deplace_projectile( level, &coords);
+	move_projectile( level, &coords);
 
     if(level->objets[2][3].type != VIDE){
         printf("Projectile non-déplacé (SOUTH) !");
@@ -256,7 +256,7 @@ static bool test_move_projectile_SOUTH(int *total_test){
         printf("Projectile pas au bon endroit (SOUTH) !\n");
 		return false;
 	}
-    deplace_projectile( level, &coords);
+    move_projectile( level, &coords);
 
 
     if(level->objets[4][3].type != PROJECTILE){
@@ -266,7 +266,7 @@ static bool test_move_projectile_SOUTH(int *total_test){
     Coordonnees coord;
     coord.x = 4;
     coord.y = 3;
-    deplace_projectile( level, &coord);
+    move_projectile( level, &coord);
 
     free_board(level);
 	return true; 
@@ -287,11 +287,11 @@ static bool test_move_projectile_EAST(int *total_test){
     coord.x = 0;
     coord.y = 7;
 	objet.type = PROJECTILE; 
-	objet.donnee_suppl = deplacement;
+	objet.data = deplacement;
     level->objets[coord.x][coord.y] = objet;
 
 
-	deplace_projectile(level, &coord); 
+	move_projectile(level, &coord); 
 
 
 	if(level->objets[0][7].type != VIDE){
@@ -304,7 +304,7 @@ static bool test_move_projectile_EAST(int *total_test){
 		return false;
 	}
 
-    deplace_projectile(level, &coord); 
+    move_projectile(level, &coord); 
     
 	if (level->objets[0][9].type != PROJECTILE){
         printf("Projectile toujours présent (EAST) \n");
@@ -314,7 +314,7 @@ static bool test_move_projectile_EAST(int *total_test){
     Coordonnees coords; 
     coords.x = 0;
     coords.y = 9; 
-    deplace_projectile(level, &coords); 
+    move_projectile(level, &coords); 
     
 	free_board(level);
 	return true; 
@@ -334,10 +334,10 @@ static bool test_move_projectile_WEST(int *total_test){
 	coordonnees.x = 2;
     coordonnees.y = 2;
 	objet.type = PROJECTILE; 
-	objet.donnee_suppl = deplacement;
+	objet.data = deplacement;
     level->objets[coordonnees.x][coordonnees.y] = objet;
 
-	deplace_projectile(level, &coordonnees);
+	move_projectile(level, &coordonnees);
 	
 	if(level->objets[2][2].type != VIDE){
         printf("Projectile non-déplacé (WEST)!");
@@ -349,7 +349,7 @@ static bool test_move_projectile_WEST(int *total_test){
 		return false;
 	}
     
-    deplace_projectile(level, &coordonnees);
+    move_projectile(level, &coordonnees);
 
 	if (level->objets[2][0].type != PROJECTILE){
         printf("Projectile toujours présent (WEST) \n");
@@ -359,7 +359,7 @@ static bool test_move_projectile_WEST(int *total_test){
     Coordonnees coord;
     coord.x = 2;
     coord.y = 0;
-    deplace_projectile(level, &coord);
+    move_projectile(level, &coord);
     if(level->objets[2][0].type != VIDE){
         printf("Le projectile est toujours là ! (WEST)\n");
         return false;
@@ -389,7 +389,7 @@ static bool test_trigger_launcher(int *total_test){
     Event e = heap_pop(tas);
     int i;
 
-    declenche_lanceur(level, tas, e.coo_obj, e);
+    trigger_launcher(level, tas, e.coo_obj, e);
 
     do{
 
@@ -397,7 +397,7 @@ static bool test_trigger_launcher(int *total_test){
 
     }while(level->objets[e.coo_obj.x][e.coo_obj.y].type != LAUNCHER);
 
-    declenche_lanceur(level, tas, e.coo_obj, e);
+    trigger_launcher(level, tas, e.coo_obj, e);
 
     for(i = NORTH; i <= EAST; i++){
         switch(i){

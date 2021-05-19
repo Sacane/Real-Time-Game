@@ -109,7 +109,7 @@ bool est_coordonnee_equivalent(Coordonnees first, Coordonnees second);
  * @param level : Board, a game board
  * @param coordinates : Coordinates*, coordinates of the projectile
  */
-void deplace_projectile(Board niveau, Coordonnees *coordonnees);
+void move_projectile(Board niveau, Coordonnees *coordonnees);
 
 /**
  * Function to check if an object is heading towards the wall 

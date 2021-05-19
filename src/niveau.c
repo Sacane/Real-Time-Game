@@ -25,8 +25,8 @@ void free_board (Board gameboard){
 
     for(i = 0; i < gameboard->taille.x; i++){
         for(j = 0; j < gameboard->taille.y; j++){
-            if(gameboard->objets[i][j].donnee_suppl)
-                free(gameboard->objets[i][j].donnee_suppl);
+            if(gameboard->objets[i][j].data)
+                free(gameboard->objets[i][j].data);
                 
         }
         free(gameboard->objets[i]);
@@ -54,7 +54,7 @@ void init_board(Board niveau, Coordonnees taille){
     for(i = 0; i < taille.x; i++){
         for(j = 0; j < taille.y; j++){
             niveau->objets[i][j].type = VIDE;
-            niveau->objets[i][j].donnee_suppl = NULL;
+            niveau->objets[i][j].data = NULL;
         }
     }
 }
@@ -158,7 +158,7 @@ bool going_to_obj(Board board, Player player, TypeObjet type){
     return false;
 }
 
-void deplace_projectile(Board niveau, Coordonnees *coordonnees){
+void move_projectile(Board niveau, Coordonnees *coordonnees){
     
     assert(niveau != NULL);
     assert(niveau->objets[coordonnees->x][coordonnees->y].type == PROJECTILE);
@@ -167,7 +167,7 @@ void deplace_projectile(Board niveau, Coordonnees *coordonnees){
     
     deplacement = (Deplacement*)malloc(sizeof(Deplacement));
 
-    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl, sizeof(Deplacement));
+    memcpy(deplacement, niveau->objets[coordonnees->x][coordonnees->y].data, sizeof(Deplacement));
 
     if(se_dirige_vers_mur(coordonnees->x, coordonnees->y, deplacement->direction, niveau)){
         free(deplacement);
@@ -181,16 +181,16 @@ void deplace_projectile(Board niveau, Coordonnees *coordonnees){
         case NORTH:
 
             niveau->objets[--coordonnees->x][coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
+            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
             niveau->objets[coordonnees->x + 1][coordonnees->y].type = VIDE;
 
             break;
         case SOUTH:
             
             niveau->objets[++coordonnees->x][coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
+            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
             
             niveau->objets[coordonnees->x - 1][coordonnees->y].type = VIDE;
 
@@ -199,15 +199,15 @@ void deplace_projectile(Board niveau, Coordonnees *coordonnees){
         case EAST:
             
             niveau->objets[coordonnees->x][++coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
+            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
             niveau->objets[coordonnees->x][coordonnees->y - 1].type = VIDE;
 
             break;
         case WEST:
             niveau->objets[coordonnees->x][--coordonnees->y].type = PROJECTILE;
-            niveau->objets[coordonnees->x][coordonnees->y].donnee_suppl = deplacement;
-            remplis_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
+            niveau->objets[coordonnees->x][coordonnees->y].data = deplacement;
+            fill_projectile(&niveau->objets[coordonnees->x][coordonnees->y], deplacement);
             niveau->objets[coordonnees->x][coordonnees->y + 1].type = VIDE;
 		
             break;
@@ -279,7 +279,7 @@ int move_players(Board niveau, Player *player){
     }
     if(niveau->objets[player->coo_player.x][player->coo_player.y].type == SWITCH){
         trigger = (Trigger*)malloc(sizeof(Trigger));
-        memcpy(trigger, niveau->objets[player->coo_player.x][player->coo_player.y].donnee_suppl, sizeof(Trigger));
+        memcpy(trigger, niveau->objets[player->coo_player.x][player->coo_player.y].data, sizeof(Trigger));
         niveau->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
 
         free(trigger);
@@ -311,21 +311,21 @@ void trigger_switch(Board board, Player player){
     trigger = (Trigger*)malloc(sizeof(Trigger));
     switch(player.dir_player){
         case NORTH:
-            memcpy(trigger, board->objets[player.coo_player.x - 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+            memcpy(trigger, board->objets[player.coo_player.x - 1][player.coo_player.y].data, sizeof(Trigger));
             break;
         case SOUTH:
-            memcpy(trigger, board->objets[player.coo_player.x + 1][player.coo_player.y].donnee_suppl, sizeof(Trigger));
+            memcpy(trigger, board->objets[player.coo_player.x + 1][player.coo_player.y].data, sizeof(Trigger));
             break;
         case EAST:
-            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y + 1].donnee_suppl, sizeof(Trigger));
+            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y + 1].data, sizeof(Trigger));
             break;
         case WEST:
-            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y - 1].donnee_suppl, sizeof(Trigger));
+            memcpy(trigger, board->objets[player.coo_player.x][player.coo_player.y - 1].data, sizeof(Trigger));
             break;
     }
     board->objets[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
 
-    board->objets[trigger->coo_door.x][trigger->coo_door.y].donnee_suppl = NULL;
+    board->objets[trigger->coo_door.x][trigger->coo_door.y].data = NULL;
     free(trigger);
 }
 
@@ -349,7 +349,7 @@ void print_board (Board niveau) {
 				break;
 			
 			case PROJECTILE: 
-                dep = niveau->objets[i][j].donnee_suppl;
+                dep = niveau->objets[i][j].data;
 				switch (dep->direction)
 				{
 				case NORTH: 

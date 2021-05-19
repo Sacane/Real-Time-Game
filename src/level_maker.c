@@ -6,11 +6,11 @@
 Board level0() {
 
     Board board;
-    Coordonnees taille_board, coo_destination;
-    taille_board.x = 5;
-    taille_board.y = 10;
-    board = malloc_board(taille_board);
-    init_board(board, taille_board);
+    Coordonnees size_board, coo_destination;
+    size_board.x = 5;
+    size_board.y = 10;
+    board = malloc_board(size_board);
+    init_board(board, size_board);
     
     Generation* gen;
     Generation* gen2;
@@ -23,14 +23,14 @@ Board level0() {
     gen->intervalle = une_seconde;
 
     board->objets[0][0].type = LAUNCHER;
-    board->objets[0][0].donnee_suppl = gen;
+    board->objets[0][0].data = gen;
     board->objets[3][5].type = LAUNCHER;
-    board->objets[3][5].donnee_suppl = gen2;
+    board->objets[3][5].data = gen2;
     board->objets[4][9].type = DESTINATION;
 	coo_destination.x = 4;
     coo_destination.y = 9;
     board->coo_destination = coo_destination;
-    /* init WALL */
+
     board->objets[1][0].type = WALL;
     board->objets[1][1].type = WALL;
     board->objets[1][2].type = WALL;
@@ -60,13 +60,13 @@ Board level1test(){
 
     Board board;
     Generation* gen;
-    Coordonnees taille_board, coo_door, coo_door2;
-    taille_board.x = 5;
-    taille_board.y = 10;
+    Coordonnees size_board, coo_door, coo_door2;
+    size_board.x = 5;
+    size_board.y = 10;
     coo_door.x = 3;
     coo_door.y = 2;
-    board = malloc_board(taille_board);
-    init_board(board, taille_board);
+    board = malloc_board(size_board);
+    init_board(board, size_board);
     coo_door2.x = 1;
     coo_door2.y = 8;
     Trigger *trigg, *trigg2;
@@ -79,13 +79,13 @@ Board level1test(){
     gen->allure_proj = une_milliseconde*300;
     gen->intervalle = une_seconde;
     board->objets[4][2].type = LAUNCHER;
-    board->objets[4][2].donnee_suppl = gen;
+    board->objets[4][2].data = gen;
     board->objets[3][2].type = DOOR;
     board->objets[1][8].type = DOOR;
     board->objets[3][9].type = SWITCH;
     board->objets[2][8].type = SWITCH;
-    board->objets[3][9].donnee_suppl = trigg;
-    board->objets[2][8].donnee_suppl = trigg2;
+    board->objets[3][9].data = trigg;
+    board->objets[2][8].data = trigg2;
     Coordonnees coo_p1, coo_p2;
     coo_p1.x = 0;
     coo_p1.y = 0;
@@ -106,11 +106,11 @@ Board level1test(){
 Board level1(){
 
     Board board;
-    Coordonnees taille_board, coo_destination;
-    taille_board.x = 5;
-    taille_board.y = 10;
-    board = malloc_board(taille_board);
-    init_board(board, taille_board);
+    Coordonnees size_board, coo_destination;
+    size_board.x = 5;
+    size_board.y = 10;
+    board = malloc_board(size_board);
+    init_board(board, size_board);
 
     Generation* gen;
     Generation* gen2;
@@ -128,11 +128,11 @@ Board level1(){
 
 
 	board->objets[4][0].type = LAUNCHER;
-    board->objets[4][0].donnee_suppl = gen;
+    board->objets[4][0].data = gen;
     board->objets[1][6].type = LAUNCHER;
-    board->objets[1][6].donnee_suppl = gen2;
+    board->objets[1][6].data = gen2;
 	board->objets[3][9].type = LAUNCHER;
-    board->objets[3][9].donnee_suppl = gen3;
+    board->objets[3][9].data = gen3;
     board->objets[0][3].type = DESTINATION;
     coo_destination.x = 0; 
     coo_destination.y = 3;
@@ -161,11 +161,11 @@ Board level1(){
 Board level2(){
 
 	Board board;
-    Coordonnees taille_board, coo_destination;
-    taille_board.x = 8;
-    taille_board.y = 12;
-    board = malloc_board(taille_board);
-    init_board(board, taille_board);
+    Coordonnees size_board, coo_destination;
+    size_board.x = 8;
+    size_board.y = 12;
+    board = malloc_board(size_board);
+    init_board(board, size_board);
     
     Generation* gen;
     Generation* gen2;
@@ -186,13 +186,13 @@ Board level2(){
     gen4->intervalle = une_seconde;
 
 	board->objets[1][2].type = LAUNCHER;
-    board->objets[1][2].donnee_suppl = gen;
+    board->objets[1][2].data = gen;
     board->objets[2][10].type = LAUNCHER;
-    board->objets[2][10].donnee_suppl = gen2;
+    board->objets[2][10].data = gen2;
 	board->objets[6][4].type = LAUNCHER;
-    board->objets[6][4].donnee_suppl = gen3;
+    board->objets[6][4].data = gen3;
 	board->objets[6][9].type = LAUNCHER;
-    board->objets[6][9].donnee_suppl = gen4;
+    board->objets[6][9].data = gen4;
     board->objets[0][0].type = DESTINATION;
     coo_destination.x = 0;
     coo_destination.y = 0;
@@ -246,11 +246,11 @@ Board level2(){
 Board level3(){
 
 	Board board;
-    Coordonnees taille_board, coo_dest;
-    taille_board.x = 8;
-    taille_board.y = 12;
-    board = malloc_board(taille_board);
-    init_board(board, taille_board);
+    Coordonnees size_board, coo_dest;
+    size_board.x = 8;
+    size_board.y = 12;
+    board = malloc_board(size_board);
+    init_board(board, size_board);
 
     Generation* gen;
     Generation* gen3;
@@ -267,11 +267,11 @@ Board level3(){
     gen4->intervalle = une_seconde;
 
 	board->objets[0][9].type = LAUNCHER;
-    board->objets[0][9].donnee_suppl = gen;
+    board->objets[0][9].data = gen;
 	board->objets[4][11].type = LAUNCHER;
-    board->objets[4][11].donnee_suppl = gen3;
+    board->objets[4][11].data = gen3;
 	board->objets[5][2].type = LAUNCHER;
-    board->objets[5][2].donnee_suppl = gen4;
+    board->objets[5][2].data = gen4;
     board->objets[0][6].type = DESTINATION;
     coo_dest.x = 0;
     coo_dest.y = 6;

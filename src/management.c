@@ -14,8 +14,8 @@ Heap construit_Tas(Board niveau){
 		for(j = 0; j < niveau->taille.y; j++){
 			if(niveau->objets[i][j].type == LAUNCHER) {
                 printf("agter\n");
-                assert(niveau->objets[i][j].donnee_suppl != NULL);
-                memcpy(gen, niveau->objets[i][j].donnee_suppl, sizeof(Generation));
+                assert(niveau->objets[i][j].data != NULL);
+                memcpy(gen, niveau->objets[i][j].data, sizeof(Generation));
                 printf("ad\n");
 				event.coo_obj.x = i;
 				event.coo_obj.y = j;
@@ -36,7 +36,7 @@ void creer_projectile_selon_direction(Board board, Direction direction, Coordonn
     verif_malloc(deplacement);
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
-    memcpy(generation, board->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
+    memcpy(generation, board->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
     deplacement->allure = generation->allure_proj;
     
     switch(direction){
@@ -64,7 +64,7 @@ void creer_projectile_selon_direction(Board board, Direction direction, Coordonn
             printf("Erreur de direction\n");
     }
     board->objets[pos_projectile->x][pos_projectile->y].type = PROJECTILE;
-    board->objets[pos_projectile->x][pos_projectile->y].donnee_suppl = deplacement;
+    board->objets[pos_projectile->x][pos_projectile->y].data = deplacement;
 
     if(est_coordonnee_equivalent(*pos_projectile, board->p1.coo_player)){
         board->p1.is_player_alive = false;
@@ -84,7 +84,7 @@ static void update_launcher_in_heap(Event lanceur, Heap tas, Coordonnees pos_lan
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
     Event new_launcher;
-    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
+    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
     update_moment = lanceur.moment + generation->intervalle;
     new_launcher.moment = update_moment;
     new_launcher.coo_obj = lanceur.coo_obj;
@@ -93,7 +93,7 @@ static void update_launcher_in_heap(Event lanceur, Heap tas, Coordonnees pos_lan
     free(generation);
 }
 
-void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur){
+void trigger_launcher(Board niveau, Heap tas, Coordonnees pos_lanceur, Event ancien_lanceur){
 	
     assert(niveau != NULL);
     assert(tas != NULL);
@@ -103,7 +103,7 @@ void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event an
     
     Generation *generation = (Generation*)malloc(sizeof(Generation));
     verif_malloc(generation);
-    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].donnee_suppl, sizeof(Generation));
+    memcpy(generation, niveau->objets[pos_lanceur.x][pos_lanceur.y].data, sizeof(Generation));
     Direction direction;
     Coordonnees pos_projectile;
     Event event_proj;
@@ -126,7 +126,7 @@ void declenche_lanceur(Board niveau, Heap tas, Coordonnees pos_lanceur, Event an
  (1) - Déplace le projectile : en fonction de la direction
  (2) - si le projectile n'a pas disparu (mur / hors plateau), rajoute dans le tas l'évènement du projectile à la position mis à jour
 */
-void declenche_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile){
+void trigger_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Event projectile){
 
 	assert(tas != NULL);
 	assert(niveau != NULL);
@@ -136,8 +136,8 @@ void declenche_projectile(Heap tas, Board niveau, Coordonnees pos_projectile, Ev
 
     Event evenement_projectile;
     Deplacement *dep = (Deplacement*)malloc(sizeof(Deplacement));
-    dep = niveau->objets[pos_projectile.x][pos_projectile.y].donnee_suppl;
-    deplace_projectile(niveau, &pos_projectile);
+    dep = niveau->objets[pos_projectile.x][pos_projectile.y].data;
+    move_projectile(niveau, &pos_projectile);
     unsigned long moment = projectile.moment + dep->allure;
 
 	if(pos_projectile.x <= niveau->taille.x && pos_projectile.y <= niveau->taille.y){
@@ -160,10 +160,10 @@ void execute_event(Event e, Heap tas, Board niveau) {
 
     switch(niveau->objets[coo_event.x][coo_event.y].type){
         case PROJECTILE:
-            declenche_projectile(tas, niveau, coo_event, e);
+            trigger_projectile(tas, niveau, coo_event, e);
             break;
         case LAUNCHER:
-            declenche_lanceur(niveau, tas, coo_event, e);
+            trigger_launcher(niveau, tas, coo_event, e);
             break;
         default:
             break;
