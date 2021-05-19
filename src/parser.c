@@ -12,7 +12,7 @@ Board read_file(char* name_file){
     char *typeObject;
     typeObject = (char*)malloc(sizeof(char) * BUFSIZ);
     char multiplayer;
-
+    
     in = fopen(name_file, "r");
     if(!in){
         fprintf(stderr, "File doesn't exist !\n");
@@ -145,13 +145,14 @@ static char *build_path_level(const char* name_folder, int level_state, char* su
 
 }
 
-void read_folder(char* name_folder, int level_start, int mode){
+void read_folder(char* name_folder, int level_start){
     int i;
     char num_char[2];
     char*get;
     
     bool is_reached = false;
     for(i = level_start; i <= MAX_LEVEL; i++){
+        
         sprintf(num_char, "%d", i);
         get = build_path_level(name_folder, i, ".txt");
         printf("%s\n", get);
@@ -164,6 +165,6 @@ void read_folder(char* name_folder, int level_start, int mode){
         if(is_reached == false){
             break;
         } 
+        
     }
-   
 }

@@ -4,7 +4,7 @@
  * \date de création : 01-04-21
  * \dernière modification : 21-05-21
  * 
- * DESCRIPTION
+ * Module use to manipulate the different kind of objects in the game
  *
  */
 
@@ -14,8 +14,6 @@
 #include "wrapper.h"
 
 #define INITIAL_SIZE 64
-
-/* ======== Definition du type `Objet` ====================================== */
 
 typedef enum {
 	VIDE = 0,          LAUNCHER,           WALL,

@@ -4,7 +4,7 @@
  * \date : 01-04-21
  * \last modification : 21-05-21
  * 
- * DESCRIPTION
+ * Module used to manipulate the board and its components
  *
  */
 

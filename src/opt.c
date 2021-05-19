@@ -28,7 +28,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
                 printf("enter folder : \n");
                 strcpy(name_file, "levels");
                 level_number = strtol(optarg, NULL, 10);
-                read_folder(name_file, level_number, COMMAND);
+                read_folder(name_file, level_number);
                 *mode = FOLDER;
                 break;
             case 'f':

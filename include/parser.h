@@ -26,6 +26,6 @@
  */
 Board read_file(char* name_file);
 
-void read_folder(char* name_folder, int level_start, int mode);
+void read_folder(char* name_folder, int level_start);
 
 #endif

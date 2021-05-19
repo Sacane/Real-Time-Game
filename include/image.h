@@ -1,3 +1,14 @@
+/**
+ * \file : gui.h
+ * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
+ * \date : 01-04-21
+ * \last modification : 21-05-21
+ * 
+ * Module used to manipulate and initialize the image used in the game
+ *
+ */
+
+
 #ifndef __IMAGE__H__
 #define __IMAGE__H__
 

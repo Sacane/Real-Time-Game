@@ -180,14 +180,21 @@ void launch_command(Board board, bool *is_reached){
 
     while (true) {
         
+        if(check_victory(board)){
+            (*is_reached) = true;
+            break;
+        }
         if(board->p1.is_player_alive == false){
+            (*is_reached) = false;
             break;
         }
         if(board->mulptiplayer_mode){
             if(board->p2.is_player_alive == false){
+                (*is_reached) = false;
                 break;
             }
         }
+        
         check_player_move(&(board->p1));
         if(board->mulptiplayer_mode)
             check_player_move(&(board->p2));
@@ -260,6 +267,7 @@ void launch_command(Board board, bool *is_reached){
             }
         }
         if(!success){
+            (*is_reached) = false;
             break;
         }
         if ( is_event_ready(tas)) {

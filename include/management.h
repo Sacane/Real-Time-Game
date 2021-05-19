@@ -25,7 +25,6 @@
  */
 Heap build_heap_by_board(Board niveau); 
 
-
 /**
  * Function to activate a player's event
  * 
