@@ -133,13 +133,12 @@ Board menu(int *mode){
     }
     
     printf("\nWould you like to type the path to your personnal level's file ? yes(y) or no(n)\n");
-
     
     scanf("%c", &file_mode);
     while ((dump = getchar() != '\n') && dump != EOF); 
     if(file_mode == 'y'){
         printf("Please type the path to your file : ");
-        name_file = (char*)malloc(sizeof(char) * 15);
+        name_file = (char*)malloc(sizeof(char) * INITIAL_SIZE);
         scanf("%s", name_file);
         if(name_file == NULL){
             printf("NULL\n");
@@ -170,8 +169,6 @@ Board menu(int *mode){
                 break;
         }
     }
-    
-    
 
     return game_board;
 }

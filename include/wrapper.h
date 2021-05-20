@@ -4,7 +4,8 @@
  * \date : 01-04-21
  * \last modification : 21-05-21
  * 
- * File containing the prototypes of the functions in the wrapper.c file
+ * This module contains all the include necessary to all the modules
+ * It also manage the game_mode required to launch the game and control the allocation's errors.
  * 
  */
 
@@ -20,6 +21,7 @@
 #include "temps.h"
 
 
+
 typedef enum{
   COMMAND,
   GRAPHIC,
@@ -30,14 +32,14 @@ typedef enum{
 
 typedef struct{
 
-  unsigned x;
-  unsigned y;
+  unsigned x; /* x coordinate of the object in the board */
+  unsigned y; /* y coordinate of the object in the board */
   
 } Coordinates;
 
 /**
  * Function to check if the allocation has been successful
- * @param data : data to check
+ * \param data : data to check
  */
 void verif_malloc(void *object);
 

@@ -27,6 +27,11 @@
  */
 void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard);
 
+/**
+ * \brief Launch the "menu", help the user to execute the program correctly and build the game board
+ * \param mode the user has to choose
+ * \return the gameboard made by the user or nu
+*/
 Board menu(int *mode);
 
 #endif

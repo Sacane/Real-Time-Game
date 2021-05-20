@@ -4,12 +4,11 @@
  * \date : 01-04-21
  * \last modification : 21-05-21
  * 
- * File containing the functions ---- 
+ * 
  *
  */
 
 #include "../include/parser.h"
-
 
 /**
  * \fn Board read_file(char* name_file)

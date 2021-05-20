@@ -22,27 +22,24 @@ typedef enum {
 } TypeObject;
 
 typedef struct object{
-	TypeObject type;     /* Type de l'object */
-	void* data; /* Donnee supplementaire: son type depend de 
-						* `type` ci-dessus :
-						* - Deplacement*  si  type == PROJECTILE
-						* - Generation* si type == LANCEUR
-						* - donnee\_suppl vaut NULL pour les 
-						*   autres types. */
+	TypeObject type;     /* Type of the object */
+	void* data; /* Data added to the object, Generation  -> Launcher 
+											 Deplacement -> Projectile
+											 Trigger 	 -> Switch
+	 */
 	
 } Object;
 
 typedef struct {
 
-	Coordinates coo_door;
+	Coordinates coo_door; /* Coordinate of the door linked to the switch */
 
 }Trigger;
 
 
 typedef struct {
-	unsigned long intervalle; /* Intervalle entre deux envois
-								* de projectiles */
-	unsigned long allure_proj; /* Allure des projectiles envoyes */
+	unsigned long intervalle; /*Interval between two projectiles*/
+	unsigned long allure_proj; /* Allure of the sent projectiles */
 } Generation;
 
 
@@ -72,7 +69,7 @@ void fill_projectile(Object* obj, Deplacement* deplacement);
 /**
  * Function to print the type of the object
  * \param object : Object, the type of the object
- * function for \test
+ * function for @test
  */
 void print_kind_object(Object object);
 

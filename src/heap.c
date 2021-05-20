@@ -117,6 +117,7 @@ bool is_event_ready(Heap heap){
 
 /**
  * \fn static void shift_up(Heap heap, int i)
+ * \brief shift up the element at the index "i" of the heap until heap->values is a heap again
  * \param heap : Heap, heap to analyze
  * \param i : int
  */
@@ -169,6 +170,7 @@ void add_event(Heap heap, Event value){
 
 /**
  * \fn static void shift_down(Heap h, unsigned int i)
+ * \brief shift down the element of the heap at the index "i" until the array is a heap again
  * \param heap : Heap, heap where we add the event
  * \param i : unsigned int
 */
@@ -190,7 +192,7 @@ static void shift_down(Heap h, unsigned int i){
         next = (i * 2) + 1;
         if (((i * 2) + 2 <= max) && (h->values[next].moment > h->values[(i*2)+2].moment))
             next = (i * 2) + 2;
-
+        
         if ((h->values[i].moment > h->values[next].moment)) {
             tmp = h->values[i];
             h->values[i] = h->values[next];

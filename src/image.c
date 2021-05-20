@@ -71,7 +71,7 @@ void resize_all_img(MLV_Image* array_img[],  int width, int height){
 /**
  * \fn void free_array_img(MLV_Image *array[])
  * \brief Function to free the memory space of an image array
- * \param array_img[] : MLV_Image *, array of image
+ * \param array of the image to free 
  */
 void free_array_img(MLV_Image *array[]){
 	int i;
@@ -79,4 +79,3 @@ void free_array_img(MLV_Image *array[]){
 		MLV_free_image(array[i]);
 	}
 }
-

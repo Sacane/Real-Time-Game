@@ -17,6 +17,7 @@
 #define SIZE_ARR_IMG 20 /* We can store max 20 img in the array of img, */
                         /* If you attend to add more than 20 images, you have to increment this value */
 
+/* Enumeration to represent the differents images for the objects in the game */
 typedef enum {
     CHARACTER_SOUTH,
     CHARACTER_NORTH,
@@ -38,14 +39,14 @@ typedef enum {
 
 
 /**
- * Function to initialize an array of image
- * \param array_img[] : MLV_Image *, array of image
+ * Function to initialize an array of image according to its type
+ * \param array_img[] : The array to initialize
  */
 void init_array_img(MLV_Image *array_img[]);
 
 
 /**
- * Function to resize an image
+ * Resize all the images in the array of images
  * \param array_img[] : MLV_Image*
  * \param width : int, the width of the image
  * \param height : int, the height of the image

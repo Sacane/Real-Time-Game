@@ -5,7 +5,7 @@
  * \last modification : 21-05-21
  * 
  * The module is used to manipulate the file and folders to read it and build a gameboard or 
- * launch the game
+ * launch the game depends on it
  *
  */
 
