@@ -157,15 +157,9 @@ void move_projectile(Board gameboard, Coordinates *Coordinates);
  * \param board : Board, a gameboard 
  * \return bool, true if the object is heading towards the well, false otherwise
  */
-bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Board Board);
+bool is_object_going_to_crash(unsigned int x, unsigned int y, Direction direction, Board Board);
 
-/**
- * \brief Check if the next case where the player is going in its next move
- * \param player : Player, a player to check  
- * \param board : Board, a game board
- * \return true if the player goes to a switch, false otherwise
-*/
-bool going_to_switch(Board board, Player player);
+
 
 
 /**

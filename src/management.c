@@ -151,7 +151,7 @@ void trigger_launcher(Board level, Heap heap, Coordinates pos_launcher, Event pr
     Event event_proj;
 
     for(direction = NORTH; direction <= EAST; direction++){
-        if(!se_dirige_vers_mur(pos_launcher.x, pos_launcher.y, direction, level)){
+        if(!is_object_going_to_crash(pos_launcher.x, pos_launcher.y, direction, level)){
             spawn_projectile_by_direction(level, direction, &pos_projectile, pos_launcher);
             event_proj.moment = previous_launcher.moment + generation->allure_proj;
             event_proj.coo_obj = pos_projectile;

@@ -138,7 +138,7 @@ static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int w
 	verif_malloc(depl);
 	MLV_draw_partial_image(font, (coo_proj.y) * width, (coo_proj.x) * height, width, height, (coo_proj.y) * width, (coo_proj.x) * height);
 	depl = board->objects[coo_proj.x][coo_proj.y].data;
-	if(se_dirige_vers_mur(coo_proj.x, coo_proj.y, depl->direction, board)){
+	if(is_object_going_to_crash(coo_proj.x, coo_proj.y, depl->direction, board)){
 		return;
 	}
 
@@ -172,7 +172,7 @@ static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int
 	Direction direction;
 
 	for(direction = NORTH; direction <= EAST; direction++){
-		if(!se_dirige_vers_mur(coo_launcher.x, coo_launcher.y, direction, board)){
+		if(!is_object_going_to_crash(coo_launcher.x, coo_launcher.y, direction, board)){
 			switch(direction){
 				case NORTH:
 					draw_img_by_board(board, array_img, coo_launcher.x - 1, coo_launcher.y, width, height);
@@ -208,22 +208,22 @@ static void refresh_player(Coordinates coo_player, Board board, unsigned int wid
 		case PLAYER1:
 			switch(board->p1.dir_player){
 				case NORTH:
-					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, NORTH, board)){
+					if(!is_object_going_to_crash(coo_player.x + 1, coo_player.y, NORTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
 					}
 					break;
 				case EAST:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, EAST, board)){
+					if(!is_object_going_to_crash(coo_player.x, coo_player.y - 1, EAST, board)){
 						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case WEST:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, WEST, board)){
+					if(!is_object_going_to_crash(coo_player.x, coo_player.y + 1, WEST, board)){
 						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case SOUTH:
-					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, SOUTH, board)){
+					if(!is_object_going_to_crash(coo_player.x - 1, coo_player.y, SOUTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
 					}
 					break;
@@ -236,22 +236,22 @@ static void refresh_player(Coordinates coo_player, Board board, unsigned int wid
 		case PLAYER2:
 			switch(board->p2.dir_player){
 				case NORTH:
-					if(!se_dirige_vers_mur(coo_player.x + 1, coo_player.y, NORTH, board)){
+					if(!is_object_going_to_crash(coo_player.x + 1, coo_player.y, NORTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x + 1) * height, width, height, (coo_player.y) * width, (coo_player.x + 1) * height);
 					}
 					break;
 				case EAST:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y - 1, EAST, board)){
+					if(!is_object_going_to_crash(coo_player.x, coo_player.y - 1, EAST, board)){
 						MLV_draw_partial_image(font, (coo_player.y - 1) * width, (coo_player.x) * height, width, height, (coo_player.y - 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case WEST:
-					if(!se_dirige_vers_mur(coo_player.x, coo_player.y + 1, WEST, board)){
+					if(!is_object_going_to_crash(coo_player.x, coo_player.y + 1, WEST, board)){
 						MLV_draw_partial_image(font, (coo_player.y + 1) * width, (coo_player.x) * height, width, height, (coo_player.y + 1) * width, (coo_player.x) * height);
 					}
 					break;
 				case SOUTH:
-					if(!se_dirige_vers_mur(coo_player.x - 1, coo_player.y, SOUTH, board)){
+					if(!is_object_going_to_crash(coo_player.x - 1, coo_player.y, SOUTH, board)){
 						MLV_draw_partial_image(font, (coo_player.y) * width, (coo_player.x - 1) * height, width, height, (coo_player.y) * width, (coo_player.x - 1) * height);
 					}
 					break;
@@ -321,7 +321,7 @@ static int listener(MLV_Keyboard_button button, Board board, Player *player){
 	}
 	
 
-	if(player->can_player_move == true && !se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
+	if(player->can_player_move == true && !is_object_going_to_crash(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
 		
 		return 1;
 	}
@@ -340,7 +340,7 @@ static int listener(MLV_Keyboard_button button, Board board, Player *player){
  * \param touche : MLV_Keyboard_button, button pressed
  * \return int
  */
-static int check_which_player_move(MLV_Keyboard_button touche){
+static int check_which_player_move(MLV_Keyboard_button touche, Board board){
 	switch(touche){
 		case MLV_KEYBOARD_z:
 		case MLV_KEYBOARD_s:
@@ -351,7 +351,9 @@ static int check_which_player_move(MLV_Keyboard_button touche){
 		case MLV_KEYBOARD_DOWN:
 		case MLV_KEYBOARD_LEFT:
 		case MLV_KEYBOARD_RIGHT:
-			return PLAYER2;
+			if(board->mulptiplayer_mode)
+				return PLAYER2;
+			return PLAYER1;
 		default:
 			break;
 	}
@@ -478,7 +480,7 @@ void launch(Board gameboard, bool *is_reached){
 				gameboard->is_game_over = true;
 				break;
 			}
-			switch(check_which_player_move(touche)){
+			switch(check_which_player_move(touche, gameboard)){
 				case PLAYER1:
 					if(listener(touche, gameboard, &(gameboard->p1)) == -1){
 						break;
@@ -496,7 +498,7 @@ void launch(Board gameboard, bool *is_reached){
 						printf("end refresh\n");
 					}
 
-					if(!se_dirige_vers_mur(gameboard->p1.coo_player.x, gameboard->p1.coo_player.y, gameboard->p1.dir_player, gameboard)){
+					if(!is_object_going_to_crash(gameboard->p1.coo_player.x, gameboard->p1.coo_player.y, gameboard->p1.dir_player, gameboard)){
 						printf("move\n");
 						switch(move_players(gameboard, &(gameboard->p1))){
 							

@@ -125,7 +125,7 @@ bool equals_coordinates(Coordinates first, Coordinates second){
 
 
 /**
- * \fn bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Board board)
+ * \fn bool is_object_going_to_crash(unsigned int x, unsigned int y, Direction direction, Board board)
  * \brief Function to check if an object is heading towards the wall 
  * \param x : unsigned int, coordinate x of the position of the object to analize
  * \param y : unsigned int, coordinate y of the position of the object to analize
@@ -133,7 +133,7 @@ bool equals_coordinates(Coordinates first, Coordinates second){
  * \param board : Board, a gameboard 
  * \return bool, true if the object is heading towards the well, false otherwise
  */
-bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Board board){
+bool is_object_going_to_crash(unsigned int x, unsigned int y, Direction direction, Board board){
     
     if((x <= 0 && direction == NORTH) || (x >= board->size.x-1 && direction == SOUTH)||
     (y <= 0 && direction == WEST) || (y >= board->size.y - 1 && direction == EAST)){
@@ -168,42 +168,10 @@ bool se_dirige_vers_mur(unsigned int x, unsigned int y, Direction direction, Boa
     }
 
     return false;
+
 }
 
 
-/**
- * \fn bool going_to_switch(Board board, Player player)
- * \brief Check if the next case where the player is going in its next move
- * \param player : Player, a player to check  
- * \param board : Board, a game board
- * \return true if the player goes to a switch, false otherwise
-*/
-bool going_to_switch(Board board, Player player){
-
-    switch(player.dir_player){
-        case NORTH:
-            if(board->objects[player.coo_player.x - 1][player.coo_player.y].type == SWITCH){
-                return true;
-            }
-            break;
-        case SOUTH:
-            if(board->objects[player.coo_player.x + 1][player.coo_player.y].type == SWITCH){
-                return true;
-            }
-            break;
-        case WEST:
-            if(board->objects[player.coo_player.x][player.coo_player.y - 1].type == SWITCH){
-                return true;
-            }
-            break;
-        case EAST:
-            if(board->objects[player.coo_player.x][player.coo_player.y + 1].type == SWITCH){
-                return true;
-            }
-            break;
-    }
-    return false;
-}
 
 
 /**
@@ -258,7 +226,7 @@ void move_projectile(Board board, Coordinates *coordinate){
     verif_malloc(deplacement);
     memcpy(deplacement, board->objects[coordinate->x][coordinate->y].data, sizeof(Deplacement));
 
-    if(se_dirige_vers_mur(coordinate->x, coordinate->y, deplacement->direction, board)){
+    if(is_object_going_to_crash(coordinate->x, coordinate->y, deplacement->direction, board)){
         free(deplacement);
         board->objects[coordinate->x][coordinate->y].type = VIDE;
 
@@ -361,7 +329,7 @@ int move_players(Board board, Player *player){
 
     Trigger *trigger;
     
-    if(se_dirige_vers_mur(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
+    if(is_object_going_to_crash(player->coo_player.x, player->coo_player.y, player->dir_player, board)){
         return -1;
     }
     if(board->objects[player->coo_player.x][player->coo_player.y].type == DESTINATION){
