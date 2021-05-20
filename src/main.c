@@ -31,7 +31,8 @@ int main(int argc, char* argv[]) {
     if(argc < 2){
         game_board = menu(&mode);
     }
-    
+    if(game_board == NULL)
+        game_board = level0();
     switch(mode){
         case DEBUG:
             main_test();

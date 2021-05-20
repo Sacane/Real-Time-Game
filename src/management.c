@@ -30,10 +30,10 @@ Heap build_heap_by_board(Board level){
 	for(i = 0; i < level->size.x ; i++){
 		for(j = 0; j < level->size.y; j++){
 			if(level->objects[i][j].type == LAUNCHER) {
-                printf("agter\n");
+                
                 assert(level->objects[i][j].data != NULL);
                 memcpy(gen, level->objects[i][j].data, sizeof(Generation));
-                printf("ad\n");
+                
 				event.coo_obj.x = i;
 				event.coo_obj.y = j;
 				event.moment = gen->intervalle;

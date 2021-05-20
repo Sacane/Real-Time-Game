@@ -102,6 +102,11 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
     }
 }
 
+/**
+ * \brief print the menu and help the player to choose how to build the game_board
+ * \param mode : the mode the player has chosen
+ * \return the board builded by the player
+*/
 Board menu(int *mode){
 
     Board game_board = NULL;

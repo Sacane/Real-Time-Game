@@ -499,7 +499,6 @@ void launch(Board gameboard, bool *is_reached){
 					}
 
 					if(!is_object_going_to_crash(gameboard->p1.coo_player.x, gameboard->p1.coo_player.y, gameboard->p1.dir_player, gameboard)){
-						printf("move\n");
 						switch(move_players(gameboard, &(gameboard->p1))){
 							
 							case -1:
