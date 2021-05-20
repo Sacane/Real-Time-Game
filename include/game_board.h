@@ -19,26 +19,27 @@
 /* Structure to store the datas of a player. */
 typedef struct player{
     
-    TypeObject typePlayer;
-    Coordinates coo_player;
-    Direction dir_player;
-    unsigned long moment_depl_player;
-    bool is_player_alive;
-    bool can_player_move;
-    bool has_player_win;
-    unsigned long speed_player;
+    TypeObject typePlayer; /* Type of the player, it can be Player1 or Player2 */
+    Coordinates coo_player; /* Actual coordinates of the player */
+    Direction dir_player; /* Actual direction of the player */
+    unsigned long moment_depl_player; /* Moment when the player is allow to move again */
+    bool is_player_alive; /* Boolean to check if the player is alive or not */
+    bool can_player_move; /* Boolean to check if the player can move or not */
+    bool has_player_win; /* Boolean to check if the player won the game */
+    unsigned long speed_player; /* allure of the deplacement of a player */
 
 }Player;
 
+/* Structure to store the datas to manipulate a game board */
 typedef struct Level{
     
-    Coordinates size; 
-    Object** objects; 
-    bool is_game_over;
-    Coordinates coo_destination;
-    bool mulptiplayer_mode;
-    Player p1;
-    Player p2;
+    Coordinates size; /*Size of the board*/
+    Object** objects; /*2D array of Objects to manipulate the objects in the game*/
+    bool is_game_over; /* boolean to check if the game is over or not */
+    Coordinates coo_destination; /* Coordinates of the goal in the board, the player won if he reach this coordinates */
+    bool mulptiplayer_mode; /* boolean to check if the board allow 1 or 2 players */
+    Player p1; /* Player 1 in the game */
+    Player p2;/* Player 2 */
     
 } Level, *Board;
 
