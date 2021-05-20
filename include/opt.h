@@ -27,6 +27,6 @@
  */
 void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard);
 
-
+Board menu(int *mode);
 
 #endif

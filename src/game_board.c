@@ -105,7 +105,7 @@ void init_board(Board board, Coordinates size){
 /**
  * \fn void affiche_coordonnee(Coordinates coordonnee)
  * \brief Function to print coordinates
- * \param coordinate : Coordinate
+ * \param coordinate : Coordinate to print in the stdout
  */
 void affiche_coordonnee(Coordinates coordonnee){
     printf("(%u, %u)", coordonnee.x, coordonnee.y);

@@ -104,7 +104,7 @@ void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y
  * \brief Function update a board 
  * \param level : Board, a game board
  * \param array_img[] : MLV_Image *
- * \param font : MLV_Image *
+ * \param font of the game
  * \param width : unsigned int, width of the game board
  * \param height : unsigned int, height of the game board
  */
@@ -130,7 +130,7 @@ void update_Board(Board niveau, MLV_Image *array_img[], MLV_Image *font, unsigne
  * \param width : unsigned int, width of the game board
  * \param height : unsigned int, height of the game board
  * \param array_img[] : MLV_Image *, array of images
- * \param font : MLV_Image *
+ * \param font of the game
  */
 static void refresh_projectile(Coordinates coo_proj, Board board, unsigned int width, unsigned height, MLV_Image* array_img[], MLV_Image* font){
 	
@@ -200,7 +200,7 @@ static void refresh_launcher(Coordinates coo_launcher, Board board, unsigned int
  * \param width : unsigned int, width of the game board
  * \param height : unsigned int, height of the game board
  * \param array_img[] : MLV_Image *, array of images
- * \param font : MLV_Image *
+ * \param font of the game
  */
 static void refresh_player(Coordinates coo_player, Board board, unsigned int width, unsigned int height, MLV_Image* array_img[], MLV_Image* font){
 
@@ -366,7 +366,7 @@ static int check_which_player_move(MLV_Keyboard_button touche, Board board){
  * \brief Function refresh a switch 
  * \param niveau : Board, a game board
  * \param player : Player, a player
- * \param font : MLV_Image *
+ * \param font of the game
  * \param width : unsigned int, width of the game board
  * \param height : unsigned int, height of the game board
  */
@@ -403,7 +403,7 @@ static void refresh_switch(Board niveau, Player player, MLV_Image* font, unsigne
  * \param niveau : Board, a game board
  * \param width : unsigned int, width of the game board
  * \param height : unsigned int, height of the game board
- * \param font : MLV_Image *
+ * \param font : font of the game
  */
 static void erase_player_after_reached(Board board, unsigned int width, unsigned int height, MLV_Image* font){
 	if(!board->p1.is_player_alive){
@@ -422,7 +422,7 @@ static void erase_player_after_reached(Board board, unsigned int width, unsigned
  * \fn void launch(Board gameboard, bool *is_reached)
  * \brief Function that initializes the appearance of a launcher
  * \param level : Board, the game board
- * \param is_reached : bool*,
+ * \param is_reached : boolean to check if the game is win or lost
  */
 void launch(Board gameboard, bool *is_reached){
 	assert(gameboard != NULL);

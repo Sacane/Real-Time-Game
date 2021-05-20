@@ -101,3 +101,72 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
         }
     }
 }
+
+Board menu(int *mode){
+
+    Board game_board = NULL;
+    char c, file_mode;
+    int level, dump;
+    char *name_file = NULL;
+
+    printf("Welcome to the real-time-game !\n");
+
+    printf("First you have to choose your game mode, select game in command line mode(c) or in graphic mode(g) : ");
+    scanf("%c", &c);
+    while ((dump = getchar() != '\n') && dump != EOF); /* Dump of the buffer */
+    if(c == 'g'){
+        printf("Graphic mode chosen\n");
+        *mode = GRAPHIC;
+    }
+    else if(c == 'c'){
+        printf("Command line mode chosen\n");
+        *mode = COMMAND;
+    }
+    else{
+        *mode = ERROR;
+        return NULL;
+    }
+    
+    printf("\nWould you like to type the path to your personnal level's file ? yes(y) or no(n)\n");
+
+    
+    scanf("%c", &file_mode);
+    while ((dump = getchar() != '\n') && dump != EOF); 
+    if(file_mode == 'y'){
+        printf("Please type the path to your file : ");
+        name_file = (char*)malloc(sizeof(char) * 15);
+        scanf("%s", name_file);
+        if(name_file == NULL){
+            printf("NULL\n");
+        }
+        printf("%s\n", name_file);
+        game_board = read_file(name_file);
+        printf("\n");
+        free(name_file);
+    }
+    if(file_mode == 'n'){
+        printf("Type the level's number you want to play (from 0 to 3):");
+        scanf("%d", &level);
+        switch(level){
+            case 0: 
+                game_board = level0();
+                break;
+            case 1:
+                game_board = level1();
+                break;
+            case 2:
+                game_board = level2();
+                break;
+            case 3:
+                game_board = level3();
+                break;
+            default:
+                *mode = ERROR;
+                break;
+        }
+    }
+    
+    
+
+    return game_board;
+}

@@ -16,19 +16,20 @@
 
 int main(int argc, char* argv[]) {
     
-    Board level = NULL;
+    Board game_board = NULL;
     int mode;
+
     char* name_file = NULL, *name_folder = NULL;
     mode = COMMAND;
     name_file = (char*)malloc(sizeof(char) * BUFSIZ);
     verif_malloc(name_file);
-    bool is_level_reached = false;
+    bool is_game_board_reached = false;
     name_folder = (char*)malloc(sizeof(char) * BUFSIZ);
     verif_malloc(name_folder);
-    opt_management(argc, argv, &mode, name_file, &level);
-    strcpy(name_folder, "levels/");
-    if(level == NULL){
-        level = level0();
+    opt_management(argc, argv, &mode, name_file, &game_board);
+    strcpy(name_folder, "game_boards/");
+    if(argc < 2){
+        game_board = menu(&mode);
     }
     
     switch(mode){
@@ -36,15 +37,15 @@ int main(int argc, char* argv[]) {
             main_test();
             break;
         case COMMAND:
-            launch_command(level, &is_level_reached);
+            launch_command(game_board, &is_game_board_reached);
             break;
         case GRAPHIC:
-            launch(level, &is_level_reached); 
+            launch(game_board, &is_game_board_reached); 
             break;
         case ERROR:
             printf("An error has occur\n");
-            if(NULL != level){
-                free_board(level);    
+            if(NULL != game_board){
+                free_board(game_board);    
             }
             free(name_file);
             return EXIT_FAILURE;
@@ -55,10 +56,10 @@ int main(int argc, char* argv[]) {
     }
     
     if(mode == GRAPHIC || mode == COMMAND){
-        (is_level_reached) ? printf("Congratuations ! You won !\n") : printf("You lost ! \n");
+        (is_game_board_reached) ? printf("Congratuations ! You won !\n") : printf("You lost ! \n");
     }
-    if(level != NULL)
-        free_board(level);
+    if(game_board != NULL)
+        free_board(game_board);
     free(name_file);
     free(name_folder);
     return EXIT_SUCCESS;

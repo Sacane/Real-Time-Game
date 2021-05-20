@@ -180,7 +180,7 @@ static char *build_path_level(const char* name_folder, int level_state, char* su
  * \fn void read_folder(char* name_folder, int level_start)
  * \brief Function to read a folder to create a game board
  * \param name_folder : char*, a string of characters
- * \param level_start : int
+ * \param level_start : int, number of the level to start
  */
 void read_folder(char* name_folder, int level_start){
     int i;
