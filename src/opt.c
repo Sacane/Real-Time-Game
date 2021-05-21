@@ -15,11 +15,14 @@
  * \brief print in the stdout the different usages of the program
 */
 void opt_print_usages(){
-    printf("Usage 1 : ./tempsreel test=<int> (from 0 to 3)\nLaunch the program with an exemple level.\n");
-    printf("Usage 2 : ./tempsreel file=<path_file>\nLaunch the program by reading the level from the given file\n");
-    printf("Usage 3 : ./tempsreel folder=<int>\n Launch the program by reading all the level in the folder 'levels', you have to specify from which level you want to start\n");
-    printf("Usage 4 : ./tempsreel mode=<Mode>\nLaunch the program with the following ways : \n");
-    printf(" -<Mode> = GRAPHIC : Launch the program in graphic mode\n -<Mode> = DEBUG launch the tests used to test the firsts functions to build the project\n");
+    printf("===================================================\n");
+    printf("Here are the different uses of the proposed program\n");
+    printf("===================================================\n\n\n");
+    printf("Usage 1 : ./tempsreel test=<int> (from 0 to 3)\nLaunch the program with an exemple level.\n\n");
+    printf("Usage 2 : ./tempsreel file=<path_file>\nLaunch the program by reading the level from the given file\n\n");
+    printf("Usage 3 : ./tempsreel folder=<int>\n Launch the program by reading all the level in the folder 'levels', you have to specify from which level you want to start\n\n");
+    printf("Usage 4 : ./tempsreel mode=<Mode>\nLaunch the program with the following ways : \n\n");
+    printf(" -<Mode> = GRAPHIC : Launch the program in graphic mode\n -<Mode> = DEBUG launch the tests used to test the firsts functions to build the project\n\n");
 }
 
 /**
