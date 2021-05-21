@@ -506,6 +506,8 @@ static bool test_trigger_launcher(int *total_test){
  * \fn static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test))
  * \brief test the function given as argument, print in the stdout if the test passed or failed
  * \param total_test : int *
+ * \param name_fun : name of the function given as parameter
+ * \param counter : counter of passed functions
  * \return bool, true if the test succeeded, false otherwise
  */
 static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test)){
