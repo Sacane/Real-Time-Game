@@ -11,6 +11,9 @@
 #include "../include/opt.h"
 
 
+/**
+ * \brief print in the stdout the different usages of the program
+*/
 void opt_print_usages(){
     printf("Usage 1 : ./tempsreel test=<int> (from 0 to 3)\nLaunch the program with an exemple level.\n");
     printf("Usage 2 : ./tempsreel file=<path_file>\nLaunch the program by reading the level from the given file\n");
