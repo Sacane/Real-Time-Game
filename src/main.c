@@ -52,6 +52,8 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         case FOLDER:
             break;
+        case QUIT:
+            break;
         default:
             break;
     }

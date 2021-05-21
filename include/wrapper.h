@@ -28,6 +28,7 @@ typedef enum{
   DEBUG,
   ERROR,
   FOLDER,
+  QUIT,
 }Game_mode;
 
 typedef struct{

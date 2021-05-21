@@ -11,6 +11,14 @@
 #include "../include/opt.h"
 
 
+void opt_print_usages(){
+    printf("Usage 1 : ./tempsreel test=<int> (from 0 to 3)\nLaunch the program with an exemple level.\n");
+    printf("Usage 2 : ./tempsreel file=<path_file>\nLaunch the program by reading the level from the given file\n");
+    printf("Usage 3 : ./tempsreel folder=<int>\n Launch the program by reading all the level in the folder 'levels', you have to specify from which level you want to start\n");
+    printf("Usage 4 : ./tempsreel mode=<Mode>\nLaunch the program with the following ways : \n");
+    printf(" -<Mode> = GRAPHIC : Launch the program in graphic mode\n -<Mode> = DEBUG launch the tests used to test the firsts functions to build the project\n");
+}
+
 /**
  * \fn void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *gameboard)
  * \brief Function to manage the different usage options
@@ -34,6 +42,7 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
             {"test",  required_argument,       0, 't'},
             {"mode",  required_argument, 0, 'm'},
             {"folder", required_argument, 0, 's'},
+            {"usage", 0, 0, 'u'},
             {0, 0, 0, 0}
             };
         c = getopt_long (argc, argv, "f:t:m:", long_options, &option_index);
@@ -91,8 +100,10 @@ void opt_management(int argc, char* argv[], int *mode, char *name_file, Board *g
                     *mode = ERROR;
                 }
                 break;
-                
-
+            case 'u':
+                opt_print_usages();
+                *mode=QUIT;
+                break;
             case '?':
                 printf("unknown option\n");
                 break;
