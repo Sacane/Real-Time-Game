@@ -1,7 +1,7 @@
 /**
  * \file : gui.h
  * \authors : Johan RAMAROSON RAKOTOMIHAMINA - Christine LI
- * \date : 01-04-21
+ * \date : 10-05-21
  * \last modification : 21-05-21
  * 
  * File containing the prototypes of the functions of the file image.c

@@ -1,7 +1,7 @@
 /**
  * \file gui.c
  * \authors Ramaroson Rakotomihamina Johan && Li Christine
- * \date : 01-04-21
+ * \date : 20-05-2021
  * \last modification : 21-05-21
  * 
  * Module used to initialize and manipulate the gui part of the game
@@ -28,7 +28,7 @@ void draw_img_by_board(Board niveau, MLV_Image *array_img[], int x_source, int y
 	Deplacement *depl = (Deplacement*)malloc(sizeof(Deplacement));
 	verif_malloc(depl);
 	switch(niveau->objects[x_source][y_source].type){
-		case VIDE: 
+		case EMPTY: 
 			break;
 		case PROJECTILE:
 			depl = niveau->objects[x_source][y_source].data;

@@ -95,7 +95,7 @@ void init_board(Board board, Coordinates size){
     unsigned int i, j;
     for(i = 0; i < size.x; i++){
         for(j = 0; j < size.y; j++){
-            board->objects[i][j].type = VIDE;
+            board->objects[i][j].type = EMPTY;
             board->objects[i][j].data = NULL;
         }
     }
@@ -228,7 +228,7 @@ void move_projectile(Board board, Coordinates *coordinate){
 
     if(is_object_going_to_crash(coordinate->x, coordinate->y, deplacement->direction, board)){
         free(deplacement);
-        board->objects[coordinate->x][coordinate->y].type = VIDE;
+        board->objects[coordinate->x][coordinate->y].type = EMPTY;
 
         return;
     }
@@ -240,7 +240,7 @@ void move_projectile(Board board, Coordinates *coordinate){
             board->objects[--coordinate->x][coordinate->y].type = PROJECTILE;
             board->objects[coordinate->x][coordinate->y].data = deplacement;
             fill_projectile(&board->objects[coordinate->x][coordinate->y], deplacement);
-            board->objects[coordinate->x + 1][coordinate->y].type = VIDE;
+            board->objects[coordinate->x + 1][coordinate->y].type = EMPTY;
 
             break;
         case SOUTH:
@@ -249,7 +249,7 @@ void move_projectile(Board board, Coordinates *coordinate){
             board->objects[coordinate->x][coordinate->y].data = deplacement;
             fill_projectile(&board->objects[coordinate->x][coordinate->y], deplacement);
             
-            board->objects[coordinate->x - 1][coordinate->y].type = VIDE;
+            board->objects[coordinate->x - 1][coordinate->y].type = EMPTY;
 
             
             break;
@@ -258,14 +258,14 @@ void move_projectile(Board board, Coordinates *coordinate){
             board->objects[coordinate->x][++coordinate->y].type = PROJECTILE;
             board->objects[coordinate->x][coordinate->y].data = deplacement;
             fill_projectile(&board->objects[coordinate->x][coordinate->y], deplacement);
-            board->objects[coordinate->x][coordinate->y - 1].type = VIDE;
+            board->objects[coordinate->x][coordinate->y - 1].type = EMPTY;
 
             break;
         case WEST:
             board->objects[coordinate->x][--coordinate->y].type = PROJECTILE;
             board->objects[coordinate->x][coordinate->y].data = deplacement;
             fill_projectile(&board->objects[coordinate->x][coordinate->y], deplacement);
-            board->objects[coordinate->x][coordinate->y + 1].type = VIDE;
+            board->objects[coordinate->x][coordinate->y + 1].type = EMPTY;
 		
             break;
     }
@@ -336,7 +336,7 @@ int move_players(Board board, Player *player){
         return -1;
     }
     
-    board->objects[player->coo_player.x][player->coo_player.y].type = VIDE;
+    board->objects[player->coo_player.x][player->coo_player.y].type = EMPTY;
     switch(player->dir_player){
         case NORTH:
             player->coo_player.x -= 1;
@@ -361,7 +361,7 @@ int move_players(Board board, Player *player){
         trigger = (Trigger*)malloc(sizeof(Trigger));
         verif_malloc(trigger);
         memcpy(trigger, board->objects[player->coo_player.x][player->coo_player.y].data, sizeof(Trigger));
-        board->objects[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
+        board->objects[trigger->coo_door.x][trigger->coo_door.y].type = EMPTY;
 
         free(trigger);
     }
@@ -424,7 +424,7 @@ void trigger_switch(Board board, Player player){
             memcpy(trigger, board->objects[player.coo_player.x][player.coo_player.y - 1].data, sizeof(Trigger));
             break;
     }
-    board->objects[trigger->coo_door.x][trigger->coo_door.y].type = VIDE;
+    board->objects[trigger->coo_door.x][trigger->coo_door.y].type = EMPTY;
 
     board->objects[trigger->coo_door.x][trigger->coo_door.y].data = NULL;
     free(trigger);
@@ -445,7 +445,7 @@ void print_board (Board board) {
 
 			switch (board->objects[i][j].type)
 			{
-			case VIDE: 
+			case EMPTY: 
 				printf(".");
 				break;
 			case LAUNCHER: 

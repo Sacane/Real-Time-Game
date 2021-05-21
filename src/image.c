@@ -1,7 +1,7 @@
 /**
  * \file image.c
  * \authors Ramaroson Rakotomihamina Johan && Li Christine
- * \date : 01-04-21
+ * \date : 10-05-21
  * \last modification : 21-05-21
  * 
  * Module used to manipulate and initialize the image used in the game
@@ -61,6 +61,7 @@ void init_array_img(MLV_Image* array_img[]){
  * \param height : int, the height of the image
  */
 void resize_all_img(MLV_Image* array_img[],  int width, int height){
+	
 	int i;
 	for(i = CHARACTER_SOUTH; i <= SWITCH_IMG; i++){
 		MLV_resize_image(array_img[i], width, height);

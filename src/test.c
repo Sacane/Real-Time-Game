@@ -226,7 +226,7 @@ static bool test_move_projectile_NORTH(int *total_test){
     level->objects[coo.x][coo.y] = object;
 	move_projectile(level, &coo);
 
-	if(level->objects[3][2].type != VIDE){
+	if(level->objects[3][2].type != EMPTY){
         printf("Projectile non-déplacé (NORTH) !");
 		return false;
 	}
@@ -259,7 +259,7 @@ static bool test_move_projectile_NORTH(int *total_test){
     level->objects[new1coord2.x][new1coord2.y].data = dep;
 
     move_projectile( level, &new1coord2);
-	if (level->objects[0][2].type != VIDE){
+	if (level->objects[0][2].type != EMPTY){
         printf("Projectile toujours présent (NORTH) \n");
 		return false;
 	}
@@ -292,7 +292,7 @@ static bool test_move_projectile_SOUTH(int *total_test){
 
 	move_projectile( level, &coords);
 
-    if(level->objects[2][3].type != VIDE){
+    if(level->objects[2][3].type != EMPTY){
         printf("Projectile non-déplacé (SOUTH) !");
 		return false;
 	}
@@ -345,7 +345,7 @@ static bool test_move_projectile_EAST(int *total_test){
 	move_projectile(level, &coord); 
 
 
-	if(level->objects[0][7].type != VIDE){
+	if(level->objects[0][7].type != EMPTY){
         printf("Projectile non-déplacé ! (EAST)");
 		return false;
 	}
@@ -397,7 +397,7 @@ static bool test_move_projectile_WEST(int *total_test){
 
 	move_projectile(level, &coo);
 	
-	if(level->objects[2][2].type != VIDE){
+	if(level->objects[2][2].type != EMPTY){
         printf("Projectile non-déplacé (WEST)!");
 		return false;
 	}
@@ -418,7 +418,7 @@ static bool test_move_projectile_WEST(int *total_test){
     coord.x = 2;
     coord.y = 0;
     move_projectile(level, &coord);
-    if(level->objects[2][0].type != VIDE){
+    if(level->objects[2][0].type != EMPTY){
         printf("Le projectile est toujours là ! (WEST)\n");
         return false;
     }
@@ -505,7 +505,7 @@ static bool test_trigger_launcher(int *total_test){
 /**
  * \fn static void qtest(const char* name_fun, int *counter, int *total_test, bool(*test_function)(int *total_test))
  * \brief test the function given as argument, print in the stdout if the test passed or failed
- * \param total_test : int *
+ * \param total_test : int * of the total of function tested
  * \param name_fun : name of the function given as parameter
  * \param counter : counter of passed functions
  * \return bool, true if the test succeeded, false otherwise

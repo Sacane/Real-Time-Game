@@ -16,7 +16,7 @@
 #define INITIAL_SIZE 64
 
 typedef enum {
-	VIDE = 0,          LAUNCHER,           WALL,
+	EMPTY = 0,          LAUNCHER,           WALL,
 	PROJECTILE,   DESTINATION, PLAYER1, PLAYER2,
 	SWITCH, DOOR,
 } TypeObject;

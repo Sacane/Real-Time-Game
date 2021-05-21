@@ -13,7 +13,6 @@
 #include "wrapper.h"
 
 
-
 #define heap_father_left(i) ((int) ((i)-1) / 2)
 #define heap_father(i) ((int) ((i)+1)/2-1)
 
@@ -21,8 +20,7 @@ typedef struct {
 
     unsigned long moment; 
     Coordinates coo_obj; 
-	unsigned int index; 
-
+	
 } Event;
 
 
